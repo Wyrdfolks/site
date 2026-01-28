@@ -1,0 +1,10 @@
+env/
+__pycacahe__/
+.cache/
+*.py[cdo]
+
+*.sqlite3
+
+production.py
+
+
