@@ -1,10 +1,8 @@
 env/
+.venv/
 __pycacahe__/
 .cache/
 *.py[cdo]
 
 *.sqlite3
-
-production.py
-
-
+.env

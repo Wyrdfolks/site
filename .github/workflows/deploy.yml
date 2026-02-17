@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Fabric
+        run: |
+          pip install fabric==3.2.2
+          pip install requests
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/net.alwaysdata.ssh-lecimm
+          chmod 600 ~/.ssh/net.alwaysdata.ssh-lecimm
+          ssh-keyscan -H ssh-lecimm.alwaysdata.net >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        env:
+          WFS_API_KEY: ${{ secrets.WFS_API_KEY }}
+        run: fab deploy
