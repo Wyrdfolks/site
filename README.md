@@ -3,7 +3,7 @@
 ### Dépendances
 
 - Python 3.14
-    - S'assurer que le chemin vers le dossier des scripts python (`path/to/your/python/Scripts`) soit dans le PATH
+  - S'assurer que le chemin vers le dossier des scripts python (`path/to/your/python/Scripts`) soit dans le PATH
 - mysql-client (ou libmysqlclient)
 
 ### Passer en virtual env
@@ -24,3 +24,7 @@
 
 - Migrer la base de donnée : `python manage.py migrate`
 - Créer le superuser : `python manage.py createsuperuser`(Peu importe pour le username et le password)
+
+### Lancer le site en local
+
+`python manage.py runserver`
