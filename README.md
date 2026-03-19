@@ -15,3 +15,7 @@ S'assurer que le chemin vers le dossier des scripts python (`path/to/your/python
 ### Mettre en place la DB
 
 `python manage.py migrate`
+
+### Lancer le site en local
+
+`python manage.py runserver`
