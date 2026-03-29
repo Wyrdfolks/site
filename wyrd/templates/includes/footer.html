@@ -1,0 +1,57 @@
+{% load wagtailcore_tags %}
+
+<footer class="bg-gray-900 text-gray-400 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <div>
+                {% wagtail_site as current_site %}
+                <h3 class="text-white font-bold text-lg mb-4">{{ current_site.site_name }}</h3>
+                {% if footer_settings.footer_social_links.all %}
+                    <div class="flex gap-3">
+                        {% for item in footer_settings.footer_social_links.all %}
+                            <a href="{{ item.social_media.url }}" target="_blank" rel="noopener"
+                               class="text-gray-400 hover:text-white transition-colors text-sm px-3 py-1 border border-gray-700 rounded-full">
+                                {{ item.social_media.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if footer_settings.footer_page_links.all %}
+                    <h4 class="text-white font-semibold mb-4">Pages</h4>
+                    <ul class="space-y-2">
+                        {% for link in footer_settings.footer_page_links.all %}
+                            <li>
+                                {% if link.page %}
+                                    <a href="{% pageurl link.page %}" class="hover:text-white transition-colors">
+                                        {{ link.label }}
+                                    </a>
+                                {% else %}
+                                    <span>{{ link.label }}</span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if footer_settings.press_document %}
+                    <h4 class="text-white font-semibold mb-4">Presse & Pro</h4>
+                    <a href="{{ footer_settings.press_document.url }}" download
+                       class="inline-block px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded transition-colors text-sm">
+                        Télécharger le dossier de presse
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+            <p>&copy; {{ current_site.site_name }} — Tous droits réservés</p>
+        </div>
+    </div>
+</footer>

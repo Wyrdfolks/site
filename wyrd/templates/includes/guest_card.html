@@ -1,0 +1,21 @@
+{% load wagtailimages_tags %}
+
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+    {% if guest.photo %}
+        {% image guest.photo fill-400x400 as guest_img %}
+        <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="w-full h-48 object-cover">
+    {% else %}
+        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-400 text-4xl">?</span>
+        </div>
+    {% endif %}
+    <div class="p-4">
+        <h3 class="font-bold text-lg">{{ guest.title }}</h3>
+        {% if guest.subtitle %}
+            <p class="text-gray-500 text-sm">{{ guest.subtitle }}</p>
+        {% endif %}
+        {% if guest.description %}
+            <div class="text-gray-600 text-sm mt-2 line-clamp-3">{{ guest.description|safe }}</div>
+        {% endif %}
+    </div>
+</div>

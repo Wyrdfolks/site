@@ -1,7 +1,8 @@
 {% load static wagtailcore_tags wagtailuserbar %}
+{% wagtail_site as current_site %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="utf-8" />
         <title>
@@ -9,7 +10,6 @@
             {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
             {% endblock %}
             {% block title_suffix %}
-            {% wagtail_site as current_site %}
             {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
             {% endblock %}
         </title>
@@ -18,30 +18,31 @@
         {% endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {# Force all links in the live preview panel to be opened in a new tab #}
         {% if request.in_preview_panel %}
         <base target="_blank">
         {% endif %}
 
-        {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
 
         {% block extra_css %}
-        {# Override this in templates to add extra stylesheets #}
         {% endblock %}
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 {% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
+        {% include "includes/header.html" %}
 
-        {# Global javascript #}
+        <main class="flex-1">
+            {% block content %}{% endblock %}
+        </main>
+
+        {% include "includes/footer.html" %}
+
         <script type="text/javascript" src="{% static 'js/test.js' %}"></script>
 
         {% block extra_js %}
-        {# Override this in templates to add extra javascript #}
         {% endblock %}
     </body>
 </html>

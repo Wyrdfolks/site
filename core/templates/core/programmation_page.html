@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-programmation{% endblock %}
+
+{% block content %}
+<section class="py-16 md:py-24">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4">{{ page.title }}</h1>
+        {% if page.subtitle %}
+            <p class="text-xl text-gray-500 text-center mb-12">{{ page.subtitle }}</p>
+        {% endif %}
+
+        {% if page.tabs %}
+            <div class="flex flex-wrap gap-2 justify-center mb-12" id="tabs-nav">
+                {% for tab in page.tabs %}
+                    <button onclick="showTab('tab-{{ forloop.counter0 }}')"
+                            class="tab-btn px-6 py-2 rounded-full text-sm font-medium border border-gray-300 hover:bg-gray-900 hover:text-white transition-colors {% if forloop.first %}bg-gray-900 text-white{% endif %}"
+                            data-tab="tab-{{ forloop.counter0 }}">
+                        {{ tab.value.title }}
+                    </button>
+                {% endfor %}
+            </div>
+
+            {% for tab in page.tabs %}
+                <div class="tab-content {% if not forloop.first %}hidden{% endif %}" id="tab-{{ forloop.counter0 }}">
+                    <div class="space-y-6">
+                        {% for animation in tab.value.animations %}
+                            <div class="bg-white rounded-lg shadow-sm p-6">
+                                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                    <div class="flex-1">
+                                        <h3 class="text-xl font-bold mb-1">{{ animation.value.title }}</h3>
+                                        <p class="text-sm text-gray-500 mb-3">
+                                            {{ animation.value.date }} &middot; {{ animation.value.start_time }}
+                                        </p>
+                                        {% if animation.value.description %}
+                                            <div class="text-gray-600 prose prose-sm">
+                                                {{ animation.value.description|safe }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if animation.value.guests %}
+                                        <div class="flex flex-wrap gap-2 md:flex-col md:items-end">
+                                            {% for guest_item in animation.value.guests %}
+                                                {% with guest=guest_item.value %}
+                                                    <div class="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1">
+                                                        {% if guest.photo %}
+                                                            {% image guest.photo fill-24x24 as guest_thumb %}
+                                                            <img src="{{ guest_thumb.url }}" alt="{{ guest.title }}" class="w-6 h-6 rounded-full object-cover">
+                                                        {% endif %}
+                                                        <span class="text-sm font-medium">{{ guest.title }}</span>
+                                                    </div>
+                                                {% endwith %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('bg-gray-900', 'text-white');
+        });
+        document.getElementById(tabId).classList.remove('hidden');
+        document.querySelector(`[data-tab="${tabId}"]`).classList.add('bg-gray-900', 'text-white');
+    }
+</script>
+{% endblock %}

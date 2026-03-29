@@ -1,0 +1,17 @@
+<section class="bg-gray-900 text-white py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4">{{ block.title }}</h1>
+        {% if block.subtitle %}
+            <p class="text-xl md:text-2xl text-gray-300 mb-2">{{ block.subtitle }}</p>
+        {% endif %}
+        {% if block.tagline %}
+            <p class="text-lg text-gray-400 mb-8">{{ block.tagline }}</p>
+        {% endif %}
+        {% if block.ticket_url %}
+            <a href="{{ block.ticket_url }}"
+               class="inline-block px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:bg-gray-200 transition-colors">
+                Billetterie
+            </a>
+        {% endif %}
+    </div>
+</section>

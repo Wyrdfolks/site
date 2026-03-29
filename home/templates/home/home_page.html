@@ -1,13 +1,27 @@
 {% extends "base.html" %}
-
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
-
 {% block content %}
-    <a href="/blog">Blog</a>
-    <a href="/about">about</a>
+    {% for block in page.body %}
+        {% if block.block_type == 'hero' %}
+            {% include "home/blocks/hero.html" with block=block.value %}
 
-    {{ page.body|richtext }}
+        {% elif block.block_type == 'espaces' %}
+            {% include "home/blocks/espaces.html" with block=block.value %}
+
+        {% elif block.block_type == 'guests' %}
+            {% include "home/blocks/guests.html" with block=block.value %}
+
+        {% elif block.block_type == 'info' %}
+            {% include "home/blocks/info.html" with block=block.value %}
+
+        {% elif block.block_type == 'ticker' %}
+            {% include "home/blocks/ticker.html" with block=block.value %}
+
+        {% elif block.block_type == 'hero_fomo' %}
+            {% include "home/blocks/hero_fomo.html" with block=block.value %}
+        {% endif %}
+    {% endfor %}
 {% endblock %}
