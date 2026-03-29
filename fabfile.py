@@ -4,21 +4,31 @@ import requests
 import os
 
 # CONFIG
-HOST        = "ssh-lecimm.alwaysdata.net"
-USER        = "lecimm"
-SSH_KEY     = f"{os.path.expanduser('~')}/.ssh/net.alwaysdata.ssh-lecimm"
+HOST = "ssh-lecimm.alwaysdata.net"
+USER = "lecimm"
+SSH_KEY = f"{os.path.expanduser('~')}/.ssh/net.alwaysdata.ssh-lecimm"
 DEPLOY_PATH = f"/home/{USER}/site"
-REPO_URL    = "git@github.com:Wyrdfolks/site.git"
-BRANCH      = "main"
+REPO_URL = "git@github.com:Wyrdfolks/site.git"
+BRANCH = "main"
 KEEP_RELEASES = 5
+
 
 # HELPERS
 def get_connection():
     return Connection(host=HOST, user=USER, connect_kwargs={"key_filename": SSH_KEY})
 
-def releases_path():  return f"{DEPLOY_PATH}/releases"
-def shared_path():    return f"{DEPLOY_PATH}/shared"
-def current_path():   return f"{DEPLOY_PATH}/current"
+
+def releases_path():
+    return f"{DEPLOY_PATH}/releases"
+
+
+def shared_path():
+    return f"{DEPLOY_PATH}/shared"
+
+
+def current_path():
+    return f"{DEPLOY_PATH}/current"
+
 
 # TASKS
 @task
@@ -101,7 +111,9 @@ def setup(ctx):
     with get_connection() as c:
         for path in [releases_path(), shared_path(), f"{shared_path()}/media"]:
             c.run(f"mkdir -p {path}")
-        c.run(f"{shared_path()}/venv/bin/python --version || python3 -m venv {shared_path()}/venv")
+        c.run(
+            f"{shared_path()}/venv/bin/python --version || python3 -m venv {shared_path()}/venv"
+        )
         print("✅ Structure initialisée. Pense à déposer ton .env dans", shared_path())
 
 
@@ -109,11 +121,11 @@ def reload_server(c):
     """Recharge le serveur web. Adapter selon ton hébergement."""
     ACCOUNT = "lecimm"
     SITE_ID = "1008505"
-    API_KEY  = os.environ.get('WFS_API_KEY')
+    API_KEY = os.environ.get("WFS_API_KEY")
 
     response = requests.post(
         f"https://api.alwaysdata.com/v1/site/{SITE_ID}/restart/",
-        auth=(f"{API_KEY} account={ACCOUNT}", "")
+        auth=(f"{API_KEY} account={ACCOUNT}", ""),
     )
     if response.status_code == 204:
         print("✅ Server reloaded via alwaysdata API")
