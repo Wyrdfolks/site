@@ -6,6 +6,7 @@ import os
 # CONFIG
 HOST = "ssh-lecimm.alwaysdata.net"
 USER = "lecimm"
+SITE_ID = "1008505"
 SSH_KEY = f"{os.path.expanduser('~')}/.ssh/net.alwaysdata.ssh-lecimm"
 DEPLOY_PATH = f"/home/{USER}/site"
 REPO_URL = "git@github.com:Wyrdfolks/site.git"
@@ -119,13 +120,11 @@ def setup(ctx):
 
 def reload_server(c):
     """Recharge le serveur web. Adapter selon ton hébergement."""
-    ACCOUNT = "lecimm"
-    SITE_ID = "1008505"
     API_KEY = os.environ.get("WFS_API_KEY")
 
     response = requests.post(
         f"https://api.alwaysdata.com/v1/site/{SITE_ID}/restart/",
-        auth=(f"{API_KEY} account={ACCOUNT}", ""),
+        auth=(f"{API_KEY} account={USER}", ""),
     )
     if response.status_code == 204:
         print("✅ Server reloaded via alwaysdata API")
