@@ -4,10 +4,10 @@ import requests
 import os
 
 # CONFIG
-HOST = "ssh-lecimm.alwaysdata.net"
-USER = "lecimm"
-SITE_ID = "1008505"
-SSH_KEY = f"{os.path.expanduser('~')}/.ssh/net.alwaysdata.ssh-lecimm"
+HOST = os.environ.get("DEPLOY_HOST")
+USER = os.environ.get("DEPLOY_USER")
+SITE_ID = os.environ.get("DEPLOY_SITE_ID")
+SSH_KEY = f"{os.path.expanduser('~')}/.ssh/deploy"
 DEPLOY_PATH = f"/home/{USER}/site"
 REPO_URL = "git@github.com:Wyrdfolks/site.git"
 BRANCH = "main"
@@ -119,7 +119,7 @@ def setup(ctx):
 
 
 def reload_server(c):
-    """Recharge le serveur web. Adapter selon ton hébergement."""
+    """Recharge le serveur web."""
     API_KEY = os.environ.get("WFS_API_KEY")
 
     response = requests.post(
