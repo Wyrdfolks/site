@@ -1,5 +1,6 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% wagtail_site as current_site %}
+{% load static tailwind_tags %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -23,10 +24,11 @@
         {% endif %}
 
         <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
+        
+        {% tailwind_css %}
 
         {% block extra_css %}
-        {% endblock %}
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        {% endblock %}        
     </head>
 
     <body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 {% block body_class %}{% endblock %}">

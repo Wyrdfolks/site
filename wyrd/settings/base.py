@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tailwind",
+    "theme",
 ]
 
 MIDDLEWARE = [
@@ -204,3 +206,6 @@ WAGTAILDOCS_EXTENSIONS = [
     "xlsx",
     "zip",
 ]
+
+# Tailwind theme app name
+TAILWIND_APP_NAME = 'theme'

@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Groovy Bumpie";
+  src: url("/static/fonts/GroovyBumpieDemo.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* fonts */
+  --font-groovy: "Groovy Bumpie", cursive;
+  --font-bricolage: "Bricolage Grotesque", sans-serif;
+
+  /**
+   * Theme colors 
+   * "-wyrd" is prepended for now to avoid conflicts with 
+   * default Tailwind colors, but we can choose to remove 
+   * the default colors later using `--color-*: initial;`
+   */
+  --color-wyrd-purple-100: #e4dbff;
+  --color-wyrd-purple-300: #b3a2f4;
+  --color-wyrd-purple-500: #7b5de6;
+  --color-wyrd-purple-900: #241262;
+  --color-wyrd-pink-300: #f9c6e5;
+  --color-wyrd-pink-500: #f48ccf;
+  --color-wyrd-pink-700: #d24c9c;
+  --color-wyrd-pink-900: #811c57;
+  --color-wyrd-yellow-500: #f3f48e;
+  --color-wyrd-green-500: #7cf6a8;
+  --color-wyrd-green-900: #154d2e;
+  --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-900: #060412;
+  --color-wyrd-gray-300: #d2c9e4;
+
+  /* Text sizes & line heights */
+  --text-hero: 164px;
+  --leading-hero: 132px;
+  --text-h2: 80px;
+  --leading-h2: 68px;
+  --text-h3: 22px;
+  --leading-h3: 26px;
+  --text-h4: 26px;
+  --leading-h4: 36px;
+  --text-h5: 14px;
+  --leading-h5: 17px;
+  --text-body: 18px;
+  --leading-body: 26px;
+
+  /* Shadows */
+  --shadow-card: 0px 8px rgba(18, 16, 31, 0.15);
+
+  /* Sizes */
+  --height-button: 53px;
+  --height-card: 250px;
+  --width-card: 250px;
+}
+
+/**
+  * A catch-all path to Django template files, JavaScript, and Python files
+  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
+  *
+  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
+  * the scope of this path.
+  */
+@source "../../../**/*.{html,py,js}";

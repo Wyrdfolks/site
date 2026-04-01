@@ -27,4 +27,6 @@
 
 ### Lancer le site en local
 
-`python manage.py runserver`
+- lancer à la fois le serveur de dev et Tailwind: `python manage.py tailwind dev`
+- lancer le serveur uniquement: `python manage.py runserver`
+- lancer Tailwind uniquement: `python manage.py tailwind start`
