@@ -1,0 +1,12 @@
+{# todo: details toggle #}
+<div class="flex col w-full py-2 px-6 bg-white rounded-xl gap-6">
+    <div className="flex items-center flex-1 h-9 text-wyrd-indigo-900 font-bold text-body leading-body">
+        {{ block.question }}
+        <button class="ml-auto bg-wyrd-pink-100 text-wyrd-indigo-900 rounded-lg h-9 w-9 flex items-center justify-center">
+            <span class="text-xl font-bold">+</span>
+        </button>
+    </div>
+    <p class="flex flex-col gap-4 mt-4 text-h4 leading-h4 text-wyrd-indigo-300">
+        {{ block.answer }}
+    </p>
+</div>

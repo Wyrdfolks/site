@@ -1,0 +1,26 @@
+{% with social_link=link.social_media|default:link %}
+<a
+    href="{{ social_link.url }}"
+    target="_blank" rel="noopener"
+    class="h-6 w-6 text-white hover:text-wyrd-indigo-900 transition-colors flex items-center justify-center"
+    aria-label="{{ social_link.name }}"
+>
+    {% if social_link.platform_type == "instagram" %}
+        {% include "svg/instagram.svg" %}
+    {% elif social_link.platform_type == "facebook" %}
+        {% include "svg/facebook.svg" %}
+    {% elif social_link.platform_type == "twitter" %}
+        {% include "svg/twitter.svg" %}
+    {% elif social_link.platform_type == "tiktok" %}
+        {% include "svg/tiktok.svg" %}
+    {% elif social_link.platform_type == "youtube" %}
+        {% include "svg/youtube.svg" %}
+    {% elif social_link.platform_type == "discord" %}
+        {% include "svg/discord.svg" %}
+    {% else %}
+        <span class="text-xs font-bold uppercase" aria-hidden="true">
+            {{ social_link.platform_type }}
+        </span>
+    {% endif %}
+</a>
+{% endwith %}

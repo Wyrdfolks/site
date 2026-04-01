@@ -1,6 +1,12 @@
 from wagtail.models import Page
 from wagtail.fields import StreamField
-from wagtail.blocks import StructBlock, CharBlock, URLBlock, RichTextBlock, ListBlock
+from wagtail.blocks import (
+    StructBlock,
+    CharBlock,
+    URLBlock,
+    RichTextBlock,
+    ListBlock,
+)
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import FieldPanel
 
@@ -12,10 +18,30 @@ class HeroBlock(StructBlock):
     subtitle = CharBlock(label="Sous-titre", required=False)
     tagline = CharBlock(label="Tagline", required=False)
     ticket_url = URLBlock(label="Lien billetterie", required=False)
+    about_url = URLBlock(label="Lien à propos", required=False)
+    text_about_url = CharBlock(
+        label="Texte du lien à propos",
+        required=False,
+        default="...Mais avant, qu'est-ce que c'est ?",
+    )
 
     class Meta:
         icon = "pick"
         label = "Hero"
+
+
+class PresentationBlock(StructBlock):
+    title = CharBlock(label="Titre")
+    description = RichTextBlock(label="Description", required=False)
+    cards = ListBlock(
+        CharBlock(label="Texte de la carte"),
+        label="Cartes",
+        max_num=5,
+    )
+
+    class Meta:
+        icon = "doc-full"
+        label = "Présentation"
 
 
 class EspacesBlock(StructBlock):
@@ -36,6 +62,20 @@ class GuestsBlock(StructBlock):
     guests = ListBlock(
         SnippetChooserBlock("core.Guest"),
         label="Invités",
+    )
+    teaser_text = CharBlock(
+        label="Texte d'accroche", default="Et bien plus encore...", required=False
+    )
+    cta = StructBlock(
+        [
+            (
+                "label",
+                CharBlock(label="Texte du bouton", default="Voir le programme"),
+            ),
+            ("url", URLBlock(label="Lien du bouton")),
+        ],
+        label="Call to action",
+        required=False,
     )
 
     class Meta:
@@ -71,6 +111,12 @@ class HeroFomoBlock(StructBlock):
         label="Liens social media",
     )
     discord_url = URLBlock(label="Lien Discord", required=False)
+    ticket_url = URLBlock(label="Lien billetterie", required=False)
+    about_text = CharBlock(
+        label="Texte d'accroche",
+        default="WWyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",
+        required=False,
+    )
 
     class Meta:
         icon = "warning"
@@ -81,6 +127,7 @@ class HomePage(Page):
     body = StreamField(
         [
             ("hero", HeroBlock()),
+            ("presentation", PresentationBlock()),
             ("espaces", EspacesBlock()),
             ("guests", GuestsBlock()),
             ("info", InfoBlock()),

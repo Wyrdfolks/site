@@ -1,0 +1,8 @@
+{# Card of presentation section. Use by calling {% render_presentation_card ... %} from home_components. #}
+<div class="presentation-card shadow-card w-card h-card flex flex-col items-center justify-end rounded-4xl p-4 absolute {{ class_name }}"{% if index is not None %} data-card-index="{{ index }}"{% endif %}>
+    <div class="card-content mt-3 w-full text-center normal-case">
+        {% if title %}
+            <p class="mb-1 text-xl font-bold">{{ title }}</p>
+        {% endif %}
+    </div>
+</div>

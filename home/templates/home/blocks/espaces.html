@@ -1,9 +1,10 @@
-<section class="py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">{{ block.title }}</h2>
+<section class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500" data-nav-color="green">
+    <div class="lg:w-[740px] max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">
+        <h2 class="text-center font-groovy text-h2 leading-h2">{{ block.title }}</h2>
         {% if block.subtitle %}
-            <p class="text-gray-500 text-center mb-12">{{ block.subtitle }}</p>
+            <p class="text-center">{{ block.subtitle }}</p>
         {% endif %}
+        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for monde_item in block.mondes %}
                 {% with monde=monde_item.value %}

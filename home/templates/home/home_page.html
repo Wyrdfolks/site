@@ -4,13 +4,16 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
 {% endblock %}
 
 {% block content %}
     {% for block in page.body %}
         {% if block.block_type == 'hero' %}
             {% include "home/blocks/hero.html" with block=block.value %}
+
+        {% elif block.block_type == 'presentation' %}
+            {% include "home/blocks/presentation.html" with block=block.value %}
 
         {% elif block.block_type == 'espaces' %}
             {% include "home/blocks/espaces.html" with block=block.value %}
@@ -28,4 +31,8 @@
             {% include "home/blocks/hero_fomo.html" with block=block.value %}
         {% endif %}
     {% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+    <script defer src="{% static 'js/presentationCardsLayout.js' %}"></script>
 {% endblock %}

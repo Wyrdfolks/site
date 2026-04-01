@@ -1,17 +1,23 @@
-<section class="bg-wyrd-purple-500 text-white py-24 md:py-32">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-5xl md:text-7xl font-bold mb-4">{{ block.title }}</h1>
-        {% if block.subtitle %}
-            <p class="text-xl md:text-2xl text-gray-300 mb-2">{{ block.subtitle }}</p>
-        {% endif %}
+{% load wagtailcore_tags %}
+
+<section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 md:py-32 home-section relative" data-nav-color="purple">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-32 text-center gap-12 flex flex-col ">
         {% if block.tagline %}
-            <p class="text-lg text-gray-400 mb-8">{{ block.tagline }}</p>
+            <h4 class="text-h4 leading-h4 uppercase font-medium">{{ block.tagline }}</h4>
         {% endif %}
-        {% if block.ticket_url %}
-            <a href="{{ block.ticket_url }}"
-               class="inline-block px-8 py-3 bg-white text-gray-900 font-semibold rounded-full hover:bg-gray-200 transition-colors">
-                Billetterie
-            </a>
+
+        <h1 class="text-hero leading-hero tracking-hero">{{ block.title }}</h1>
+        {% if block.subtitle %}
+            <p class="text-xl md:text-2xl">{{ block.subtitle }}</p>
         {% endif %}
-    </div>
+
+        <div class="flex items-center justify-center gap-px">
+            {% if block.ticket_url %}
+                {% include "includes/button.html" with label="Prendre ma place" url=block.ticket_url variant="primary" color="purple" %}
+            {% endif %}
+
+            {% if block.about_url %}
+                {% include "includes/button.html" with label=block.text_about_url url=block.about_url variant="secondary" color="purple" %}
+            {% endif %}
+        </div>
 </section>

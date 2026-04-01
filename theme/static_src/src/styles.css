@@ -1,3 +1,9 @@
+/* 
+** This file contains theme variables and some CSS for reusable 
+** components, in cases where it was easier adn/or more readable
+** to write custom CSS instead of using Tailwind utility classes.
+*/
+
 @import "tailwindcss";
 
 @font-face {
@@ -61,6 +67,40 @@
   font-display: swap;
 }
 
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/BricolageGrotesque-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  box-sizing: border-box;
+  --color-wyrd-purple-100: #e4dbff;
+  --color-wyrd-purple-300: #b3a2f4;
+  --color-wyrd-purple-400: #9375ff;
+  --color-wyrd-purple-500: #7b5de6;
+  --color-wyrd-purple-700: #4a32b6;
+  --color-wyrd-purple-900: #241262;
+  --color-wyrd-pink-100: #fdeaf6;
+  --color-wyrd-pink-300: #f9c6e5;
+  --color-wyrd-pink-500: #f48ccf;
+  --color-wyrd-pink-700: #d24c9c;
+  --color-wyrd-pink-900: #811c57;
+  --color-wyrd-pink-950: #47090e;
+  --color-wyrd-yellow-500: #f3f48e;
+  --color-wyrd-green-500: #7cf6a8;
+  --color-wyrd-green-800: #1d643d;
+  --color-wyrd-green-900: #154d2e;
+  --color-wyrd-indigo-100: #e2e1f0;
+  --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-900: #060412;
+  --color-wyrd-gray-300: #d2c9e4;
+  --color-wyrd-teal-500: #7cc7f2;
+}
+
 @theme {
   /* fonts */
   --font-groovy: "Groovy Bumpie", cursive;
@@ -72,24 +112,34 @@
    * default Tailwind colors, but we can choose to remove 
    * the default colors later using `--color-*: initial;`
    */
-  --color-wyrd-purple-100: #e4dbff;
-  --color-wyrd-purple-300: #b3a2f4;
-  --color-wyrd-purple-500: #7b5de6;
-  --color-wyrd-purple-900: #241262;
-  --color-wyrd-pink-300: #f9c6e5;
-  --color-wyrd-pink-500: #f48ccf;
-  --color-wyrd-pink-700: #d24c9c;
-  --color-wyrd-pink-900: #811c57;
-  --color-wyrd-yellow-500: #f3f48e;
-  --color-wyrd-green-500: #7cf6a8;
-  --color-wyrd-green-900: #154d2e;
-  --color-wyrd-indigo-300: #a19bcb;
-  --color-wyrd-indigo-900: #060412;
-  --color-wyrd-gray-300: #d2c9e4;
+  --color-wyrd-purple-100: var(--color-wyrd-purple-100);
+  --color-wyrd-purple-300: var(--color-wyrd-purple-300);
+  --color-wyrd-purple-400: var(--color-wyrd-purple-400);
+  --color-wyrd-purple-500: var(--color-wyrd-purple-500);
+  --color-wyrd-purple-700: var(--color-wyrd-purple-700);
+  --color-wyrd-purple-900: var(--color-wyrd-purple-900);
+  --color-wyrd-pink-100: var(--color-wyrd-pink-100);
+  --color-wyrd-pink-300: var(--color-wyrd-pink-300);
+  --color-wyrd-pink-500: var(--color-wyrd-pink-500);
+  --color-wyrd-pink-700: var(--color-wyrd-pink-700);
+  --color-wyrd-pink-900: var(--color-wyrd-pink-900);
+  --color-wyrd-pink-950: var(--color-wyrd-pink-950);
+  --color-wyrd-yellow-500: var(--color-wyrd-yellow-500);
+  --color-wyrd-green-500: var(--color-wyrd-green-500);
+  --color-wyrd-green-800: var(--color-wyrd-green-800);
+  --color-wyrd-green-900: var(--color-wyrd-green-900);
+  --color-wyrd-indigo-100: var(--color-wyrd-indigo-100);
+  --color-wyrd-indigo-300: var(--color-wyrd-indigo-300);
+  --color-wyrd-indigo-900: var(--color-wyrd-indigo-900);
+  --color-wyrd-gray-300: var(--color-wyrd-gray-300);
+  --color-wyrd-teal-500: var(--color-wyrd-teal-500);
 
   /* Text sizes & line heights */
   --text-hero: 164px;
   --leading-hero: 132px;
+  --tracking-hero: -2%;
+  --text-h1: 127px;
+  --leading-h1: 108px;
   --text-h2: 80px;
   --leading-h2: 68px;
   --text-h3: 22px;
@@ -108,6 +158,182 @@
   --height-button: 53px;
   --height-card: 250px;
   --width-card: 250px;
+}
+
+body {
+  @apply text-body leading-body;
+}
+
+/* Button base */
+.btn {
+  @apply font-bold w-fit;
+}
+
+.btn.is-disabled {
+  @apply pointer-events-none opacity-50;
+}
+
+.btn:not(.btn-ghost) svg.ghost-arrow {
+  display: none;
+}
+
+/* Button ghost variant */
+
+.btn-ghost {
+  @apply relative bg-transparent text-white hover:text-wyrd-indigo-100;
+  @apply text-h3 leading-h3;
+}
+
+.btn.btn-ghost svg.ghost-arrow {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn.btn-ghost span {
+  @apply inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn.btn-ghost:hover svg.ghost-arrow {
+  opacity: 1;
+}
+
+.btn.btn-ghost:hover span {
+  transform: translateX(24px);
+}
+
+.btn-ghost.btn-small {
+  @apply text-lg font-normal;
+}
+
+/* Button primary variant */
+.btn-primary {
+  @apply relative inline-flex items-center justify-center overflow-hidden;
+  @apply bg-white text-wyrd-indigo-900 rounded-lg;
+  @apply uppercase tracking-tight h-button px-6 py-3;
+  @apply ease-in-out transition-colors duration-300;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: var(--color-wyrd-indigo-900);
+  z-index: 0;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+}
+
+.btn-primary > span {
+  z-index: 1;
+}
+
+.btn-primary:hover::before {
+  transform: translateY(0);
+}
+
+.btn-primary:hover {
+  color: white;
+}
+
+/* Button secondary variant */
+@keyframes btn-bounce {
+  0% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+  28% {
+    transform: translateY(-10px) scaleX(1.02) scaleY(0.97);
+  }
+  52% {
+    transform: translateY(-3px) scaleX(0.995) scaleY(1.005);
+  }
+  72% {
+    transform: translateY(-1px) scaleX(1.002) scaleY(0.998);
+  }
+  100% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+}
+
+/*
+** To allow a JS script to dynamically change the colors of the secondary buttons
+** of the navbar on scroll, it's easier to define classes for each variant than
+** and to toggle these in the JS, instead of toggling individual CSS variables, or
+** each tailwind class used by that variant.
+**/
+
+#navbar.purple {
+  background-color: var(--color-wyrd-purple-500);
+  color: var(--color-wyrd-purple-100);
+}
+
+.btn-secondary.btn-purple,
+#navbar.purple .btn-secondary {
+  background-color: var(--color-wyrd-purple-400);
+  --btn-secondary-bg: var(--color-wyrd-purple-400);
+  color: white;
+  --btn-secondary-text: white;
+}
+
+#navbar.green {
+  background-color: var(--color-wyrd-green-900);
+  color: var(--color-wyrd-green-500);
+}
+
+.btn-secondary.btn-green,
+#navbar.green .btn-secondary {
+  background-color: var(--color-wyrd-green-800);
+  --btn-secondary-bg: var(--color-wyrd-green-800);
+  color: white;
+  --btn-secondary-text: white;
+}
+
+#navbar.pink {
+  background-color: var(--color-wyrd-pink-500);
+  color: var(--color-wyrd-pink-900);
+}
+
+.btn-secondary.btn-pink,
+#navbar.pink .btn-secondary {
+  background-color: var(--color-wyrd-pink-300);
+  --btn-secondary-bg: var(--color-wyrd-pink-300);
+  color: var(--color-wyrd-pink-950);
+  --btn-secondary-text: var(--color-wyrd-pink-950);
+}
+
+#navbar.pink p {
+  color: var(--color-wyrd-pink-950);
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center;
+  @apply text-body uppercase tracking-tight;
+  @apply rounded-full px-6 py-3 h-button;
+  transform-origin: 50% 100%;
+  will-change: transform;
+  background-color: var(--btn-secondary-bg, var(--color-wyrd-purple-300));
+  color: var(--btn-secondary-text, white);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-radius 0.25s ease;
+}
+
+.btn-secondary:hover,
+.btn-secondary.btn-green:hover,
+.btn-secondary.btn-purple:hover,
+.btn-secondary.btn-pink:hover,
+#navbar.purple .btn-secondary:hover,
+#navbar.green .btn-secondary:hover,
+#navbar.pink .btn-secondary:hover {
+  animation: btn-bounce 0.46s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+  background-color: white;
+  color: var(--color-wyrd-indigo-900);
+  border-radius: 0.5rem;
 }
 
 /**

@@ -11,7 +11,10 @@ from core.models import (
     FAQPage,
     ProgrammationPage,
     HeaderSettings,
-    HeaderNavigationLink,
+    HeaderNavBarLeftLink,
+    HeaderNavBarRightLink,
+    HeaderNavMenuTopLink,
+    HeaderNavMenuBottomLink,
     FooterSettings,
     FooterSocialLink,
     FooterPageLink,
@@ -156,6 +159,20 @@ class Command(BaseCommand):
                     "subtitle": "Pantin - 11 Oct. 2026",
                     "tagline": "Zéro prérequis. Observe, joue ou viens en famille",
                     "ticket_url": "https://example.com/billetterie",
+                },
+            },
+            {
+                "type": "presentation",
+                "value": {
+                    "title": "Plusieurs chemins s'offrent à toi",
+                    "description": "Tous les choix sont possibles ! Tu peux regarder la scène, rejoindre une table, dévaliser les stands des créateurs.ices ou faire les trois dans la même journée, dans le même lieu. Pas de règles à apprendre avant d'arriver. Pas besoin de costumes. Pas de préparation. Seul.e ou en groupe. Passionné.e ou néophyte. WYRD est un festival de jeu de rôle ouvert à tous.tes. Écrivez votre propre histoire.",
+                    "cards": [
+                        {"title": "Je veux jouer"},
+                        {"title": "Je viens voir"},
+                        {"title": "Voir le show du soir"},
+                        {"title": "On vient en famille"},
+                        {"title": "Je viens flâner"},
+                    ],
                 },
             },
             {
@@ -335,7 +352,7 @@ class Command(BaseCommand):
                         "title": "Scène",
                         "animations": [
                             {
-                                "title": "Table ronde \"Pourquoi jouer au JdR ?\"",
+                                "title": 'Table ronde "Pourquoi jouer au JdR ?"',
                                 "date": "2026-10-11",
                                 "start_time": "09:00",
                                 "description": "<p>Une discussion ouverte entre joueurs, MJ et créateurs pour explorer les bienfaits du jeu de rôle.</p>",
@@ -454,17 +471,58 @@ class Command(BaseCommand):
         site = Site.objects.filter(is_default_site=True).first()
         if site:
             header, _ = HeaderSettings.objects.get_or_create(site=site)
-            if not header.navigation_links.exists():
+            if (
+                not header.nav_bar_left_links.exists()
+                and not header.nav_bar_right_links.exists()
+                and not header.nav_menu_top_links.exists()
+                and not header.nav_menu_bottom_links.exists()
+            ):
                 pages_for_nav = {
                     "Programmation": ProgrammationPage.objects.first(),
+                    "FAQ": FAQPage.objects.first(),
+                    "À Propos": AProposPage.objects.first(),
                 }
-                nav_links = [
+                nav_bar_left_links = [
                     ("Programmation", pages_for_nav.get("Programmation"), ""),
                     ("Réserver une table", None, "https://example.com/reservation"),
+                ]
+                nav_bar_right_links = [
                     ("Billetterie", None, "https://example.com/billetterie"),
                 ]
-                for i, (label, page, url) in enumerate(nav_links):
-                    HeaderNavigationLink.objects.create(
+                nav_menu_top_links = [
+                    ("C'est quoi Wyrd ?", pages_for_nav.get("À Propos"), ""),
+                    ("Programmation", pages_for_nav.get("Programmation"), ""),
+                    ("Réserver une table", None, "https://example.com/reservation"),
+                ]
+                nav_menu_bottom_links = [
+                    ("FAQ", pages_for_nav.get("FAQ"), ""),
+                ]
+                for i, (label, page, url) in enumerate(nav_bar_left_links):
+                    HeaderNavBarLeftLink.objects.create(
+                        header=header,
+                        label=label,
+                        page=page,
+                        external_url=url,
+                        sort_order=i,
+                    )
+                for i, (label, page, url) in enumerate(nav_bar_right_links):
+                    HeaderNavBarRightLink.objects.create(
+                        header=header,
+                        label=label,
+                        page=page,
+                        external_url=url,
+                        sort_order=i,
+                    )
+                for i, (label, page, url) in enumerate(nav_menu_top_links):
+                    HeaderNavMenuTopLink.objects.create(
+                        header=header,
+                        label=label,
+                        page=page,
+                        external_url=url,
+                        sort_order=i,
+                    )
+                for i, (label, page, url) in enumerate(nav_menu_bottom_links):
+                    HeaderNavMenuBottomLink.objects.create(
                         header=header,
                         label=label,
                         page=page,

@@ -1,21 +1,41 @@
 {% load wagtailimages_tags %}
 
-<div class="bg-white rounded-lg shadow-sm overflow-hidden">
-    {% if guest.photo %}
-        {% image guest.photo fill-400x400 as guest_img %}
-        <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="w-full h-48 object-cover">
-    {% else %}
-        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-            <span class="text-gray-400 text-4xl">?</span>
+{% if guest.subtitle or guest.description %}
+    <div class="bg-white rounded-4xl overflow-hidden border-2 border-wyrd-indigo-900 p-2{% if additional_class %} {{ additional_class }}{% endif %}">
+        <div class="flex flex-col items-center {% if size == 'small' %} max-sm:w-[100px] max-sm:h-[100px] {% elif size == 'large' %} w-[475px] max-sm:w-[265px] {% endif %}">
+            <div class="relative bg-wyrd-purple-500 w-full rounded-3xl {% if size == 'small' %} max-sm:h-[100px] h-[250px] {% elif size == 'large' %} h-[575px] max-sm:h-[324px] {% endif %} text-white leading-h3 font-bold text-h3 text-center">
+                {% if guest.photo %}
+                    {% image guest.photo fill-400x400 as guest_img %}
+                    <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="w-full h-full object-cover">
+                    <span class="absolute bottom-4 left-0 w-full">{{ guest.title }}</span>
+                {% else %}
+                    <span class="absolute bottom-4 left-0 w-full">?</span>
+                {% endif %}
+            </div>
+            <div class="p-4 w-full text-center">
+                {% if guest.subtitle %}
+                    <p class="font-bold text-h5 leading-h5 uppercase text-wyrd-purple-500">
+                        {{ guest.subtitle }}
+                    </p>
+                {% endif %}
+                {% if guest.description %}
+                    <div class="text-wyrd-indigo-300 font-bold text-lg leading-5 line-clamp-5">
+                        {{ guest.description|safe }}
+                    </div>
+                {% endif %}
+            </div>
         </div>
-    {% endif %}
-    <div class="p-4">
-        <h3 class="font-bold text-lg">{{ guest.title }}</h3>
-        {% if guest.subtitle %}
-            <p class="text-gray-500 text-sm">{{ guest.subtitle }}</p>
-        {% endif %}
-        {% if guest.description %}
-            <div class="text-gray-600 text-sm mt-2 line-clamp-3">{{ guest.description|safe }}</div>
-        {% endif %}
     </div>
-</div>
+{% else  %}
+    <div class="bg-white rounded-4xl overflow-hidden shadow-card h-fit p-2 w-fit shrink-0{% if additional_class %} {{ additional_class }}{% endif %}">
+         <div class="relative bg-wyrd-purple-500 rounded-3xl {% if size == 'small' %} max-sm:h-[100px] max-sm:w-[100px] h-[250px] w-[250px] {% elif size == 'large' %} w-[475px] max-sm:w-[265px] h-[575px] max-sm:h-[324px] {% endif %} text-white leading-h3 font-bold text-h3 text-center">
+                {% if guest.photo %}
+                    {% image guest.photo fill-400x400 as guest_img %}
+                    <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="w-full h-full object-cover">
+                    <span class="absolute bottom-4 left-0 w-full">{{ guest.title }}</span>
+                {% else %}
+                    <span class="absolute bottom-4 left-0 w-full">?</span>
+                {% endif %}
+            </div>
+    </div>
+{% endif %}
