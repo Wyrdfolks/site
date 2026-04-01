@@ -24,6 +24,7 @@
 
 - Migrer la base de donnée : `python manage.py migrate`
 - Créer le superuser : `python manage.py createsuperuser`(Peu importe pour le username et le password)
+- Seeder la base : `python manage.py seed`
 
 ### Lancer le site en local
 
