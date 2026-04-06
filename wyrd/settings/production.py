@@ -29,7 +29,7 @@ LOGGING = {
         "file": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": f"{os.environ.get('HOME')}/admin/logs/wagtail/debug.log",
+            "filename": "./admin/logs/wagtail/debug.log",
         },
     },
     "loggers": {
