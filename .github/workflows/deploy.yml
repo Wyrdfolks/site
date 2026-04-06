@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ben/deployV2
 
 jobs:
   deploy:
@@ -23,14 +24,14 @@ jobs:
           pip install fabric==3.2.2
           pip install requests
 
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/net.alwaysdata.ssh-lecimm
-          chmod 600 ~/.ssh/net.alwaysdata.ssh-lecimm
-          ssh-keyscan -H ssh-lecimm.alwaysdata.net >> ~/.ssh/known_hosts
-
       - name: Deploy
         env:
           WFS_API_KEY: ${{ secrets.WFS_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DEPLOY_HOST: ${{ secrets.HOST }}
+          DEPLOY_USER: ${{ secrets.USER }}
+          DEPLOY_ACCOUNT: ${{ secrets.ACCOUNT }}
+          DEPLOY_SITE_ID: ${{ github.ref_name == 'main' && secrets.PROD_SITE_ID || secrets.DEV_SITE_ID  }}
+          DEPLOY_ENV: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
         run: fab deploy

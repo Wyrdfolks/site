@@ -1,22 +1,32 @@
 from fabric import Connection, task
 from datetime import datetime
 import requests
+import io
+import paramiko
 import os
 
 # CONFIG
 HOST = os.environ.get("DEPLOY_HOST")
 USER = os.environ.get("DEPLOY_USER")
+ACCOUNT = os.environ.get("DEPLOY_ACCOUNT")
 SITE_ID = os.environ.get("DEPLOY_SITE_ID")
-SSH_KEY = f"{os.path.expanduser('~')}/.ssh/deploy"
-DEPLOY_PATH = f"/home/{USER}/site"
-REPO_URL = "git@github.com:Wyrdfolks/site.git"
-BRANCH = "main"
+ENV = os.environ.get("DEPLOY_ENV")
+SSH_KEY = os.environ.get("SSH_KEY")
+REPO_URL = f"https://{os.environ.get('GITHUB_TOKEN')}@github.com/Wyrdfolks/site.git"
+DEPLOY_PATH = f"/home/{ACCOUNT}/{ENV}"
+ENV_TO_BRANCH = {"dev": "ben/deployV2", "prod": "main"}
+BRANCH = ENV_TO_BRANCH.get(ENV)
 KEEP_RELEASES = 5
 
 
 # HELPERS
 def get_connection():
-    return Connection(host=HOST, user=USER, connect_kwargs={"key_filename": SSH_KEY})
+    pkey = paramiko.Ed25519Key.from_private_key(io.StringIO(SSH_KEY))
+    return Connection(
+        host=HOST,
+        user=USER,
+        connect_kwargs={"pkey": pkey}
+    )
 
 
 def releases_path():
@@ -42,7 +52,7 @@ def deploy(ctx):
         try:
             print(f"🚀 Déploiement de la release {release_name}...")
 
-            c.run(f"git clone --depth=1 --branch {BRANCH} {REPO_URL} {release_path}")
+            c.run(f"git clone --depth=1 --branch {BRANCH} {REPO_URL} {release_path}", hide="both")
 
             c.run(f"ln -sfn {shared_path()}/.env        {release_path}/.env")
             c.run(f"ln -sfn {shared_path()}/media       {release_path}/media")
@@ -65,6 +75,7 @@ def deploy(ctx):
             print(f"💥 Erreur : {e}")
             print("⏪ Rollback en cours...")
             rollback(ctx)
+            c.run(f"rm -rf {release_path}")
             raise SystemExit(1)
 
 
@@ -88,7 +99,6 @@ def rollback(ctx):
         c.run(f"ln -sfn {previous_path} {current_path()}")
         reload_server(c)
         print(f"✅ Rollback effectué vers {previous}")
-
 
 @task
 def releases_list(ctx):
@@ -124,7 +134,7 @@ def reload_server(c):
 
     response = requests.post(
         f"https://api.alwaysdata.com/v1/site/{SITE_ID}/restart/",
-        auth=(f"{API_KEY} account={USER}", ""),
+        auth=(f"{API_KEY} account={ACCOUNT}", ""),
     )
     if response.status_code == 204:
         print("✅ Server reloaded via alwaysdata API")
