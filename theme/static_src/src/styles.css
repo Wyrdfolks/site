@@ -92,8 +92,15 @@ html {
   /* Sizes */
   --height-button: 53px;
   --height-navbar: 85px;
-  --height-card: 250px;
-  --width-card: 250px;
+
+  --height-card-s-desktop: 250px;
+  --width-card-s-desktop: 250px;
+  --height-card-s-mobile: 100px;
+  --width-card-s-mobile: 100px;
+  --height-card-l-desktop: 575px;
+  --width-card-l-desktop: 475px;
+  --height-card-l-mobile: 324px;
+  --width-card-l-mobile: 265px;
 }
 
 button:not(:disabled) {

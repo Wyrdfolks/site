@@ -96,8 +96,14 @@
     --leading-body: 26px;
     --height-button: 53px;
     --height-navbar: 85px;
-    --height-card: 250px;
-    --width-card: 250px;
+    --height-card-s-desktop: 250px;
+    --width-card-s-desktop: 250px;
+    --height-card-s-mobile: 100px;
+    --width-card-s-mobile: 100px;
+    --height-card-l-desktop: 575px;
+    --width-card-l-desktop: 475px;
+    --height-card-l-mobile: 324px;
+    --width-card-l-mobile: 265px;
   }
 }
 @layer base {
@@ -423,8 +429,11 @@
   .h-\[575px\] {
     height: 575px;
   }
-  .h-card {
-    height: var(--height-card);
+  .h-card-l-desktop {
+    height: var(--height-card-l-desktop);
+  }
+  .h-card-s-desktop {
+    height: var(--height-card-s-desktop);
   }
   .h-fit {
     height: fit-content;
@@ -456,8 +465,11 @@
   .w-\[475px\] {
     width: 475px;
   }
-  .w-card {
-    width: var(--width-card);
+  .w-card-l-desktop {
+    width: var(--width-card-l-desktop);
+  }
+  .w-card-s-desktop {
+    width: var(--width-card-s-desktop);
   }
   .w-fit {
     width: fit-content;
@@ -519,9 +531,6 @@
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
-  }
-  .transform-gpu {
-    transform: translateZ(0) var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
   }
   .cursor-pointer {
     cursor: pointer;
@@ -943,14 +952,6 @@
   .underline {
     text-decoration-line: underline;
   }
-  .antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  .subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
   .opacity-0 {
     opacity: 0%;
   }
@@ -1009,9 +1010,6 @@
     --tw-ease: var(--ease-out);
     transition-timing-function: var(--ease-out);
   }
-  .will-change-transform {
-    will-change: transform;
-  }
   .group-open\:rotate-180 {
     &:is(:where(.group):is([open], :popover-open, :open) *) {
       rotate: 180deg;
@@ -1060,6 +1058,16 @@
       height: 324px;
     }
   }
+  .max-sm\:h-card-l-mobile {
+    @media (width < 40rem) {
+      height: var(--height-card-l-mobile);
+    }
+  }
+  .max-sm\:h-card-s-mobile {
+    @media (width < 40rem) {
+      height: var(--height-card-s-mobile);
+    }
+  }
   .max-sm\:w-\[100px\] {
     @media (width < 40rem) {
       width: 100px;
@@ -1068,6 +1076,16 @@
   .max-sm\:w-\[265px\] {
     @media (width < 40rem) {
       width: 265px;
+    }
+  }
+  .max-sm\:w-card-l-mobile {
+    @media (width < 40rem) {
+      width: var(--width-card-l-mobile);
+    }
+  }
+  .max-sm\:w-card-s-mobile {
+    @media (width < 40rem) {
+      width: var(--width-card-s-mobile);
     }
   }
   .sm\:mx-6 {
