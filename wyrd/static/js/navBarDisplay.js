@@ -67,7 +67,12 @@ function setNavMenuState({ drawer, backdrop, toggleButton }, open) {
       "opacity-0",
       "pointer-events-none",
     );
-    drawer.classList.add("translate-x-0", "opacity-100", "pointer-events-auto");
+    drawer.classList.add(
+      "translate-x-0",
+      "opacity-100",
+      "pointer-events-auto",
+      "is-opening",
+    );
     backdrop.classList.remove("opacity-0", "pointer-events-none");
     backdrop.classList.add("opacity-100", "pointer-events-auto");
     drawer.setAttribute("aria-hidden", "false");
@@ -78,6 +83,7 @@ function setNavMenuState({ drawer, backdrop, toggleButton }, open) {
       "translate-x-0",
       "opacity-100",
       "pointer-events-auto",
+      "is-opening",
     );
     drawer.classList.add(
       "-translate-x-full",
@@ -136,6 +142,7 @@ function initNavMenuToggle() {
 (function () {
   function initNavColorSwitching() {
     const navBar = document.getElementById("navbar");
+    const navHeight = navBar?.getBoundingClientRect().height || 0;
     if (!navBar) return;
 
     const sections = Array.from(document.querySelectorAll("[data-nav-color]"));
@@ -155,7 +162,7 @@ function initNavMenuToggle() {
       const showNav =
         isNavMenuOpen(drawer) ||
         scrollingUp ||
-        currentScrollY <= window.innerHeight - 85; // 85 is the navbar height
+        currentScrollY <= window.innerHeight - navHeight;
       toggleNavDisplay(navBar, showNav);
       syncNavColor();
     }

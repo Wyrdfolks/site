@@ -41,7 +41,9 @@
   transform: scale(1) rotate(0deg);
 }
 
-#nav-side-drawer.is-opening #nav-menu-close .nav-menu-close-icon {
+#nav-side-drawer.is-opening[aria-hidden="false"]
+  #nav-menu-close
+  .nav-menu-close-icon {
   animation: nav-close-pop-rotate 560ms cubic-bezier(0.2, 0.85, 0.25, 1.25) both;
 }
 
