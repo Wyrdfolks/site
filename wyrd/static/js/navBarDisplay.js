@@ -155,7 +155,7 @@ function initNavMenuToggle() {
       const showNav =
         isNavMenuOpen(drawer) ||
         scrollingUp ||
-        currentScrollY <= window.innerHeight;
+        currentScrollY <= window.innerHeight - 85; // 85 is the navbar height
       toggleNavDisplay(navBar, showNav);
       syncNavColor();
     }

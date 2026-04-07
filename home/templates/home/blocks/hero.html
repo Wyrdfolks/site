@@ -1,12 +1,14 @@
 {% load wagtailcore_tags %}
 
-<section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 md:py-32 home-section relative" data-nav-color="purple">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-32 text-center gap-12 flex flex-col ">
+<section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 flex flex-col justify-center md:py-32 home-section relative" data-nav-color="purple">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-32 justify-center text-center gap-12 flex flex-col ">
         {% if block.tagline %}
             <h4 class="text-h4 leading-h4 uppercase font-medium">{{ block.tagline }}</h4>
         {% endif %}
 
-        <h1 class="text-hero leading-hero tracking-hero">{{ block.title }}</h1>
+        <h1 class="text-hero leading-hero tracking-hero">
+            {{ block.title }}
+        </h1>
         {% if block.subtitle %}
             <p class="text-xl md:text-2xl">{{ block.subtitle }}</p>
         {% endif %}

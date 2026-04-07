@@ -4,24 +4,6 @@
 {% with header_settings=settings.core.HeaderSettings %}
 
 <header class="bg-transparent text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex items-center gap-4">
-                {% if header_settings.logo %}
-                    {% image header_settings.logo fill-40x40 as logo_img %}
-                    <a href="/">
-                        <img src="{{ logo_img.url }}" alt="{{ current_site.site_name }}" class="h-10 w-10">
-                    </a>
-                {% endif %}
-                <a href="/" class="text-xl font-bold tracking-tight">
-                    {% wagtail_site as current_site %}
-                    {{ current_site.site_name }}
-                </a>
-            </div>
-
-            {% include "includes/nav_bar.html" with header_settings=header_settings only %}
-
-        </div>
-    </div>
+    {% include "includes/nav_bar.html" with header_settings=header_settings only %}
 </header>
 {% endwith %}

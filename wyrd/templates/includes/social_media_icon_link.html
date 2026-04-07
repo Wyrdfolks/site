@@ -1,9 +1,10 @@
 {% with social_link=link.social_media|default:link %}
 <a
     href="{{ social_link.url }}"
-    target="_blank" rel="noopener"
-    class="h-6 w-6 text-white hover:text-wyrd-indigo-900 transition-colors flex items-center justify-center"
+    target="_blank"
+    rel="noopener"
     aria-label="{{ social_link.name }}"
+    class="social-media-icon h-6 w-6 text-white hover:text-wyrd-indigo-900 transition-colors flex items-center justify-center"
 >
     {% if social_link.platform_type == "instagram" %}
         {% include "svg/instagram.svg" %}
