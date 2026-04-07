@@ -114,7 +114,7 @@ class HeroFomoBlock(StructBlock):
     ticket_url = URLBlock(label="Lien billetterie", required=False)
     about_text = CharBlock(
         label="Texte d'accroche",
-        default="WWyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",
+        default="Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",
         required=False,
     )
 

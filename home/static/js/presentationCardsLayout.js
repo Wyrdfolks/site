@@ -7,8 +7,6 @@
  * TODO: animations with GSAP
  */
 
-const CARD_SIZE = 250; // px
-
 const CARD_POSITIONS_DESKTOP = {
   "card-yellow": {
     top: "-45px",

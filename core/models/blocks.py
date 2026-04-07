@@ -43,7 +43,7 @@ class ButtonBlock(StructBlock):
 
 class FaqItemBlock(StructBlock):
     question = CharBlock(label="Question")
-    answer = RichTextBlock(label="Reponse")
+    answer = RichTextBlock(label="Réponse")
 
     class Meta:
         icon = "help"
