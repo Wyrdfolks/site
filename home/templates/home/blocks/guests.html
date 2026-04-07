@@ -1,9 +1,9 @@
 {# title #}
 <section class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex" data-nav-color="purple">
     <div class="max-w-7xl m-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-center font-groovy text-h1 leading-h1">
+        <h1 class="text-center">
             {{ block.title }}
-        </h2>
+        </h1>
     </div>
 </section>
 
@@ -31,9 +31,9 @@
     <section class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section" data-nav-color="purple">
         <div class="max-w-7xl m-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
             {% if block.teaser_text %}
-                <h2 class="text-center font-groovy text-h1 leading-h1 h-[275px] flex items-center">
+                <h1 class="text-center h-[275px] flex items-center">
                     {{ block.teaser_text }}
-                </h2>
+                </h1>
             {% endif %}            
             {% if block.cta %}            
                 {% include "includes/button.html" with label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
