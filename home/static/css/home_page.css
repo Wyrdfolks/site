@@ -9,7 +9,9 @@ body {
   padding: 0;
   width: 100vw;
   min-height: 100vh;
-  @apply bg-wyrd-purple-500 text-wyrd-indigo-900 font-bricolage;
+  background-color: var(--color-wyrd-purple-500);
+  font-family: "Bricolage Grotesque", sans-serif;
+  color: var(--color-wyrd-indigo-900);
 }
 
 main section.home-section {
@@ -23,7 +25,10 @@ h1 {
 /* improve text rendering on rotated elements */
 .presentation-card,
 .card {
-  @apply subpixel-antialiased transform-gpu will-change-transform;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  transform: translateZ(0);
+  will-change: transform;
   backface-visibility: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
