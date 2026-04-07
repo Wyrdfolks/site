@@ -12,8 +12,6 @@ from .settings import (  # noqa: F401
 from .pages import AProposPage, FAQPage, ProgrammationPage  # noqa: F401
 from .blocks import (  # noqa: F401
     ButtonBlock,
-    LinkBlock,
-    CardBlock,
     FaqItemBlock,
     ScheduleItemBlock,
 )

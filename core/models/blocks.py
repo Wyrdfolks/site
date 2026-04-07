@@ -41,44 +41,6 @@ class ButtonBlock(StructBlock):
         label = "Bouton"
 
 
-class LinkBlock(StructBlock):
-    label = CharBlock(label="Texte du lien")
-    url = URLBlock(label="Lien")
-    open_in_new_tab = BooleanBlock(
-        label="Ouvrir dans un nouvel onglet?", default=False, required=False
-    )
-
-    class Meta:
-        icon = "link"
-        label = "Lien"
-
-
-class CardBlock(StructBlock):
-    title = CharBlock(label="Titre", required=False)
-    subtitle = CharBlock(label="Sous-titre", required=False)
-    picture = ImageBlock(label="Image", required=False)
-    pictureLabel = CharBlock(label="Label de l'image", required=False)
-    pictureAlt = CharBlock(label="Texte alternatif de l'image", required=False)
-    size = ChoiceBlock(
-        label="Taille",
-        choices=[("S", "S"), ("M", "M"), ("L", "L")],
-        default="M",
-    )
-    color = ChoiceBlock(
-        label="Couleur",
-        choices=[
-            ("purple", "Violet"),
-            ("green", "Vert"),
-            ("pink", "Rose"),
-            ("yellow", "Jaune"),
-        ],
-    )
-
-    class Meta:
-        icon = "image"
-        label = "Card"
-
-
 class FaqItemBlock(StructBlock):
     question = CharBlock(label="Question")
     answer = RichTextBlock(label="Reponse")
