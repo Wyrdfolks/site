@@ -1,4 +1,4 @@
-{% load core_components %}
+{% load wagtailcore_tags core_components %}
 
 <div class="monde-card flex flex-col items-start w-full text-wyrd-green-500 gap-6">
     <div class="flex uppercase gap-px">
@@ -11,7 +11,7 @@
     </div>
     <h2>{{ monde.title }}</h2>
     {% if monde.description %}
-        {{ monde.description | safe }}
+        {{ monde.description|richtext }}
     {% endif %}
     {% if monde.cta_text and monde.cta_link %}
         {% render_button label=monde.cta_text url=monde.cta_link variant="primary" color="purple" %}

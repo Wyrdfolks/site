@@ -1,4 +1,4 @@
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags wagtailcore_tags %}
 
 <div class="card bg-white rounded-4xl overflow-hidden border-2 border-wyrd-indigo-900 p-2{% if additional_class %} {{ additional_class }}{% endif %}">
     <div class="flex flex-col items-center {% if size == 'small' %} max-sm:w-card-s-mobile max-sm:h-card-s-mobile {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile {% endif %}">
@@ -20,7 +20,7 @@
             {% endif %}
             {% if guest.description %}
                 <div class="text-wyrd-indigo-300 font-bold text-lg leading-5 line-clamp-5">
-                    {{ guest.description|safe }}
+                    {{ guest.description|richtext }}
                 </div>
             {% endif %}
         </div>
