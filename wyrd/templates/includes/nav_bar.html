@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags core_components %}
 
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex h-navbar items-center p-6">
     <div class="flex items-center gap-px">
@@ -6,18 +6,18 @@
             {% for link in header_settings.nav_bar_left_links.all %}
                 {% if link.page %}
                     {% pageurl link.page as link_url %}
-                        {% include "includes/button.html" with label=link.label url=link_url variant="secondary" %}
+                        {% render_button label=link.label url=link_url variant="secondary" %}
                 {% elif link.external_url %}
-                    {% include "includes/button.html" with label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for link in header_settings.nav_menu_top_links.all %}
                 {% if link.page %}
                     {% pageurl link.page as link_url %}
-                    {% include "includes/button.html" with label=link.label url=link_url variant="secondary" %}
+                    {% render_button label=link.label url=link_url variant="secondary" %}
                 {% elif link.external_url %}
-                    {% include "includes/button.html" with label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
                 {% endif %}
             {% endfor %}
         {% endif %}
@@ -48,18 +48,18 @@
             {% for link in header_settings.nav_bar_right_links.all %}
                 {% if link.page %}
                     {% pageurl link.page as link_url %}
-                    {% include "includes/button.html" with label=link.label url=link_url variant="primary" color="purple" %}
+                    {% render_button label=link.label url=link_url variant="primary" color="purple" %}
                 {% elif link.external_url %}
-                    {% include "includes/button.html" with label=link.label url=link.external_url variant="primary" color="purple" target="_blank" rel="noopener" %}
+                    {% render_button label=link.label url=link.external_url variant="primary" color="purple" target="_blank" rel="noopener" %}
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for link in header_settings.nav_menu_bottom_links.all %}
                 {% if link.page %}
                     {% pageurl link.page as link_url %}
-                    {% include "includes/button.html" with label=link.label url=link_url variant="primary" %}
+                    {% render_button label=link.label url=link_url variant="primary" %}
                 {% elif link.external_url %}
-                    {% include "includes/button.html" with label=link.label url=link.external_url variant="primary" target="_blank" rel="noopener" %}
+                    {% render_button label=link.label url=link.external_url variant="primary" target="_blank" rel="noopener" %}
                 {% endif %}
             {% endfor %}
         {% endif %}

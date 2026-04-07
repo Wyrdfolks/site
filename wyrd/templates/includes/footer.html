@@ -1,4 +1,4 @@
-{% load wagtailcore_tags wagtailsettings_tags %}
+{% load wagtailcore_tags wagtailsettings_tags core_components %}
 
 {% get_settings use_default_site=True %}
 {% with footer_settings=settings.core.FooterSettings %}
@@ -10,15 +10,15 @@
                 {% for link in footer_settings.footer_page_links.all %}
                     {% if link.page %}
                         {% pageurl link.page as link_url %}
-                        {% include "includes/button.html" with label=link.label url=link_url variant="ghost" %}
+                        {% render_button label=link.label url=link_url variant="ghost" %}
                     {% else %}
-                        {% include "includes/button.html" with label=link.label variant="ghost" %}
+                        {% render_button label=link.label variant="ghost" %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
 
             {% if footer_settings.press_document %}
-                {% include "includes/button.html" with label="Dossier de presse" url=footer_settings.press_document.url variant="ghost" %}
+                {% render_button label="Dossier de presse" url=footer_settings.press_document.url variant="ghost" %}
             {% endif %}
         </div>
 

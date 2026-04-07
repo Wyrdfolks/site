@@ -1,11 +1,11 @@
-{# Reusable button component. Use via include with variables: label, url, variant, color, size, disabled, additional_class, target, rel. #}
-<a href="{{ url }}"
-   class="btn{% if variant == 'secondary' %} btn-secondary{% elif variant == 'ghost' %} btn-ghost{% else %} btn-primary{% endif %}{% if variant == 'secondary' %}{% if color == 'green' %} btn-green{% elif color == 'pink' %} btn-pink{% else %} btn-purple{% endif %}{% endif %}{% if variant == 'ghost' and size == 'small' %} btn-small{% endif %}{% if disabled %} is-disabled{% endif %}{% if additional_class %} {{ additional_class }}{% endif %}"
+{# Reusable button component. Use by calling {% render_button ... %}. #}
+<a href="{{ href }}"
+   class="{{ classes }}"
    {% if target %}target="{{ target }}"{% endif %}
    {% if rel %}rel="{{ rel }}"{% endif %}
-   {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+   {% if is_disabled %}aria-disabled="true" tabindex="-1"{% endif %}
 >
-   {% if variant == 'ghost' %}
+   {% if show_icon %}
       <svg 
          width="16" 
          height="16" 

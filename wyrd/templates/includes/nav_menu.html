@@ -1,4 +1,4 @@
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags core_components %}
 
 <div id="nav-menu-backdrop" class="fixed inset-0 z-55 bg-black/45 opacity-0 pointer-events-none transition-opacity duration-300" aria-hidden="true"></div>
 
@@ -33,9 +33,9 @@
 			{% for link in header_settings.nav_menu_top_links.all %}
 				{% if link.page %}
 					{% pageurl link.page as link_url %}
-					{% include "includes/button.html" with label=link.label url=link_url variant="ghost" size="medium" %}
+					{% render_button label=link.label url=link_url variant="ghost" size="medium" %}
 				{% elif link.external_url %}
-					{% include "includes/button.html" with label=link.label url=link.external_url variant="ghost" size="medium" target="_blank" rel="noopener" %}
+					{% render_button label=link.label url=link.external_url variant="ghost" size="medium" target="_blank" rel="noopener" %}
 				{% endif %}
 			{% endfor %}
 		</div>
@@ -45,9 +45,9 @@
                 <div class="w-full border-b border-wyrd-indigo-100 py-2">
                     {% if link.page %}
                         {% pageurl link.page as link_url %}
-						{% include "includes/button.html" with label=link.label url=link_url variant="ghost" size="small" %}
+					{% render_button label=link.label url=link_url variant="ghost" size="small" %}
                     {% elif link.external_url %}
-						{% include "includes/button.html" with label=link.label url=link.external_url variant="ghost" size="small" target="_blank" rel="noopener" %}
+					{% render_button label=link.label url=link.external_url variant="ghost" size="small" target="_blank" rel="noopener" %}
                     {% endif %}
                 </div>
 			{% endfor %}

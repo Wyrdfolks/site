@@ -1,3 +1,5 @@
+{% load core_components %}
+
 <section class="bg-wyrd-purple-300 text-wyrd-purple-100 p-4 md:p-6 home-section flex flex-col items-center justify-center" data-nav-color="purple">
     <div class="bg-wyrd-purple-500 w-full h-full flex items-center rounded-3xl">
         {# content #}
@@ -7,7 +9,7 @@
 
             <div class="flex flex-col gap-6">
                 {% if block.discord_url %}
-                    {% include "includes/button.html" with label="Sur Discord" url=block.discord_url variant="primary" %}
+                    {% render_button label="Sur Discord" url=block.discord_url variant="primary" %}
                 {% endif %}
 
                 <p class="uppercase font-medium">
@@ -34,7 +36,7 @@
                 Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026
             </p>
             {% if block.ticket_url %}
-                {% include "includes/button.html" with label="Prendre ma place" url=block.ticket_url variant="primary" %}
+                {% render_button label="Prendre ma place" url=block.ticket_url variant="primary" %}
             {% endif %}
         </div>
     </div>

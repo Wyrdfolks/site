@@ -1,3 +1,5 @@
+{% load core_components %}
+
 {# title #}
 <section class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex" data-nav-color="purple">
     <div class="max-w-7xl m-auto px-4 sm:px-6 lg:px-8">
@@ -36,7 +38,7 @@
                 </h1>
             {% endif %}            
             {% if block.cta %}            
-                {% include "includes/button.html" with label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
+                {% render_button label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
             {% endif %}
         </div>
 </section>
