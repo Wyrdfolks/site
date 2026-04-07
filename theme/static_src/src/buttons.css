@@ -71,7 +71,7 @@
 }
 
 .btn-ghost.btn-small {
-  @apply text-lg font-normal;
+  @apply text-lg font-normal leading-body;
 }
 
 /* Button secondary variant */

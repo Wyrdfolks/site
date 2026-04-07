@@ -1337,6 +1337,8 @@
 .btn-ghost.btn-small {
   font-size: var(--text-lg);
   line-height: var(--tw-leading, var(--text-lg--line-height));
+  --tw-leading: var(--leading-body);
+  line-height: var(--leading-body);
   --tw-font-weight: var(--font-weight-normal);
   font-weight: var(--font-weight-normal);
 }
