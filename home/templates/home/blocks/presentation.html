@@ -8,7 +8,7 @@
         {% endif %}
         
         {% for card_item in block.cards %}
-            {% render_presentation_card title=card_item.title color=forloop.counter0|color_by_index index=forloop.counter0 %}
+            {% render_presentation_card title=card_item color=forloop.counter0|color_by_index index=forloop.counter0 %}
         {% endfor %}
     </div>
 </section>
