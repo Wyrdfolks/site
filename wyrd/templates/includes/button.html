@@ -1,5 +1,5 @@
 {# Reusable button component. Use by calling {% render_button ... %}. #}
-<a href="{{ href }}"
+<a {% if not is_disabled %} href="{{ href }}"{% endif %}
    class="{{ classes }}"
    {% if target %}target="{{ target }}"{% endif %}
    {% if rel %}rel="{{ rel }}"{% endif %}
