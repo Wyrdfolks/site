@@ -1189,13 +1189,6 @@
   font-style: normal;
   font-display: swap;
 }
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src: url("/static/fonts/BricolageGrotesque-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
 @keyframes btn-bounce {
   0% {
     transform: translateY(0) scaleX(1) scaleY(1);
