@@ -8,7 +8,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-6d&vn5ohzo_#1hh@1k-pb4u8!=$kw+ujgz+7x65ck3$7=s9v8r",
 )
 
-ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1", "dev.wyrdfolks.com"]
 INTERNAL_IPS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS += [
