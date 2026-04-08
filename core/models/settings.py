@@ -1,38 +1,14 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
-from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-from wagtail.models import Orderable
+from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
+from wagtail.models import Orderable
 
 
-@register_setting
-class HeaderSettings(ClusterableModel, BaseSiteSetting):
-    logo = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Logo",
-    )
-
-    panels = [
-        FieldPanel("logo"),
-        InlinePanel("navigation_links", label="Liens de navigation"),
-    ]
-
-    class Meta:
-        verbose_name = "Header"
-
-
-class HeaderNavigationLink(Orderable):
-    header = ParentalKey(
-        HeaderSettings,
-        on_delete=models.CASCADE,
-        related_name="navigation_links",
-    )
+class HeaderNavigationLink(models.Model):
     label = models.CharField("Libellé", max_length=100)
     page = models.ForeignKey(
         "wagtailcore.Page",
@@ -49,6 +25,86 @@ class HeaderNavigationLink(Orderable):
         FieldPanel("page"),
         FieldPanel("external_url"),
     ]
+
+    class Meta:
+        abstract = True
+
+    def clean(self):
+        has_page = bool(self.page_id)
+        has_external = bool(self.external_url)
+        if not has_page and not has_external:
+            raise ValidationError(
+                "Renseignez soit une Page, soit une URL externe pour le lien."
+            )
+        if has_page and has_external:
+            raise ValidationError(
+                "Choisissez soit une Page, soit une URL externe (pas les deux)."
+            )
+
+
+@register_setting
+class HeaderSettings(ClusterableModel, BaseSiteSetting):
+    logo = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Logo",
+    )
+
+    panels = [
+        FieldPanel("logo"),
+        MultiFieldPanel(
+            [
+                InlinePanel("nav_bar_left_links", label="Liens gauche"),
+                InlinePanel("nav_bar_right_links", label="Liens droite"),
+            ],
+            heading="Nav bar",
+        ),
+        MultiFieldPanel(
+            [
+                InlinePanel("nav_menu_top_links", label="Liens haut"),
+                InlinePanel("nav_menu_bottom_links", label="Liens bas"),
+            ],
+            heading="Nav menu",
+        ),
+    ]
+
+    class Meta:
+        verbose_name = "Header"
+
+
+class HeaderNavBarLeftLink(Orderable, HeaderNavigationLink):
+    header = ParentalKey(
+        "HeaderSettings",
+        on_delete=models.CASCADE,
+        related_name="nav_bar_left_links",
+    )
+
+
+class HeaderNavBarRightLink(Orderable, HeaderNavigationLink):
+    header = ParentalKey(
+        "HeaderSettings",
+        on_delete=models.CASCADE,
+        related_name="nav_bar_right_links",
+    )
+
+
+class HeaderNavMenuTopLink(Orderable, HeaderNavigationLink):
+    header = ParentalKey(
+        "HeaderSettings",
+        on_delete=models.CASCADE,
+        related_name="nav_menu_top_links",
+    )
+
+
+class HeaderNavMenuBottomLink(Orderable, HeaderNavigationLink):
+    header = ParentalKey(
+        "HeaderSettings",
+        on_delete=models.CASCADE,
+        related_name="nav_menu_bottom_links",
+    )
 
 
 @register_setting

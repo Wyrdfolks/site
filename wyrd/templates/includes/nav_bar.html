@@ -1,0 +1,70 @@
+{% load static wagtailcore_tags core_components %}
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex h-navbar items-center p-6">
+    <div class="flex items-center gap-px">
+        {% if header_settings.nav_bar_left_links.all %}
+            {% for link in header_settings.nav_bar_left_links.all %}
+                {% if link.page %}
+                    {% pageurl link.page as link_url %}
+                        {% render_button label=link.label url=link_url variant="secondary" %}
+                {% elif link.external_url %}
+                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for link in header_settings.nav_menu_top_links.all %}
+                {% if link.page %}
+                    {% pageurl link.page as link_url %}
+                    {% render_button label=link.label url=link_url variant="secondary" %}
+                {% elif link.external_url %}
+                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <button
+            id="nav-menu-toggle"
+            type="button"
+            class="btn btn-secondary nav-menu-toggle"
+            aria-controls="nav-side-drawer"
+            aria-expanded="false"
+            aria-label="Ouvrir le menu"
+        >
+            <span>...</span>
+        </button>
+    </div>
+
+    <div class="absolute left-1/2 mt-7 flex -translate-x-1/2 flex-col items-center gap-1 text-center">
+        <h1 class="font-groovy text-logo! leading-4!">
+            Wyrd
+        </h1>
+        <p class="text-[15px] font-bold leading-body">
+            Festival du jeu de rôle
+        </p>
+    </div>
+
+    <div class="flex items-center ml-auto">
+        {% if header_settings.nav_bar_right_links.all %}
+            {% for link in header_settings.nav_bar_right_links.all %}
+                {% if link.page %}
+                    {% pageurl link.page as link_url %}
+                    {% render_button label=link.label url=link_url variant="primary" color="purple" %}
+                {% elif link.external_url %}
+                    {% render_button label=link.label url=link.external_url variant="primary" color="purple" target="_blank" rel="noopener" %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for link in header_settings.nav_menu_bottom_links.all %}
+                {% if link.page %}
+                    {% pageurl link.page as link_url %}
+                    {% render_button label=link.label url=link_url variant="primary" %}
+                {% elif link.external_url %}
+                    {% render_button label=link.label url=link.external_url variant="primary" target="_blank" rel="noopener" %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</nav>
+
+{% include "includes/nav_menu.html" with header_settings=header_settings only %}
+<script src="{% static 'js/navBarDisplay.js' %}"></script>

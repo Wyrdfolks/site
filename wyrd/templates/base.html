@@ -34,13 +34,17 @@
     <body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 {% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% include "includes/header.html" %}
+        {% block header %}
+            {% include "includes/header.html" %}
+        {% endblock %}
 
         <main class="flex-1">
             {% block content %}{% endblock %}
         </main>
 
-        {% include "includes/footer.html" %}
+        {% block footer %}
+            {% include "includes/footer.html" %}
+        {% endblock %}
 
         <script type="text/javascript" src="{% static 'js/test.js' %}"></script>
 

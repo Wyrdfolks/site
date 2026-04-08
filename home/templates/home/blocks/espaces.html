@@ -1,15 +1,58 @@
-<section class="py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">{{ block.title }}</h2>
+<section 
+    class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500 overflow-visible" 
+    data-nav-color="green"
+>
+    <div class="max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col text-wyrd-green-500 relative h-[300px] overflow-visible">
+        <svg
+            width="2000"
+            height="300"
+            viewBox="0 0 2000 300"
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
+        >
+            <defs>
+                <path id="curve" d="M 250,225 Q 1000,75 1750,225" fill="none"/>
+            </defs>
+            <text 
+                class="text-center font-groovy text-h1 leading-h1" 
+                fill="var(--color-wyrd-green-500)"
+            >
+                <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                    {{ block.title }}
+                </textPath>
+            </text>
+        </svg>
+    </div>
+</section>
+
+<section 
+    class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500" 
+    data-nav-color="green"
+>
+    <div class="max-w-5xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">
         {% if block.subtitle %}
-            <p class="text-gray-500 text-center mb-12">{{ block.subtitle }}</p>
+            <h3 class="text-center">{{ block.subtitle }}</h3>
         {% endif %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    </div>
+</section>
+
+{% if block.mondes|length > 0 %}
+    <section 
+        class="flex md:flex-row flex-col md:space-between items-center justify-center p-6 home-section bg-wyrd-green-900 text-wyrd-green-500" 
+        data-nav-color="green"
+    >
+        <div class="md:flex-1 flex items-center justify-center">
+        {# todo add map and highlight area on hover #}
+        {% with size="large" %}
+            {% include "includes/picture_card.html" %}
+        {% endwith %}
+        </div>
+
+        <div class="md:flex-1 w-full flex flex-col overflow-y-auto h-full rounded-3xl bg-wyrd-green-800 p-16">
             {% for monde_item in block.mondes %}
-                {% with monde=monde_item.value %}
-                    {% include "includes/monde_card.html" %}
+                {% with monde=monde_item %}
+                    {% include "includes/monde_card.html" with zone_index=forloop.counter %}
                 {% endwith %}
             {% endfor %}
         </div>
-    </div>
-</section>
+    </section>
+{% endif %}

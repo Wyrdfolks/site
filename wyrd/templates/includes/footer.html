@@ -1,57 +1,40 @@
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailsettings_tags core_components %}
 
-<footer class="bg-gray-900 text-gray-400 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+{% get_settings use_default_site=True %}
+{% with footer_settings=settings.core.FooterSettings %}
 
-            <div>
-                {% wagtail_site as current_site %}
-                <h3 class="text-white font-bold text-lg mb-4">{{ current_site.site_name }}</h3>
-                {% if footer_settings.footer_social_links.all %}
-                    <div class="flex gap-3">
-                        {% for item in footer_settings.footer_social_links.all %}
-                            <a href="{{ item.social_media.url }}" target="_blank" rel="noopener"
-                               class="text-gray-400 hover:text-white transition-colors text-sm px-3 py-1 border border-gray-700 rounded-full">
-                                {{ item.social_media.name }}
-                            </a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+<footer class="bg-wyrd-indigo-900 text-white mt-auto md:p-24">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="flex flex-col gap-2">
+            {% if footer_settings.footer_page_links.all %}
+                {% for link in footer_settings.footer_page_links.all %}
+                    {% if link.page %}
+                        {% pageurl link.page as link_url %}
+                        {% render_button label=link.label url=link_url variant="ghost" %}
+                    {% else %}
+                        {% render_button label=link.label variant="ghost" %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
-            <div>
-                {% if footer_settings.footer_page_links.all %}
-                    <h4 class="text-white font-semibold mb-4">Pages</h4>
-                    <ul class="space-y-2">
-                        {% for link in footer_settings.footer_page_links.all %}
-                            <li>
-                                {% if link.page %}
-                                    <a href="{% pageurl link.page %}" class="hover:text-white transition-colors">
-                                        {{ link.label }}
-                                    </a>
-                                {% else %}
-                                    <span>{{ link.label }}</span>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-
-            <div>
-                {% if footer_settings.press_document %}
-                    <h4 class="text-white font-semibold mb-4">Presse & Pro</h4>
-                    <a href="{{ footer_settings.press_document.url }}" download
-                       class="inline-block px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded transition-colors text-sm">
-                        Télécharger le dossier de presse
-                    </a>
-                {% endif %}
-            </div>
-
+            {% if footer_settings.press_document %}
+                {% render_button label="Dossier de presse" url=footer_settings.press_document.url variant="ghost" %}
+            {% endif %}
         </div>
 
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; {{ current_site.site_name }} — Tous droits réservés</p>
+        <div class="flex flex-col gap-7 text-white">
+            <p>
+                Les meilleures histoires se préparent en avance. Inscris-toi pour recevoir les annonces en avant-première, guests, programme, surprises du jour J.
+            </p>
+            {% if footer_settings.footer_social_links.all %}
+                <div class="flex gap-6 uppercase">
+                    Nous suivre :
+                    {% for item in footer_settings.footer_social_links.all %}
+                        {% include "includes/social_media_icon_link.html" with link=item.social_media %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </footer>
+{% endwith %}

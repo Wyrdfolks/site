@@ -1,11 +1,19 @@
-<div class="bg-white rounded-lg shadow-sm p-6">
-    <h3 class="font-bold text-xl mb-2">{{ monde.title }}</h3>
+{% load wagtailcore_tags core_components %}
+
+<div class="monde-card flex flex-col items-start w-full text-wyrd-green-500 gap-6">
+    <div class="flex uppercase gap-px">
+        <div class="bg-wyrd-green-500 text-wyrd-green-900 rounded-full px-4 py-2 cursor-pointer">
+            Zone
+        </div>
+        <div class="bg-wyrd-green-500 text-wyrd-green-900 rounded-full px-4 py-2 w-[42px] text-center cursor-pointer">
+            {{ zone_index }}
+        </div>
+    </div>
+    <h2>{{ monde.title }}</h2>
     {% if monde.description %}
-        <div class="text-gray-600 mb-4">{{ monde.description|safe }}</div>
+        {{ monde.description|richtext }}
     {% endif %}
     {% if monde.cta_text and monde.cta_link %}
-        <a href="{{ monde.cta_link }}" class="inline-block px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-700 transition-colors text-sm">
-            {{ monde.cta_text }}
-        </a>
+        {% render_button label=monde.cta_text url=monde.cta_link variant="primary" color="purple" %}
     {% endif %}
 </div>

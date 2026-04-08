@@ -1,0 +1,22 @@
+{# Reusable button component. Use by calling {% render_button ... %}. #}
+<a {% if not is_disabled %} href="{{ href }}"{% endif %}
+   class="{{ classes }}"
+   {% if target %}target="{{ target }}"{% endif %}
+   {% if rel %}rel="{{ rel }}"{% endif %}
+   {% if is_disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+>
+   {% if show_icon %}
+      <svg 
+         width="16" 
+         height="16" 
+         viewBox="0 0 16 16" 
+         fill="currentColor" 
+         xmlns="http://www.w3.org/2000/svg"
+         class="ghost-arrow transition-opacity duration-300"
+      >
+         <path d="M16 8L9.53674e-07 -6.99382e-07L3.97163 8L2.54292e-07 16L16 8Z" />
+      </svg>
+   {% endif %}
+   
+   <span class="z-1">{{ label }}</span>
+</a>

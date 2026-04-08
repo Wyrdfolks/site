@@ -1,0 +1,59 @@
+/* Button secondary variant, hover animation */
+@keyframes btn-bounce {
+  0% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+  28% {
+    transform: translateY(-10px) scaleX(1.02) scaleY(0.97);
+  }
+  52% {
+    transform: translateY(-3px) scaleX(0.995) scaleY(1.005);
+  }
+  72% {
+    transform: translateY(-1px) scaleX(1.002) scaleY(0.998);
+  }
+  100% {
+    transform: translateY(0) scaleX(1) scaleY(1);
+  }
+}
+
+/* Side nav menu animation on opening menu */
+@keyframes nav-close-pop-rotate {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-130deg);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(1.18) rotate(22deg);
+  }
+  68% {
+    transform: scale(0.94) rotate(-8deg);
+  }
+  84% {
+    transform: scale(1.03) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Side nav menu animation on hover of close btn */
+@keyframes nav-close-hover-partial-rotate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  46% {
+    transform: scale(1.12) rotate(22deg);
+  }
+  68% {
+    transform: scale(0.96) rotate(-8deg);
+  }
+  84% {
+    transform: scale(1.02) rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}

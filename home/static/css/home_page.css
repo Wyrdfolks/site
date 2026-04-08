@@ -1,0 +1,42 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--color-wyrd-purple-500);
+  font-family: "Bricolage Grotesque", sans-serif;
+  color: var(--color-wyrd-indigo-900);
+}
+
+main section.home-section {
+  height: 100vh;
+}
+
+h1 {
+  font-family: "Groovy Bumpie", cursive;
+}
+
+/* improve text rendering on rotated elements */
+.presentation-card,
+.card {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.monde-card + .monde-card {
+  padding-top: 4rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--color-wyrd-green-500);
+}

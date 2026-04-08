@@ -1,64 +1,38 @@
+/* 
+** This file contains theme variables and some CSS for reusable 
+** components, in cases where it was easier and/or more readable
+** to write custom CSS instead of using Tailwind utility classes.
+*/
+
 @import "tailwindcss";
+@import "./fonts.css";
+@import "./animations.css";
+@import "./buttons.css";
+@import "./nav.css";
 
-@font-face {
-  font-family: "Groovy Bumpie";
-  src:
-    url("/static/fonts/GroovyBumpie.woff2") format("woff2"),
-    url("/static/fonts/GroovyBumpie.woff") format("woff"),
-    url("/static/fonts/GroovyBumpie.ttf") format("truetype");
-  font-style: normal;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src:
-    url("/static/fonts/BricolageGrotesque-Light.woff2") format("woff2"),
-    url("/static/fonts/BricolageGrotesque-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src:
-    url("/static/fonts/BricolageGrotesque-Regular.woff2") format("woff2"),
-    url("/static/fonts/BricolageGrotesque-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src:
-    url("/static/fonts/BricolageGrotesque-Medium.woff2") format("woff2"),
-    url("/static/fonts/BricolageGrotesque-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src:
-    url("/static/fonts/BricolageGrotesque-SemiBold.woff2") format("woff2"),
-    url("/static/fonts/BricolageGrotesque-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src:
-    url("/static/fonts/BricolageGrotesque-Bold.woff2") format("woff2"),
-    url("/static/fonts/BricolageGrotesque-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+html {
+  box-sizing: border-box;
+  --color-wyrd-purple-100: #e4dbff;
+  --color-wyrd-purple-300: #b3a2f4;
+  --color-wyrd-purple-400: #9375ff;
+  --color-wyrd-purple-500: #7b5de6;
+  --color-wyrd-purple-700: #4a32b6;
+  --color-wyrd-purple-900: #241262;
+  --color-wyrd-pink-100: #fdeaf6;
+  --color-wyrd-pink-300: #f9c6e5;
+  --color-wyrd-pink-500: #f48ccf;
+  --color-wyrd-pink-700: #d24c9c;
+  --color-wyrd-pink-900: #811c57;
+  --color-wyrd-pink-950: #47090e;
+  --color-wyrd-yellow-500: #f3f48e;
+  --color-wyrd-green-500: #7cf6a8;
+  --color-wyrd-green-800: #1d643d;
+  --color-wyrd-green-900: #154d2e;
+  --color-wyrd-indigo-100: #e2e1f0;
+  --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-900: #060412;
+  --color-wyrd-gray-300: #d2c9e4;
+  --color-wyrd-teal-500: #7cc7f2;
 }
 
 @theme {
@@ -72,28 +46,39 @@
    * default Tailwind colors, but we can choose to remove 
    * the default colors later using `--color-*: initial;`
    */
-  --color-wyrd-purple-100: #e4dbff;
-  --color-wyrd-purple-300: #b3a2f4;
-  --color-wyrd-purple-500: #7b5de6;
-  --color-wyrd-purple-900: #241262;
-  --color-wyrd-pink-300: #f9c6e5;
-  --color-wyrd-pink-500: #f48ccf;
-  --color-wyrd-pink-700: #d24c9c;
-  --color-wyrd-pink-900: #811c57;
-  --color-wyrd-yellow-500: #f3f48e;
-  --color-wyrd-green-500: #7cf6a8;
-  --color-wyrd-green-900: #154d2e;
-  --color-wyrd-indigo-300: #a19bcb;
-  --color-wyrd-indigo-900: #060412;
-  --color-wyrd-gray-300: #d2c9e4;
+  --color-wyrd-purple-100: var(--color-wyrd-purple-100);
+  --color-wyrd-purple-300: var(--color-wyrd-purple-300);
+  --color-wyrd-purple-400: var(--color-wyrd-purple-400);
+  --color-wyrd-purple-500: var(--color-wyrd-purple-500);
+  --color-wyrd-purple-700: var(--color-wyrd-purple-700);
+  --color-wyrd-purple-900: var(--color-wyrd-purple-900);
+  --color-wyrd-pink-100: var(--color-wyrd-pink-100);
+  --color-wyrd-pink-300: var(--color-wyrd-pink-300);
+  --color-wyrd-pink-500: var(--color-wyrd-pink-500);
+  --color-wyrd-pink-700: var(--color-wyrd-pink-700);
+  --color-wyrd-pink-900: var(--color-wyrd-pink-900);
+  --color-wyrd-pink-950: var(--color-wyrd-pink-950);
+  --color-wyrd-yellow-500: var(--color-wyrd-yellow-500);
+  --color-wyrd-green-500: var(--color-wyrd-green-500);
+  --color-wyrd-green-800: var(--color-wyrd-green-800);
+  --color-wyrd-green-900: var(--color-wyrd-green-900);
+  --color-wyrd-indigo-100: var(--color-wyrd-indigo-100);
+  --color-wyrd-indigo-300: var(--color-wyrd-indigo-300);
+  --color-wyrd-indigo-900: var(--color-wyrd-indigo-900);
+  --color-wyrd-gray-300: var(--color-wyrd-gray-300);
+  --color-wyrd-teal-500: var(--color-wyrd-teal-500);
 
   /* Text sizes & line heights */
   --text-hero: 164px;
   --leading-hero: 132px;
+  --tracking-hero: -2%;
+  --text-logo: 64px;
+  --text-h1: 127px;
+  --leading-h1: 108px;
   --text-h2: 80px;
   --leading-h2: 68px;
-  --text-h3: 22px;
-  --leading-h3: 26px;
+  --text-h3: 40px;
+  --leading-h3: 49px;
   --text-h4: 26px;
   --leading-h4: 36px;
   --text-h5: 14px;
@@ -106,8 +91,55 @@
 
   /* Sizes */
   --height-button: 53px;
-  --height-card: 250px;
-  --width-card: 250px;
+  --height-navbar: 85px;
+
+  --height-card-s-desktop: 250px;
+  --width-card-s-desktop: 250px;
+  --height-card-s-mobile: 100px;
+  --width-card-s-mobile: 100px;
+  --height-card-l-desktop: 575px;
+  --width-card-l-desktop: 475px;
+  --height-card-l-mobile: 324px;
+  --width-card-l-mobile: 265px;
+}
+
+h1 {
+  @apply text-h1 leading-h1 font-normal;
+}
+
+h2 {
+  @apply text-h2 leading-h2 font-normal;
+}
+
+h3 {
+  @apply text-h3 leading-h3;
+}
+
+h4 {
+  @apply text-h4 leading-h4;
+}
+
+h5 {
+  @apply text-h5 leading-h5;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+header,
+body,
+footer {
+  @apply text-body leading-body font-medium font-bricolage;
+}
+
+h1,
+h2 {
+  @apply font-groovy uppercase;
+}
+
+footer a.social-media-icon:hover {
+  @apply text-wyrd-indigo-300;
 }
 
 /**

@@ -6,3 +6,4 @@ __pycacahe__/
 
 *.sqlite3
 .env
+.vscode
