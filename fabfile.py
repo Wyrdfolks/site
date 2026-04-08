@@ -66,7 +66,8 @@ def deploy(ctx):
 
             c.run(f"ln -sfn {release_path} {current_path()}")
 
-            reload_server(c)
+            # FIXME: tmp remove this for prod
+            # reload_server(c)
             cleanup(c)
 
             print("✅ Déploiement réussi !")
