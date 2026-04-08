@@ -97,7 +97,8 @@ def rollback(ctx):
 
         print(f"⏪ Rollback vers {previous}...")
         c.run(f"ln -sfn {previous_path} {current_path()}")
-        reload_server(c)
+        # tmp for staging
+        # reload_server(c)
         print(f"✅ Rollback effectué vers {previous}")
 
 @task
@@ -120,7 +121,7 @@ def releases_list(ctx):
 def setup(ctx):
     """Initialisation de la structure sur le serveur (à lancer une seule fois)."""
     with get_connection() as c:
-        for path in [releases_path(), shared_path(), f"{shared_path()}/media"]:
+        for path in [releases_path(), shared_path(), f"{shared_path()}/media", f"{shared_path()}/logs"]:
             c.run(f"mkdir -p {path}")
         c.run(
             f"{shared_path()}/venv/bin/python --version || python3 -m venv {shared_path()}/venv"
