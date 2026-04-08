@@ -14,7 +14,7 @@ ENV = os.environ.get("DEPLOY_ENV")
 SSH_KEY = os.environ.get("SSH_KEY")
 REPO_URL = f"https://{os.environ.get('GITHUB_TOKEN')}@github.com/Wyrdfolks/site.git"
 DEPLOY_PATH = f"/home/{ACCOUNT}/{ENV}"
-ENV_TO_BRANCH = {"dev": "ben/deployV2", "prod": "main"}
+ENV_TO_BRANCH = {"dev": "dev", "prod": "main"}
 BRANCH = ENV_TO_BRANCH.get(ENV)
 KEEP_RELEASES = 5
 

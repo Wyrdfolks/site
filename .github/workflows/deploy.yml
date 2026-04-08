@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - ben/deployV2
+      - dev
 
 jobs:
   deploy:
