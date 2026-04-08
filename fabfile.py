@@ -102,6 +102,7 @@ def rollback(ctx):
         # reload_server(c)
         print(f"✅ Rollback effectué vers {previous}")
 
+
 @task
 def releases_list(ctx):
     """Lister les releases disponibles."""
