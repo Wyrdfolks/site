@@ -26,6 +26,11 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_HSTS_SECONDS = 0
 
+# Staging password protection (only active when STAGING_PASSWORD is set)
+STAGING_PASSWORD = os.environ.get("STAGING_PASSWORD")
+if STAGING_PASSWORD:
+    MIDDLEWARE.insert(0, "core.middleware.StagingPasswordMiddleware")
+
 if "DB_NAME" in os.environ:
     DATABASES = {
         "default": {
