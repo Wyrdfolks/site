@@ -18,9 +18,15 @@
         {% include "svg/youtube.svg" %}
     {% elif social_link.platform_type == "discord" %}
         {% include "svg/discord.svg" %}
+    {% elif social_link.icon %}
+        <img 
+            src="{{ social_link.icon.url }}" 
+            alt="{{ social_link.name }} icon" 
+            class="h-6 w-6 object-contain"
+        >
     {% else %}
-        <span class="text-xs font-bold uppercase" aria-hidden="true">
-            {{ social_link.platform_type }}
+        <span class="text-3xl font-bold uppercase" aria-hidden="true">
+            ?
         </span>
     {% endif %}
 </a>

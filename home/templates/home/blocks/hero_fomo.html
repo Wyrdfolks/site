@@ -7,7 +7,7 @@
             
             <h1>{{ block.title }}</h1>
 
-            <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-6 items-center">
                 {% if block.discord_url %}
                     {% render_button label="Sur Discord" url=block.discord_url variant="primary" %}
                 {% endif %}
