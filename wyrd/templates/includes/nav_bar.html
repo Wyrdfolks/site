@@ -1,68 +1,112 @@
 {% load static wagtailcore_tags core_components %}
 
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex h-navbar items-center p-6">
+<nav id="navbar" class="fixed top-0 left-0 w-screen z-50 flex h-navbar-mobile md:h-navbar-desktop items-center md:p-6 p-4">
     <div class="flex items-center gap-px">
-        {% if header_settings.nav_bar_left_links.all %}
-            {% for link in header_settings.nav_bar_left_links.all %}
-                {% if link.page %}
-                    {% pageurl link.page as link_url %}
+        <div class="hidden md:flex md:items-center md:gap-px">
+            {% if header_settings.nav_bar_left_links.all %}
+                {% for link in header_settings.nav_bar_left_links.all %}
+                    {% if link.page %}
+                        {% pageurl link.page as link_url %}
+                            {% render_button label=link.label url=link_url variant="secondary" %}
+                    {% elif link.external_url %}
+                        {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for link in header_settings.nav_menu_top_links.all %}
+                    {% if link.page %}
+                        {% pageurl link.page as link_url %}
                         {% render_button label=link.label url=link_url variant="secondary" %}
-                {% elif link.external_url %}
-                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            {% for link in header_settings.nav_menu_top_links.all %}
-                {% if link.page %}
-                    {% pageurl link.page as link_url %}
-                    {% render_button label=link.label url=link_url variant="secondary" %}
-                {% elif link.external_url %}
-                    {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+                    {% elif link.external_url %}
+                        {% render_button label=link.label url=link.external_url variant="secondary" target="_blank" rel="noopener" %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
 
         <button
             id="nav-menu-toggle"
             type="button"
-            class="btn btn-secondary nav-menu-toggle"
+            class="btn btn-secondary nav-menu-toggle btn-circle"
             aria-controls="nav-side-drawer"
             aria-expanded="false"
             aria-label="Ouvrir le menu"
         >
-            <span>...</span>
+            {# Desktop #}
+            <span class="hidden md:inline">...</span>
+            {# Hamburger menu icon for mobile #}
+            <svg
+                class="md:hidden"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                stroke="currentColor"
+            >
+                <line y1="7.5" x2="24" y2="7.5" />
+                <line y1="11.5" x2="24" y2="11.5" />
+                <line y1="15.5" x2="24" y2="15.5" />
+            </svg>
         </button>
     </div>
 
-    <div class="absolute left-1/2 mt-7 flex -translate-x-1/2 flex-col items-center gap-1 text-center">
-        <h1 class="font-groovy text-logo! leading-4!">
+    <div class="absolute left-1/2 mt-4 md:mt-7 flex -translate-x-1/2 flex-col items-center gap-1 text-center">
+        <h1 class="font-groovy text-logo-mobile! md:text-logo-desktop! leading-4!">
             Wyrd
         </h1>
-        <p class="text-[15px] font-bold leading-body">
+        <p class="text-2xs md:text-[15px] font-bold md:leading-body-desktop leading-body-mobile">
             Festival du jeu de rôle
         </p>
     </div>
 
-    <div class="flex items-center ml-auto">
+    {# mobile icon link #}
+    <div class="ml-auto md:hidden items-center flex">
+        {% if header_settings.nav_bar_right_links.all %}
+            {% for link in header_settings.nav_bar_right_links.all %}
+                {% if link.page %}
+                    <a
+                        href="{% pageurl link.page %}" 
+                        class="btn btn-primary btn-circle"
+                        aria-controls="nav-side-drawer"
+                        aria-expanded="false" 
+                        aria-label="{{ link.label }}"
+                    >
+                        <span aria-hidden="true">
+                            {% include "svg/ticket.svg" %}
+                        </span>
+                        <span class="sr-only">{{ link.label }}</span>
+                    </a>                    
+                {% elif link.external_url %}
+                     <a href="{{ link.external_url }}" 
+                        class="btn btn-primary btn-circle"
+                        target="_blank" 
+                        rel="noreferrer noopener" 
+                        aria-label="{{ link.label }}"
+                    >
+                         <span aria-hidden="true">
+                            {% include "svg/ticket.svg" %}
+                        </span>
+                        <span class="sr-only">{{ link.label }}</span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}        
+    </div>
+
+    {# Full links in desktop version #}
+    <div class="ml-auto hidden items-center md:flex">
         {% if header_settings.nav_bar_right_links.all %}
             {% for link in header_settings.nav_bar_right_links.all %}
                 {% if link.page %}
                     {% pageurl link.page as link_url %}
-                    {% render_button label=link.label url=link_url variant="primary" color="purple" %}
-                {% elif link.external_url %}
-                    {% render_button label=link.label url=link.external_url variant="primary" color="purple" target="_blank" rel="noopener" %}
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            {% for link in header_settings.nav_menu_bottom_links.all %}
-                {% if link.page %}
-                    {% pageurl link.page as link_url %}
                     {% render_button label=link.label url=link_url variant="primary" %}
                 {% elif link.external_url %}
-                    {% render_button label=link.label url=link.external_url variant="primary" target="_blank" rel="noopener" %}
+                    {% render_button label=link.label url=link.external_url variant="primary" target="_blank" rel="noreferrer noopener" %}
                 {% endif %}
             {% endfor %}
-        {% endif %}
+        {% endif %}        
     </div>
 </nav>
 

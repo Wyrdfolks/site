@@ -13,7 +13,7 @@
                 <path id="curve" d="M 250,225 Q 1000,75 1750,225" fill="none"/>
             </defs>
             <text 
-                class="text-center font-groovy text-h1 leading-h1" 
+                class="text-center font-groovy text-h1-mobile leading-h1-mobile md:text-h1-desktop md:leading-h1-desktop" 
                 fill="var(--color-wyrd-green-500)"
             >
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
@@ -28,7 +28,7 @@
     class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500" 
     data-nav-color="green"
 >
-    <div class="max-w-5xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">
+    <div class="max-w-5xl mx-auto px-12 gap-3 flex flex-col">
         {% if block.subtitle %}
             <h3 class="text-center">{{ block.subtitle }}</h3>
         {% endif %}
@@ -37,17 +37,17 @@
 
 {% if block.mondes|length > 0 %}
     <section 
-        class="flex md:flex-row flex-col md:space-between items-center justify-center p-6 home-section bg-wyrd-green-900 text-wyrd-green-500" 
+        class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 bg-wyrd-green-900 text-wyrd-green-500" 
         data-nav-color="green"
     >
-        <div class="md:flex-1 flex items-center justify-center">
+        <div class="md:flex-1 flex items-center justify-center max-md:hidden">
         {# todo add map and highlight area on hover #}
         {% with size="large" %}
             {% include "includes/picture_card.html" %}
         {% endwith %}
         </div>
 
-        <div class="md:flex-1 w-full flex flex-col overflow-y-auto h-full rounded-3xl bg-wyrd-green-800 p-16">
+        <div class="md:flex-1 w-full flex flex-col overflow-x-hidden md:overflow-y-auto h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12">
             {% for monde_item in block.mondes %}
                 {% with monde=monde_item %}
                     {% include "includes/monde_card.html" with zone_index=forloop.counter %}

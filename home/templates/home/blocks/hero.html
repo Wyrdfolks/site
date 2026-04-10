@@ -1,25 +1,35 @@
 {% load wagtailcore_tags core_components %}
 
 <section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 flex flex-col justify-center md:py-32 home-section relative" data-nav-color="purple">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-32 justify-center text-center gap-12 flex flex-col ">
+    <div class="md:max-w-7xl mx-auto px-4 md:px-32 items-center justify-center text-center gap-6 md:gap-12 flex flex-col">
         {% if block.tagline %}
             <h4 class="uppercase">{{ block.tagline }}</h4>
         {% endif %}
 
-        <h1 class="text-hero leading-hero tracking-hero">
+        <h1 class="hero">
             {{ block.title }}
         </h1>
         {% if block.subtitle %}
-            <p class="text-xl md:text-2xl">{{ block.subtitle }}</p>
+            <h4>{{ block.subtitle }}</h4>
         {% endif %}
 
         <div class="flex items-center justify-center gap-px">
-            {% if block.ticket_url %}
-                {% render_button label="Prendre ma place" url=block.ticket_url variant="primary" color="purple" %}
+            {% if block.ticket_url.page %}
+                {% pageurl block.ticket_url.page as ticket_link %}
+                {% render_button label="Prendre ma place" url=ticket_link variant="primary" %}
+            {% elif block.ticket_url.external_url %}
+                {% render_button label="Prendre ma place" url=block.ticket_url.external_url variant="primary" %}
             {% endif %}
 
-            {% if block.about_url %}
-                {% render_button label=block.text_about_url url=block.about_url variant="secondary" color="purple" %}
-            {% endif %}
+            <div class="max-md:hidden"> 
+                {% if block.about_url.page or block.about_url.external_url %}
+                    {% if block.about_url.page %}
+                        {% pageurl block.about_url.page as about_link %}
+                        {% render_button label=block.text_about_url url=about_link variant="secondary" color="purple" %}
+                    {% else %}
+                        {% render_button label=block.text_about_url url=block.about_url.external_url variant="secondary" color="purple" %}
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
 </section>

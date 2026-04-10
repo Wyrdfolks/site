@@ -1,29 +1,40 @@
-{% load core_components %}
+{% load wagtailcore_tags core_components %}
 
 <section class="bg-wyrd-purple-300 text-wyrd-purple-100 p-4 md:p-6 home-section flex flex-col items-center justify-center" data-nav-color="purple">
     <div class="bg-wyrd-purple-500 w-full h-full flex items-center rounded-3xl">
         {# content #}
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col gap-16 text-center items-center">
+        <div class="max-w-5xl mx-auto px-6 md:px-8 flex flex-col gap-16 text-center items-center">
             
             <h1>{{ block.title }}</h1>
 
-            <div class="flex flex-col gap-6 items-center">
-                {% if block.discord_url %}
-                    {% render_button label="Sur Discord" url=block.discord_url variant="primary" %}
+            <div class="flex flex-col gap-6 max-md:gap-16 items-center">
+                {% if block.discord_url.page %}
+                    {% pageurl block.discord_url.page as discord_link %}
+                    {% render_button label="Sur Discord" url=discord_link variant="primary" %}
+                {% elif block.discord_url.external_url %}
+                    {% render_button label="Sur Discord" url=block.discord_url.external_url variant="primary" %}
                 {% endif %}
 
-                <p class="uppercase font-medium">
-                    Mais aussi...
-                </p>
+                <div class="flex flex-row md:flex-col gap-2 md:gap-6 items-center">
+                    {% if block.discord_url.page or block.discord_url.external_url %}
+                        <p class="uppercase font-medium hidden md:block">
+                            Mais aussi...
+                        </p>
+                        <p class="uppercase font-medium md:hidden">
+                            Mais aussi :
+                        </p>
+                    {% endif %}
 
-                {% if block.social_links %}
-                    <div class="flex justify-center gap-2">
-                        {% for link in block.social_links %}
-                            {% include "includes/social_media_icon_link.html" with link=link %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                    {% if block.social_links %}
+                        <div class="flex justify-center gap-2">
+                            {% for link in block.social_links %}
+                                {% include "includes/social_media_icon_link.html" with link=link %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
+
         </div>
     </div>
 </section>
@@ -31,12 +42,15 @@
 {# description + ticket booking link #}
 <section class="bg-wyrd-purple-300 text-wyrd-purple-100 p-4 md:p-6 home-section flex flex-col items-center justify-center" data-nav-color="purple">
     <div class="bg-wyrd-purple-500 w-full h-full flex items-center rounded-3xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-16 text-center md:h-[424px] justify-end items-center">
-            <p class="font-medium text-h4">
+        <div class="max-w-7xl mx-auto px-8 flex flex-col gap-16 text-center md:h-[424px] justify-end items-center">
+            <h4 class="font-medium">
                 Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026
-            </p>
-            {% if block.ticket_url %}
-                {% render_button label="Prendre ma place" url=block.ticket_url variant="primary" %}
+            </h4>
+            {% if block.ticket_url.page %}
+                {% pageurl block.ticket_url.page as ticket_link %}
+                {% render_button label="Prendre ma place" url=ticket_link variant="primary" %}
+            {% elif block.ticket_url.external_url %}
+                {% render_button label="Prendre ma place" url=block.ticket_url.external_url variant="primary" %}
             {% endif %}
         </div>
     </div>

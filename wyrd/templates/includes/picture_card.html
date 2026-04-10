@@ -1,7 +1,7 @@
 {% load wagtailimages_tags %}
 
-<div class="card bg-white rounded-4xl overflow-hidden shadow-card h-fit p-2 w-fit shrink-0{% if additional_class %} {{ additional_class }}{% endif %}">
-    <div class="relative bg-wyrd-purple-500 rounded-3xl {% if size == 'small' %} max-sm:h-card-s-mobile max-sm:w-card-s-mobile h-card-s-desktop w-card-s-desktop {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile h-card-l-desktop max-sm:h-card-l-mobile {% endif %} text-white leading-h3 font-bold text-h3 text-center">
+<div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit p-1 md:p-2 w-fit shrink-0{% if additional_class %} {{ additional_class }}{% endif %}">
+    <div class="relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl {% if size == 'small' %} max-sm:h-card-s-mobile max-sm:w-card-s-mobile h-card-s-desktop w-card-s-desktop {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile h-card-l-desktop max-sm:h-card-l-mobile {% endif %} text-white font-bold text-center">
             
         {% if card.photo %}
             {% image card.photo fill-400x400 as card_img %}
@@ -10,9 +10,9 @@
                     alt="{{ card.title }}"
                     class="w-full h-full object-cover"
                 >
-                <span class="absolute bottom-4 left-0 w-full">
+                <h3 class="absolute bottom-4 left-0 w-full">
                     {{ card.title }}
-                </span>
+                </h3>
         {% endif %}
         
     </div>

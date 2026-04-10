@@ -30,6 +30,7 @@ html {
   --color-wyrd-green-900: #154d2e;
   --color-wyrd-indigo-100: #e2e1f0;
   --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-700: #130e30;
   --color-wyrd-indigo-900: #060412;
   --color-wyrd-gray-300: #d2c9e4;
   --color-wyrd-teal-500: #7cc7f2;
@@ -64,34 +65,64 @@ html {
   --color-wyrd-green-900: var(--color-wyrd-green-900);
   --color-wyrd-indigo-100: var(--color-wyrd-indigo-100);
   --color-wyrd-indigo-300: var(--color-wyrd-indigo-300);
+  --color-wyrd-indigo-700: var(--color-wyrd-indigo-700);
   --color-wyrd-indigo-900: var(--color-wyrd-indigo-900);
   --color-wyrd-gray-300: var(--color-wyrd-gray-300);
   --color-wyrd-teal-500: var(--color-wyrd-teal-500);
 
   /* Text sizes & line heights */
-  --text-hero: 164px;
-  --leading-hero: 132px;
+  --text-hero-desktop: 164px;
+  --text-hero-mobile: 60px;
+  --leading-hero-desktop: 132px;
+  --leading-hero-mobile: 48px;
   --tracking-hero: -2%;
-  --text-logo: 64px;
-  --text-h1: 127px;
-  --leading-h1: 108px;
-  --text-h2: 80px;
-  --leading-h2: 68px;
-  --text-h3: 40px;
-  --leading-h3: 49px;
-  --text-h4: 26px;
-  --leading-h4: 36px;
-  --text-h5: 14px;
-  --leading-h5: 17px;
-  --text-body: 18px;
-  --leading-body: 26px;
+
+  --text-logo-desktop: 64px;
+  --text-logo-mobile: 42px;
+  --text-h1-desktop: 127px;
+  --leading-h1-desktop: 108px;
+  --text-h1-mobile: 56px;
+  --leading-h1-mobile: 46px;
+
+  --text-h2-desktop: 80px;
+  --leading-h2-desktop: 68px;
+  --text-h2-mobile: 36px;
+  --leading-h2-mobile: 30px;
+
+  --text-h3-desktop: 40px;
+  --leading-h3-desktop: 49px;
+  --text-h3-mobile: 22px;
+  --leading-h3-mobile: 26px;
+
+  --text-h4-desktop: 26px;
+  --leading-h4-desktop: 36px;
+  --text-h4-mobile: 18px;
+  --leading-h4-mobile: 20px;
+
+  --text-h5-desktop: 14px;
+  --leading-h5-desktop: 17px;
+  --text-h5-mobile: 12px;
+  --leading-h5-mobile: 15px;
+
+  --text-body-desktop: 18px;
+  --text-body-mobile: 16px;
+  --leading-body-desktop: 26px;
+  --leading-body-mobile: 20px;
+  --text-2xs: 10px;
+  --leading-2xs: 10px;
 
   /* Shadows */
-  --shadow-card: 0px 8px rgba(18, 16, 31, 0.15);
+  --shadow-card-mobile: 0 4px rgba(18, 16, 31, 0.15);
+  --shadow-card-desktop: 0px 8px rgba(18, 16, 31, 0.15);
+  --shadow-nav-menu: 0 10px 30px rgba(6, 4, 18, 0.2);
 
   /* Sizes */
-  --height-button: 53px;
-  --height-navbar: 85px;
+  --height-btn-desktop: 53px;
+  --height-btn-mobile: 56px;
+  --width-btn-desktop: 53px;
+  --width-btn-mobile: 56px;
+  --height-navbar-desktop: 85px;
+  --height-navbar-mobile: 88px;
 
   --height-card-s-desktop: 250px;
   --width-card-s-desktop: 250px;
@@ -101,26 +132,35 @@ html {
   --width-card-l-desktop: 475px;
   --height-card-l-mobile: 324px;
   --width-card-l-mobile: 265px;
+
+  --width-map-desktop: 500px;
+  --width-map-mobile: 250px;
+  --height-map-desktop: 500px;
+  --height-map-mobile: 250px;
 }
 
 h1 {
-  @apply text-h1 leading-h1 font-normal;
+  @apply text-h1-mobile leading-h1-mobile md:text-h1-desktop md:leading-h1-desktop font-normal;
+}
+
+h1.hero {
+  @apply text-hero-mobile leading-hero-mobile md:text-hero-desktop md:leading-hero-desktop tracking-hero font-normal;
 }
 
 h2 {
-  @apply text-h2 leading-h2 font-normal;
+  @apply text-h2-mobile leading-h2-mobile md:text-h2-desktop md:leading-h2-desktop font-normal;
 }
 
 h3 {
-  @apply text-h3 leading-h3;
+  @apply text-h3-mobile leading-h3-mobile md:text-h3-desktop md:leading-h3-desktop;
 }
 
 h4 {
-  @apply text-h4 leading-h4;
+  @apply text-h4-mobile leading-h4-mobile md:text-h4-desktop md:leading-h4-desktop;
 }
 
 h5 {
-  @apply text-h5 leading-h5;
+  @apply text-h5-mobile leading-h5-mobile md:text-h5-desktop md:leading-h5-desktop;
 }
 
 button:not(:disabled) {
@@ -130,7 +170,7 @@ button:not(:disabled) {
 header,
 body,
 footer {
-  @apply text-body leading-body font-medium font-bricolage;
+  @apply md:text-body-desktop text-body-mobile md:leading-body-desktop leading-body-mobile font-medium font-bricolage;
 }
 
 h1,

@@ -1,8 +1,14 @@
 {% load static wagtailcore_tags home_components %}
 
-<section class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-pink-500 text-wyrd-pink-900 text-center" data-nav-color="pink">
-    <div class="relative lg:w-[740px] max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">
-        <h2 class="text-center">{{ block.title }}</h2>
+<section
+    data-nav-color="pink"
+    class="flex flex-col items-center justify-center px-12 sm:px-16 py-16 md:py-24 home-section bg-wyrd-pink-500 text-wyrd-pink-900 text-center max-sm:h-[calc(100vh+200px)]!" 
+>
+    <div class="relative lg:w-[740px] max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">        
+        <h2 class="text-center tracking-hero">
+            {{ block.title }}
+        </h2>
+        
         {% if block.description %}
             <p class="text-center">{{ block.description }}</p>
         {% endif %}

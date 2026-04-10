@@ -2,13 +2,13 @@
 
 <div id="nav-menu-backdrop" class="fixed inset-0 z-55 bg-black/45 opacity-0 pointer-events-none transition-opacity duration-300" aria-hidden="true"></div>
 
-<aside id="nav-side-drawer" class="fixed flex flex-col top-4 left-4 z-60 bottom-4 md:w-1/2 lg:w-1/3 max-md:right-16 rounded-lg overflow-y-auto bg-wyrd-purple-500 shadow-[0_10px_30px_rgb(6_4_18/20%)] -translate-x-full opacity-0 pointer-events-none transition-all duration-300 ease-out" aria-hidden="true">
+<aside id="nav-side-drawer" class="fixed top-4 left-4 bottom-4 z-60 flex h-[calc(100dvh-2rem)] w-[calc(80vw-1rem)] max-w-[calc(100vw-2rem)] flex-col overflow-y-auto rounded-2xl md:rounded-3xl bg-wyrd-purple-500 shadow-nav-menu -translate-x-full opacity-0 pointer-events-none transition-all duration-300 ease-out md:w-1/2 md:max-w-none lg:w-1/3" aria-hidden="true">
 	
-    <div class="justify-self-start h-16 px-12 flex text-wyrd-indigo-900">
+    <div class="flex h-16 justify-self-start px-6 text-wyrd-indigo-900 md:px-12">
         <button
 			id="nav-menu-close"
 			type="button"
-			class="rounded-full h-12 w-12 top-6 flex items-center justify-center bg-white text-wyrd-indigo-900 absolute"
+			class="rounded-full h-12 w-12 md:top-6 top-5 flex items-center justify-center bg-white text-wyrd-indigo-900 absolute"
 			aria-label="Fermer le menu"
 		>
             <svg 
@@ -26,7 +26,7 @@
 	</div>
 
 	<nav
-		class="flex flex-col js-nav-menu-links p-12 flex-1"
+		class="js-nav-menu-links flex flex-1 flex-col p-6 md:p-12"
 		aria-label="Menu de navigation secondaire"
 	>
 		<div class="flex flex-col gap-2">

@@ -3,8 +3,8 @@
 {% get_settings use_default_site=True %}
 {% with footer_settings=settings.core.FooterSettings %}
 
-<footer class="bg-wyrd-indigo-900 text-white mt-auto md:p-24">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+<footer class="bg-wyrd-indigo-700 text-wyrd-indigo-100 mt-auto md:px-24 md:py-24 py-16 px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="flex flex-col gap-2">
             {% if footer_settings.footer_page_links.all %}
                 {% for link in footer_settings.footer_page_links.all %}
@@ -22,7 +22,7 @@
             {% endif %}
         </div>
 
-        <div class="flex flex-col gap-7 text-white">
+        <div class="flex flex-col gap-7 text-wyrd-indigo-100 max-md:border-t border-wyrd-indigo-100 max-md:pt-6">
             <p>
                 Les meilleures histoires se préparent en avance. Inscris-toi pour recevoir les annonces en avant-première, guests, programme, surprises du jour J.
             </p>

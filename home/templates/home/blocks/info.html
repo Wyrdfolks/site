@@ -1,24 +1,50 @@
-<section class="py-16 lg:p-16 home-section bg-wyrd-pink-500 text-wyrd-pink-900 flex items-center flex-row" data-nav-color="pink">
-    <div class="flex flex-row items-center justify-center flex-1 gap-32 lg:m-6 mx-auto">
-        {% with size="large" additional_class="rotate-[8deg]" %}
-            {% include "includes/picture_card.html" %}
-        {% endwith %}
-        <div class="flex flex-col gap-16 lg:w-[640px]">
-            <h2>{{ block.title }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+{% load wagtailcore_tags core_components %}
+
+<section 
+    data-nav-color="pink"
+    class="home-section bg-wyrd-pink-500 text-wyrd-pink-900 flex items-center flex-row"
+>
+    <div class="flex flex-col md:flex-row items-center justify-center flex-1 gap-6 lg:gap-32 md:gap-16 lg:m-6 mx-auto p-14 sm:p-16 max-w-full">
+        
+        <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit w-fit p-1 md:p-2 rotate-[8deg]">
+            <div class="relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop text-white font-bold text-center max-w-full">
+            </div>        
+        </div>
+
+        <div class="flex flex-col gap-6 md:gap-16 lg:w-[640px] max-md:mt-2">
+            <h2 class="max-md:text-center">{{ block.title }}</h2>
+            <div class="grid grid-cols-2 gap-6 md:gap-12 max-w-4xl mx-auto">
                 {% if block.access %}
                     <div>
-                        <h3 class="text-xl! font-semibold mb-2.5 uppercase">Accès</h3>
-                        <div class="">{{ block.access|safe }}</div>
+                        <h4 class="font-semibold uppercase">Accès</h4>
+                        {{ block.access|safe }}
                     </div>
                 {% endif %}
                 {% if block.schedule %}
                     <div>
-                        <h3 class="text-xl! font-semibold mb-2.5 uppercase">Horaires</h3>
-                        <div class="">{{ block.schedule|safe }}</div>
+                        <h4 class="font-semibold uppercase">Horaires</h4>
+                        {{ block.schedule|safe }}
                     </div>
                 {% endif %}
             </div>
+
+            {% if block.directions_link or block.faq_link %}
+                <div class="flex flex-row">
+                    {% if block.directions_link.page %}
+                        {% pageurl block.directions_link.page as directions_link %}
+                        {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" %}
+                    {% elif block.directions_link.external_url %}
+                            {% render_button label="Comment venir ?" url=block.directions_link.external_url variant="secondary" color="pink" %}
+                    {% endif %}
+
+                    {% if block.faq_link.page %}
+                        {% pageurl block.faq_link.page as faq_link %}
+                        {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" %}
+                    {% elif block.faq_link.external_url %}
+                        {% render_button label="FAQ" url=block.faq_link.external_url variant="secondary" color="pink" %}
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </section>

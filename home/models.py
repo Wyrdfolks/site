@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from wagtail.models import Page
 from wagtail.fields import StreamField
 from wagtail.blocks import (
@@ -6,6 +8,7 @@ from wagtail.blocks import (
     URLBlock,
     RichTextBlock,
     ListBlock,
+    PageChooserBlock,
 )
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import FieldPanel
@@ -13,12 +16,33 @@ from wagtail.admin.panels import FieldPanel
 # --- Blocks ---
 
 
+class LinkBlock(StructBlock):
+    page = PageChooserBlock(label="Page interne", required=False)
+    external_url = URLBlock(label="URL externe", required=False)
+
+    def clean(self, value):
+        value = super().clean(value)
+        page = value.get("page")
+        external_url = value.get("external_url")
+
+        if page and external_url:
+            raise ValidationError(
+                "Choisissez soit une page interne, soit une URL externe, pas les deux."
+            )
+
+        return value
+
+    class Meta:
+        icon = "link"
+        label = "Lien"
+
+
 class HeroBlock(StructBlock):
     title = CharBlock(label="Titre")
     subtitle = CharBlock(label="Sous-titre", required=False)
     tagline = CharBlock(label="Tagline", required=False)
-    ticket_url = URLBlock(label="Lien billetterie", required=False)
-    about_url = URLBlock(label="Lien à propos", required=False)
+    ticket_url = LinkBlock(label="Lien billetterie", required=False)
+    about_url = LinkBlock(label="Lien à propos", required=False)
     text_about_url = CharBlock(
         label="Texte du lien à propos",
         required=False,
@@ -72,7 +96,7 @@ class GuestsBlock(StructBlock):
                 "label",
                 CharBlock(label="Texte du bouton", default="Voir le programme"),
             ),
-            ("url", URLBlock(label="Lien du bouton")),
+            ("url", LinkBlock(label="Lien du bouton")),
         ],
         label="Call to action",
         required=False,
@@ -87,6 +111,8 @@ class InfoBlock(StructBlock):
     title = CharBlock(label="Titre")
     access = RichTextBlock(label="Accès", required=False)
     schedule = RichTextBlock(label="Horaires", required=False)
+    directions_link = LinkBlock(label="Lien vers la page d'accès", required=False)
+    faq_link = LinkBlock(label="Lien vers la FAQ", required=False)
 
     class Meta:
         icon = "info-circle"
@@ -110,8 +136,8 @@ class HeroFomoBlock(StructBlock):
         SnippetChooserBlock("core.SocialMediaLink"),
         label="Liens social media",
     )
-    discord_url = URLBlock(label="Lien Discord", required=False)
-    ticket_url = URLBlock(label="Lien billetterie", required=False)
+    discord_url = LinkBlock(label="Lien Discord", required=False)
+    ticket_url = LinkBlock(label="Lien billetterie", required=False)
     about_text = CharBlock(
         label="Texte d'accroche",
         default="Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",

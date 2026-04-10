@@ -4,7 +4,7 @@
     target="_blank"
     rel="noopener noreferrer"
     aria-label="{{ social_link.name }}"
-    class="social-media-icon h-6 w-6 text-white hover:text-wyrd-indigo-900 transition-colors flex items-center justify-center"
+    class="social-media-icon md:h-6 md:w-6 h-4 w-4 text-white hover:text-wyrd-indigo-900 transition-colors flex items-center justify-center"
 >
     {% if social_link.platform_type == "instagram" %}
         {% include "svg/instagram.svg" %}
@@ -22,10 +22,10 @@
         <img 
             src="{{ social_link.icon.url }}" 
             alt="{{ social_link.name }} icon" 
-            class="h-6 w-6 object-contain"
+            class="md:h-6 md:w-6 h-4 w-4 object-contain"
         >
     {% else %}
-        <span class="text-3xl font-bold uppercase" aria-hidden="true">
+        <span class="text-xl md:text-3xl font-bold uppercase" aria-hidden="true">
             ?
         </span>
     {% endif %}

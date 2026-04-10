@@ -1,11 +1,11 @@
 {# Card of presentation section. Use by calling {% render_presentation_card ... %} from home_components. #}
 <div 
-    class="presentation-card shadow-card w-card-s-desktop h-card-s-desktop flex flex-col items-center justify-end rounded-4xl p-4 absolute {{ class_name }}"
+    class="presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute {{ class_name }}"
     {% if index is not None %} data-card-index="{{ index }}"{% endif %}
 >
-    <div class="card-content mt-3 w-full text-center">
+    <div class="card-content w-full text-center">
         {% if title %}
-            <p class="presentation-card-title mb-1 text-xl font-bold normal-case">
+            <p class="presentation-card-title text-2xs md:text-xl font-bold normal-case max-md:leading-2xs">
                 {{ title|lower|capfirst }}
             </p>
         {% endif %}

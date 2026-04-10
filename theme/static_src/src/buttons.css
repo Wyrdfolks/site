@@ -1,6 +1,6 @@
 /* Button base */
 .btn {
-  @apply font-bold w-fit;
+  @apply font-medium md:font-bold w-fit text-nowrap;
 }
 
 .btn.is-disabled {
@@ -11,11 +11,16 @@
   display: none;
 }
 
+.btn.btn-circle {
+  @apply rounded-full p-0!;
+  @apply w-btn-mobile h-btn-mobile md:w-btn-desktop md:h-btn-desktop;
+}
+
 /* Button primary variant */
 .btn-primary {
   @apply relative inline-flex items-center justify-center overflow-hidden;
   @apply bg-white text-wyrd-indigo-900 rounded-lg;
-  @apply uppercase tracking-tight h-button px-6 py-3;
+  @apply uppercase tracking-tight h-btn-mobile md:h-btn-desktop px-6 py-3;
   @apply ease-in-out transition-colors duration-300;
 }
 
@@ -45,7 +50,7 @@
 
 .btn-ghost {
   @apply relative bg-transparent text-white hover:text-wyrd-indigo-100;
-  @apply text-h3 leading-h3;
+  @apply md:text-h3-desktop md:leading-h3-desktop text-h3-mobile leading-h3-mobile;
 }
 
 .btn.btn-ghost svg.ghost-arrow {
@@ -71,15 +76,15 @@
 }
 
 .btn-ghost.btn-small {
-  @apply text-lg font-normal leading-body;
+  @apply text-lg font-normal md:leading-body-desktop leading-body-mobile;
 }
 
 /* Button secondary variant */
 
 .btn-secondary {
   @apply inline-flex items-center justify-center;
-  @apply text-body uppercase tracking-tight;
-  @apply rounded-full px-6 py-3 h-button;
+  @apply text-body-desktop uppercase tracking-tight;
+  @apply rounded-full h-btn-mobile md:h-btn-desktop px-6 py-3;
   transform-origin: 50% 100%;
   will-change: transform;
   background-color: var(--btn-secondary-bg, var(--color-wyrd-purple-300));
