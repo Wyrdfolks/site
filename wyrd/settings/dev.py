@@ -1,7 +1,7 @@
 from .base import *
 import os
 
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False").strip().lower() == "true"
 
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",

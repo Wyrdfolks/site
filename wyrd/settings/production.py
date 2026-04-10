@@ -20,7 +20,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # See https://docs.djangoproject.com/en/6.0/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STORAGES["staticfiles"][
     "BACKEND"
-] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+] = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 LOG_DIR = os.environ.get("LOG_DIR", ".")
 LOGGING = {
