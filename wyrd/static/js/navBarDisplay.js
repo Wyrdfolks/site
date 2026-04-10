@@ -54,6 +54,22 @@ function isNavMenuOpen(drawer) {
   return drawer?.getAttribute("aria-hidden") === "false";
 }
 
+const BODY_CLASSES = ["overflow-hidden"];
+const BACKDROP_CLOSED_CLASSES = ["opacity-0", "pointer-events-none"];
+const BACKDROP_OPEN_CLASSES = ["opacity-100", "pointer-events-auto"];
+const DRAWER_CLOSED_CLASSES = [
+  "-translate-x-full",
+  "opacity-0",
+  "pointer-events-none",
+  "is-opening",
+];
+const DRAWER_OPEN_CLASSES = [
+  "translate-x-0",
+  "opacity-100",
+  "pointer-events-auto",
+  "is-opening",
+];
+
 /**
  * @param {{drawer: HTMLElement, backdrop: HTMLElement, toggleButton: HTMLElement}} state
  * @param {boolean} open
@@ -62,39 +78,21 @@ function setNavMenuState({ drawer, backdrop, toggleButton }, open) {
   if (!drawer || !backdrop || !toggleButton) return;
 
   if (open) {
-    drawer.classList.remove(
-      "-translate-x-full",
-      "opacity-0",
-      "pointer-events-none",
-    );
-    drawer.classList.add(
-      "translate-x-0",
-      "opacity-100",
-      "pointer-events-auto",
-      "is-opening",
-    );
-    backdrop.classList.remove("opacity-0", "pointer-events-none");
-    backdrop.classList.add("opacity-100", "pointer-events-auto");
+    drawer.classList.remove(...DRAWER_CLOSED_CLASSES);
+    drawer.classList.add(...DRAWER_OPEN_CLASSES);
+    backdrop.classList.remove(...BACKDROP_CLOSED_CLASSES);
+    backdrop.classList.add(...BACKDROP_OPEN_CLASSES);
     drawer.setAttribute("aria-hidden", "false");
     toggleButton.setAttribute("aria-expanded", "true");
-    document.body.classList.add("overflow-hidden");
+    document.body.classList.add(...BODY_CLASSES);
   } else {
-    drawer.classList.remove(
-      "translate-x-0",
-      "opacity-100",
-      "pointer-events-auto",
-      "is-opening",
-    );
-    drawer.classList.add(
-      "-translate-x-full",
-      "opacity-0",
-      "pointer-events-none",
-    );
-    backdrop.classList.remove("opacity-100", "pointer-events-auto");
-    backdrop.classList.add("opacity-0", "pointer-events-none");
+    drawer.classList.remove(...DRAWER_OPEN_CLASSES);
+    drawer.classList.add(...DRAWER_CLOSED_CLASSES);
+    backdrop.classList.remove(...BACKDROP_OPEN_CLASSES);
+    backdrop.classList.add(...BACKDROP_CLOSED_CLASSES);
     drawer.setAttribute("aria-hidden", "true");
     toggleButton.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("overflow-hidden");
+    document.body.classList.remove(...BODY_CLASSES);
   }
 }
 

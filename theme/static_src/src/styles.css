@@ -167,6 +167,11 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+html {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 header,
 body,
 footer {

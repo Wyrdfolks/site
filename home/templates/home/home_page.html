@@ -3,10 +3,6 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
-{% endblock %}
-
 {% block content %}
     {% for block in page.body %}
         {% if block.block_type == 'hero' %}
@@ -31,6 +27,10 @@
             {% include "home/blocks/hero_fomo.html" with block=block.value %}
         {% endif %}
     {% endfor %}
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
 {% endblock %}
 
 {% block extra_js %}

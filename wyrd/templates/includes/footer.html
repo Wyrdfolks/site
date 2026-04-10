@@ -27,7 +27,7 @@
                 Les meilleures histoires se préparent en avance. Inscris-toi pour recevoir les annonces en avant-première, guests, programme, surprises du jour J.
             </p>
             {% if footer_settings.footer_social_links.all %}
-                <div class="flex gap-6 uppercase">
+                <div class="flex gap-6 uppercase items-center">
                     Nous suivre :
                     {% for item in footer_settings.footer_social_links.all %}
                         {% include "includes/social_media_icon_link.html" with link=item.social_media %}

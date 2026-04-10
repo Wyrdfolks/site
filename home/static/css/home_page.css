@@ -4,21 +4,27 @@
   box-sizing: inherit;
 }
 
-body {
+html,
+html.template-homepage {
   margin: 0;
   padding: 0;
-  width: 100vw;
   min-height: 100vh;
   background-color: var(--color-wyrd-purple-500);
   font-family: "Bricolage Grotesque", sans-serif;
   color: var(--color-wyrd-indigo-900);
+  overflow-x: hidden;
+}
+
+section {
   max-width: 100vw;
   overflow-x: hidden;
 }
 
-main section.home-section {
-  height: 100vh;
+html.template-homepage section.home-section {
+  min-height: 100vh;
   width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 h1 {
