@@ -3,6 +3,7 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
+
 {% block content %}
     {% for block in page.body %}
         {% if block.block_type == 'hero' %}
@@ -29,10 +30,14 @@
     {% endfor %}
 {% endblock %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
+{% block extra_js %}
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollToPlugin.min.js"></script>
+    <script defer src="{% static 'js/presentationCardsLayout.js' %}"></script>
+    <script defer src="{% static 'js/homeSectionScroll.js' %}"></script>
 {% endblock %}
 
-{% block extra_js %}
-    <script defer src="{% static 'js/presentationCardsLayout.js' %}"></script>
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home_page.css' %}">
 {% endblock %}

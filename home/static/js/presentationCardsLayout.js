@@ -70,7 +70,7 @@ const desktopMedia = window.matchMedia("(min-width: 768px)");
 
 function layoutPresentationCards() {
   const cards = Array.from(document.querySelectorAll(".presentation-card"));
-  const positions = desktopMedia.matches
+  const positions = isDesktop.matches
     ? CARD_POSITIONS_DESKTOP
     : CARD_POSITIONS_MOBILE;
 
@@ -95,5 +95,5 @@ if (document.readyState === "loading") {
   schedulePresentationCardLayout();
 }
 
-desktopMedia.addEventListener("change", schedulePresentationCardLayout);
+isDesktop.addEventListener("change", schedulePresentationCardLayout);
 window.addEventListener("resize", schedulePresentationCardLayout);

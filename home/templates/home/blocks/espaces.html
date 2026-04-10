@@ -1,8 +1,9 @@
 <section 
-    class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500 overflow-visible" 
+    class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500 overflow-hidden" 
     data-nav-color="green"
+    data-espaces-section="hero"
 >
-    <div class="max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col text-wyrd-green-500 relative h-[300px] w-full overflow-hidden">
+    <div class="max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col text-wyrd-green-500 relative h-[300px] w-full" data-espaces-hero-content>
         <svg
             width="2000"
             height="300"
@@ -27,8 +28,9 @@
 <section 
     class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500" 
     data-nav-color="green"
+    data-espaces-section="subtitle"
 >
-    <div class="max-w-5xl mx-auto px-12 gap-3 flex flex-col">
+    <div class="max-w-5xl mx-auto px-12 gap-3 flex flex-col" data-espaces-subtitle-content>
         {% if block.subtitle %}
             <h3 class="text-center">{{ block.subtitle }}</h3>
         {% endif %}
@@ -37,7 +39,7 @@
 
 {% if block.mondes|length > 0 %}
     <section 
-        class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 bg-wyrd-green-900 text-wyrd-green-500" 
+        class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 bg-wyrd-green-900 text-wyrd-green-500 md:h-screen" 
         data-nav-color="green"
     >
         <div class="md:flex-1 flex items-center justify-center max-md:hidden">
@@ -47,7 +49,7 @@
         {% endwith %}
         </div>
 
-        <div class="md:flex-1 w-full flex flex-col overflow-x-hidden md:overflow-y-auto h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12">
+        <div class="md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-y-auto h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12">
             {% for monde_item in block.mondes %}
                 {% with monde=monde_item %}
                     {% include "includes/monde_card.html" with zone_index=forloop.counter %}
