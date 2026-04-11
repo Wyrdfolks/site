@@ -25,8 +25,11 @@
                             >
                                 <button 
                                     {# closed by default, toggled from JS #}
-                                    data-faq-trigger 
-                                    aria-expanded="false" 
+                                    data-faq-trigger
+                                    type="button"
+                                    id="faq-{{ block.id }}-{{ forloop.counter }}-trigger"
+                                    aria-expanded="false"
+                                    aria-controls="faq-{{ block.id }}-{{ forloop.counter }}-answer"
                                     class="h-13 w-full flex items-center justify-between cursor-pointer pl-6 pr-2 py-2 font-bold text-wyrd-indigo-900"
                                 >
                                     <span>{{ item.question }}</span>
@@ -48,8 +51,12 @@
                                 </button>
                                 
                                 <div
-                                    data-faq-answer 
-                                    aria-hidden="true" 
+                                    id="faq-{{ block.id }}-{{ forloop.counter }}-answer"
+                                    data-faq-answer
+                                    role="region"
+                                    aria-labelledby="faq-{{ block.id }}-{{ forloop.counter }}-trigger"
+                                    aria-hidden="true"
+                                    hidden
                                     class="h-0 overflow-hidden transition-all duration-300 ease-out"
                                 >
                                     <div 
@@ -95,6 +102,7 @@
             const setOpenState = (open) => {
                 trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
                 answer.setAttribute('aria-hidden', open ? 'false' : 'true');
+                answer.inert = !open;
                 icon.style.transform = open ? 'rotate(45deg)' : 'rotate(0deg)';
                 answerInner.classList.remove(...(open ? CLOSED_CLASSES : OPEN_CLASSES));
                 answerInner.classList.add(...(open ? OPEN_CLASSES : CLOSED_CLASSES));
@@ -103,6 +111,7 @@
             setOpenState(false); // init in closed state
 
             const openAnswer = () => {
+                answer.hidden = false;
                 answer.style.height = '0px';
                 setOpenState(true);
                 requestAnimationFrame(() => {
@@ -130,6 +139,11 @@
                 if (event.propertyName !== 'height') return;
                 if (trigger.getAttribute('aria-expanded') === 'true' && answer.style.height !== '0px') {
                     answer.style.height = 'auto';
+                    return;
+                }
+
+                if (trigger.getAttribute('aria-expanded') === 'false' && answer.style.height === '0px') {
+                    answer.hidden = true;
                 }
             };
 
