@@ -195,6 +195,15 @@ body.template-apropos {
   @apply bg-wyrd-purple-500 text-white;
 }
 
+body.template-faq {
+  @apply bg-wyrd-pink-500 text-wyrd-pink-950;
+}
+
+body.template-faq section,
+body.template-apropos section {
+  @apply min-h-screen;
+}
+
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
   * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
