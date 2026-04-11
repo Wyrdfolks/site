@@ -1,5 +1,3 @@
-import json
-
 from django.core.management.base import BaseCommand
 from wagtail.models import Page, Site
 
@@ -158,7 +156,15 @@ class Command(BaseCommand):
                     "title": "Incarne l'histoire",
                     "subtitle": "Pantin - 11 Oct. 2026",
                     "tagline": "Zéro prérequis. Observe, joue ou viens en famille",
-                    "ticket_url": "https://example.com/billetterie",
+                    "ticket_url": {
+                        "page": None,
+                        "external_url": "https://example.com/billetterie",
+                    },
+                    "about_url": {
+                        "page": None,
+                        "external_url": "",
+                    },
+                    "text_about_url": "...Mais avant, qu'est-ce que c'est ?",
                 },
             },
             {
@@ -188,6 +194,11 @@ class Command(BaseCommand):
                 "value": {
                     "title": "Cette histoire a déjà ses personnages.",
                     "guests": [g.pk for g in guests],
+                    "teaser_text": "Et bien plus encore...",
+                    "cta": {
+                        "label": "Voir le programme",
+                        "url": {"page": None, "external_url": ""},
+                    },
                 },
             },
             {
@@ -196,6 +207,11 @@ class Command(BaseCommand):
                     "title": "Certaines histoires ne se racontent qu'une fois",
                     "access": "<p>La Cité Fertile<br/>14 Av. Edouard Vaillant, 93500<br/>Pantin</p>",
                     "schedule": "<p>Dimanche 11 Oct. 2026<br/>10h à 22h30</p>",
+                    "directions_link": {
+                        "page": None,
+                        "external_url": "https://citefertile.com/infos-pratiques/",
+                    },
+                    "faq_link": {"page": None, "external_url": ""},
                 },
             },
             {
@@ -214,13 +230,18 @@ class Command(BaseCommand):
                 "value": {
                     "title": "Ne rate pas le début de l'histoire",
                     "social_links": [socials[name].pk for name in socials],
-                    "discord_url": "https://discord.gg/wyrdfestival",
+                    "discord_url": {
+                        "page": None,
+                        "external_url": "https://discord.gg/wyrdfestival",
+                    },
+                    "ticket_url": {
+                        "page": None,
+                        "external_url": "https://example.com/billetterie",
+                    },
+                    "about_text": "Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",
                 },
             },
         ]
-        home_page.body = json.dumps(home_body)
-        home_page.title = "Wyrd - Festival du jeu de rôle"
-        home_page.save_revision().publish()
 
         # ── Page À Propos ──
         self.stdout.write("  Création de la page À Propos...")
@@ -259,6 +280,7 @@ class Command(BaseCommand):
             )
             home_page.add_child(instance=apropos)
             apropos.save_revision().publish()
+        apropos = AProposPage.objects.first()
 
         # ── Page FAQ ──
         self.stdout.write("  Création de la page FAQ...")
@@ -337,10 +359,11 @@ class Command(BaseCommand):
                 title="J'ai plein de questions",
                 slug="faq",
                 subtitle="La page la plus utile du site (on dit ça, mais on le pense vraiment). Néophyte ou vieux de la vieille, les réponses sont ici. Et si on a raté la tienne, dis-le nous.",
-                categories=json.dumps(faq_categories),
+                categories=faq_categories,
             )
             home_page.add_child(instance=faq)
             faq.save_revision().publish()
+        faq = FAQPage.objects.first()
 
         # ── Page Programmation ──
         self.stdout.write("  Création de la page Programmation...")
@@ -461,10 +484,19 @@ class Command(BaseCommand):
                 title="Le programme (et on est fier de lui)",
                 slug="programmation",
                 subtitle="Tables ouvertes, scène allumée, espaces à explorer et quelques surprises qu'on garde pour nous. Tout ça le même jour, au même endroit. Il n'y a plus qu'à choisir par où commencer.",
-                tabs=json.dumps(prog_tabs),
+                tabs=prog_tabs,
             )
             home_page.add_child(instance=prog)
             prog.save_revision().publish()
+        prog = ProgrammationPage.objects.first()
+
+        self.stdout.write("  Mise à jour du contenu de la HomePage...")
+        home_body[0]["value"]["about_url"]["page"] = apropos.pk if apropos else None
+        home_body[3]["value"]["cta"]["url"]["page"] = prog.pk if prog else None
+        home_body[4]["value"]["faq_link"]["page"] = faq.pk if faq else None
+        home_page.body = home_body
+        home_page.title = "Wyrd - Festival du jeu de rôle"
+        home_page.save_revision().publish()
 
         # ── Settings : Header ──
         self.stdout.write("  Configuration du Header...")
