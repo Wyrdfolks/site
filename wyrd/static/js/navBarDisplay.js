@@ -10,6 +10,100 @@
 
 const DEFAULT_COLOR = "purple";
 
+// threshold of vertical scroll in pixels before showing/hiding the navbar
+const NAV_VISIBILITY_THRESHOLD_DESKTOP = 12;
+const NAV_VISIBILITY_THRESHOLD_MOBILE = 28;
+const SCREEN_WIDTH_THRESHOLD = 768;
+
+const isDesktop = window.matchMedia(`(min-width: ${SCREEN_WIDTH_THRESHOLD}px)`);
+
+/**
+ * @typedef {Object} NavScrollState
+ * @property {number} currentScrollY
+ * @property {-1 | 0 | 1} lastDirection
+ * @property {number} accumulatedDelta
+ * @property {boolean} navVisible
+ */
+
+function getNavVisibilityThreshold() {
+  return isDesktop.matches
+    ? NAV_VISIBILITY_THRESHOLD_DESKTOP
+    : NAV_VISIBILITY_THRESHOLD_MOBILE;
+}
+
+/**
+ * Convert a scroll delta into a normalized direction.
+ * @param {number} deltaY
+ * @returns {-1 | 0 | 1}
+ */
+function getScrollDirection(deltaY) {
+  if (deltaY === 0) return 0;
+  return deltaY > 0 ? 1 : -1;
+}
+
+/**
+ * Determine whether the navbar should stay visible regardless of scroll
+ * direction, such as near the top of the page or while the menu drawer is open.
+ * @param {HTMLElement | null} drawer
+ * @param {number} currentScrollY
+ * @param {number} navHeight
+ * @returns {boolean}
+ */
+function shouldShowNavByDefault(drawer, currentScrollY, navHeight) {
+  return (
+    isNavMenuOpen(drawer) || currentScrollY <= window.innerHeight - navHeight
+  );
+}
+
+/**
+ * Reset scroll accumulated scroll delta when the navbar must remain visible.
+ * @param {NavScrollState} state
+ */
+function resetNavScrollState(state) {
+  state.navVisible = true;
+  state.lastDirection = 0;
+  state.accumulatedDelta = 0;
+}
+
+/**
+ * Update navbar visibility using accumulated scroll distance so tiny direction
+ * changes do not immediately show or hide the bar.
+ * @param {NavScrollState} state
+ * @param {number} deltaY
+ * @returns {boolean}
+ */
+function updateNavVisibility(state, deltaY) {
+  const direction = getScrollDirection(deltaY);
+
+  if (direction !== 0) {
+    if (direction !== state.lastDirection) {
+      state.accumulatedDelta = 0;
+      state.lastDirection = direction;
+    }
+    state.accumulatedDelta += deltaY;
+  }
+
+  const threshold = getNavVisibilityThreshold();
+
+  if (
+    direction > 0 &&
+    state.navVisible &&
+    state.accumulatedDelta >= threshold
+  ) {
+    state.navVisible = false;
+    state.accumulatedDelta = 0;
+  } else if (
+    direction < 0 &&
+    !state.navVisible &&
+    Math.abs(state.accumulatedDelta) >= threshold
+  ) {
+    state.navVisible = true;
+    state.accumulatedDelta = 0;
+  }
+
+  return state.navVisible;
+}
+
 /**
  * @param {HTMLElement} navbar
  * @param {string} color
@@ -24,8 +118,8 @@ function applyNavColor(navbar, color = DEFAULT_COLOR) {
  * @param {boolean} show
  */
 function toggleNavDisplay(navbar, show) {
-  if (show) navbar.classList.remove("hidden");
-  else navbar.classList.add("hidden");
+  navbar.classList.toggle("nav-hidden", !show);
+  navbar.setAttribute("data-nav-visible", show ? "true" : "false");
 }
 
 /**
@@ -147,24 +241,43 @@ function initNavMenuToggle() {
 
     if (!sections.length) return applyNavColor(navBar, DEFAULT_COLOR);
 
-    let currentScrollY = window.scrollY;
+    /** @type {NavScrollState} */
+    const navScrollState = {
+      currentScrollY: window.scrollY,
+      lastDirection: 0,
+      accumulatedDelta: 0,
+      navVisible: true,
+    };
 
     function syncNavColor() {
       applyNavColor(navBar, detectActiveSectionColor(sections));
     }
 
     function onScroll() {
-      const scrollingUp = currentScrollY - window.scrollY > 0;
-      currentScrollY = window.scrollY;
+      const nextScrollY = window.scrollY;
+      const deltaY = nextScrollY - navScrollState.currentScrollY;
+      navScrollState.currentScrollY = nextScrollY;
+
       const drawer = document.getElementById("nav-side-drawer");
-      const showNav =
-        isNavMenuOpen(drawer) ||
-        scrollingUp ||
-        currentScrollY <= window.innerHeight - navHeight;
-      toggleNavDisplay(navBar, showNav);
+      const showNavByDefault = shouldShowNavByDefault(
+        drawer,
+        navScrollState.currentScrollY,
+        navHeight,
+      );
+
+      if (showNavByDefault) {
+        resetNavScrollState(navScrollState);
+        toggleNavDisplay(navBar, true);
+        syncNavColor();
+        return;
+      }
+
+      const navVisible = updateNavVisibility(navScrollState, deltaY);
+      toggleNavDisplay(navBar, navVisible);
       syncNavColor();
     }
 
+    toggleNavDisplay(navBar, true);
     syncNavColor();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", syncNavColor);

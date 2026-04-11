@@ -10,9 +10,14 @@
 
 const SECTION_SELECTOR = "main section.home-section";
 const FOOTER_SELECTOR = "body > footer";
-const SCROLL_DURATION = 1.35;
+
+const DESKTOP_SCROLL_DURATION = 1.35;
+const MOBILE_SCROLL_DURATION = 0.85;
+
 const WHEEL_THRESHOLD = 18;
-const TOUCH_THRESHOLD = 48;
+const DESKTOP_TOUCH_THRESHOLD = 48;
+const MOBILE_TOUCH_THRESHOLD = 72;
+
 const SCREEN_WIDTH_THRESHOLD = 768;
 
 const isDesktop = window.matchMedia(`(min-width: ${SCREEN_WIDTH_THRESHOLD}px)`);
@@ -106,6 +111,20 @@ function sectionFitsViewport(section) {
 }
 
 /**
+ * On mobile, use a higher touch threshold to avoid triggering section
+ * scroll unintentionally when trying to scroll within a section that
+ * doesn't fit in the viewport
+ */
+function getScrollDuration() {
+  return isDesktop.matches ? DESKTOP_SCROLL_DURATION : MOBILE_SCROLL_DURATION;
+}
+
+// same here
+function getTouchThreshold() {
+  return isDesktop.matches ? DESKTOP_TOUCH_THRESHOLD : MOBILE_TOUCH_THRESHOLD;
+}
+
+/**
  * Initialize GSAP animations for the "Espaces" section, triggered on scroll.
  * - The hero content slides in from left to right while fading in.
  * - The subtitle fades in and out when entering/leaving the viewport.
@@ -133,12 +152,12 @@ function initEspacesAnimations({ goToStop }) {
     // triggered when the section enters the viewport
     const textTimeline = gsap.timeline({
       paused: true,
-      defaults: { duration: 5, ease: "power2.out" },
+      defaults: { duration: isDesktop.matches ? 5 : 15, ease: "power2.out" },
     });
 
     textTimeline.fromTo(
       heroContent,
-      { xPercent: isDesktop.matches ? 50 : -100, autoAlpha: 0.35 },
+      { xPercent: isDesktop.matches ? 50 : -50, autoAlpha: 0.35 },
       { xPercent: isDesktop.matches ? 0 : 120, autoAlpha: 1 },
     );
 
@@ -250,7 +269,7 @@ function initHomeSectionScroll() {
     currentIndex = nextIndex;
 
     gsap.to(window, {
-      duration: SCROLL_DURATION,
+      duration: getScrollDuration(),
       ease: "power2.inOut",
       overwrite: true,
       scrollTo: {
@@ -336,7 +355,7 @@ function initHomeSectionScroll() {
 
     touchLastY = event.touches[0].clientY;
     const deltaY = touchStartY - touchLastY;
-    if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
+    if (Math.abs(deltaY) < getTouchThreshold()) return;
 
     if (currentStopNeedsNativeScroll()) {
       touchCaptured = false;
@@ -359,7 +378,7 @@ function initHomeSectionScroll() {
   function onTouchEnd(event) {
     if (isAnimating) return event.preventDefault();
     const deltaY = touchStartY - touchLastY;
-    if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
+    if (Math.abs(deltaY) < getTouchThreshold()) return;
     const handled = handleDirectionalInput(deltaY, event.target);
     if (handled && touchCaptured) event.preventDefault();
   }

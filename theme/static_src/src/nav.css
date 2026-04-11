@@ -10,6 +10,21 @@
   color: var(--color-wyrd-purple-100);
 }
 
+#navbar {
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+  will-change: transform, opacity;
+}
+
+#navbar.nav-hidden {
+  transform: translateY(calc(-100% - 1rem));
+  opacity: 0;
+  pointer-events: none;
+}
+
 #navbar.green {
   background-color: var(--color-wyrd-green-900);
   color: var(--color-wyrd-green-500);
