@@ -4,15 +4,26 @@
 {% block body_class %}template-apropos{% endblock %}
 
 {% block content %}
-<section class="py-16 md:py-24">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ page.title }}</h1>
+<section data-nav-color="purple">
+    <div class="flex flex-col items-center justify-center px-6 py-16 md:px-24 md:py-24 mt-header-mobile md:mt-header-desktop max-w-7xl mx-auto">
+        <h1 class="text-center min-h-44 md:min-h-80 flex items-center text-wyrd-purple-100">
+            {{ page.title }}
+        </h1>
         {% if page.subtitle %}
-            <p class="text-xl text-gray-500 mb-8">{{ page.subtitle }}</p>
+            <h4 class="text-center max-w-3xl">{{ page.subtitle }}</h4>
         {% endif %}
         {% if page.content %}
-            <div class="prose prose-lg max-w-none text-gray-700">
-                {{ page.content|richtext }}
+            <div class="gap-16 flex flex-col w-full pt-16 md:pt-24">
+                {% for category in page.content %}
+                    <article class="max-w-none grid grid-cols-1 md:grid-cols-2 border-t border-white pt-6 md:pt-16">
+                        <h4>{{ category.value.title }}</h4>
+                        {% if category.value.content %}
+                            <div class="max-md:pt-6 flex flex-col gap-2" data-apropos-category-content>
+                                {{ category.value.content|richtext }}
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
             </div>
         {% endif %}
     </div>

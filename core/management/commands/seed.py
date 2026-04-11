@@ -250,33 +250,61 @@ class Command(BaseCommand):
                 title="Mais au fond, c'est quoi Wyrd ?",
                 slug="a-propos",
                 subtitle="WYRD, c'est le premier festival exclusivement dédié au jeu de rôle en région parisienne.",
-                content=(
-                    "<h3>Quand est-ce que c'est ?</h3>"
-                    "<p>Le dimanche 11 octobre à la Cité Fertile, de 10h à 22h30. "
-                    "Une journée pour découvrir seul ou en famille le jeu de rôle en totale immersion ! "
-                    "Au programme : tables rondes, sessions de jeu, exposants et actual plays. "
-                    "Le soir, assistez en direct à une session d'actual play exceptionnelle organisée en partenariat avec…</p>"
-                    "<h3>Qu'est-ce que le jeu de rôle ?</h3>"
-                    "<p>C'est du théâtre de l'imaginaire, tout simplement. Un peu comme quand vous étiez enfant "
-                    "et que vous passiez des heures à imaginer les aventures extraordinaires de tous les objets "
-                    "ou jouets qui vous passaient sous la main. Une vieille passoire devenait une soucoupe volante "
-                    "prête à attaquer une planète d'hommes brocolis. Les cailloux pouvaient se lier d'amitié avec "
-                    "les pâquerettes et les chiens du voisin devenaient de terribles dragons, protecteurs de sorcières "
-                    "ou gardiens d'un trésor ancien. Tout ça c'est du jeu de rôle. À la croisée des mondes - entre "
-                    "l'aventure sociale, la création de mondes et le théâtre d'improvisation - le jeu de rôle est une "
-                    "activité adaptable à tous.</p>"
-                    "<h3>Quelles activités ?</h3>"
-                    "<p>Une scène principale proposera tout au long de la journée des actual plays et des tables rondes "
-                    "autour du jeu de rôle. Le soir, la scène laissera sa place aux reines de D&amp;Drags pour un actual "
-                    "play en places limitées.</p>"
-                    "<p>Une quarantaine de tables ouvertes pour venir découvrir le jeu de rôle.</p>"
-                    "<p>Un espace famille avec des activités proposées toute la journée.</p>"
-                    "<p>Une dizaine de stands d'exposants dont des éditeurs, auteurs, artistes et créateurs du monde "
-                    "du jeu de rôle seront présents pour vous faire découvrir leurs univers.</p>"
-                    "<h3>Quelles sont nos valeurs ?</h3>"
-                    "<p>Un festival développé par des passionnés pour tous les curieux. Experts ou néophytes. "
-                    "Petits et grands ! Tous les actual plays seront traduits en direct en langue des signes.</p>"
-                ),
+                content=[
+                    {
+                        "type": "category",
+                        "value": {
+                            "title": "Quand est-ce que c'est ?",
+                            "content": (
+                                "<p>Le dimanche 11 octobre à la Cité Fertile, de 10h à 22h30. "
+                                "Une journée pour découvrir seul ou en famille le jeu de rôle en totale immersion ! "
+                                "Au programme : tables rondes, sessions de jeu, exposants et actual plays. "
+                                "Le soir, assistez en direct à une session d'actual play exceptionnelle organisée en partenariat avec…</p>"
+                            ),
+                        },
+                    },
+                    {
+                        "type": "category",
+                        "value": {
+                            "title": "Qu'est-ce que le jeu de rôle ?",
+                            "content": (
+                                "<p>C'est du théâtre de l'imaginaire, tout simplement. Un peu comme quand vous étiez enfant "
+                                "et que vous passiez des heures à imaginer les aventures extraordinaires de tous les objets "
+                                "ou jouets qui vous passaient sous la main. Une vieille passoire devenait une soucoupe volante "
+                                "prête à attaquer une planète d'hommes brocolis. Les cailloux pouvaient se lier d'amitié avec "
+                                "les pâquerettes et les chiens du voisin devenaient de terribles dragons, protecteurs de sorcières "
+                                "ou gardiens d'un trésor ancien. Tout ça c'est du jeu de rôle. À la croisée des mondes - entre "
+                                "l'aventure sociale, la création de mondes et le théâtre d'improvisation - le jeu de rôle est une "
+                                "activité adaptable à tous.</p>"
+                            ),
+                        },
+                    },
+                    {
+                        "type": "category",
+                        "value": {
+                            "title": "Quelles activités ?",
+                            "content": (
+                                "<p>Une scène principale proposera tout au long de la journée des actual plays et des tables rondes "
+                                "autour du jeu de rôle. Le soir, la scène laissera sa place aux reines de D&amp;Drags pour un actual "
+                                "play en places limitées.</p>"
+                                "<p>Une quarantaine de tables ouvertes pour venir découvrir le jeu de rôle.</p>"
+                                "<p>Un espace famille avec des activités proposées toute la journée.</p>"
+                                "<p>Une dizaine de stands d'exposants dont des éditeurs, auteurs, artistes et créateurs du monde "
+                                "du jeu de rôle seront présents pour vous faire découvrir leurs univers.</p>"
+                            ),
+                        },
+                    },
+                    {
+                        "type": "category",
+                        "value": {
+                            "title": "Quelles sont nos valeurs ?",
+                            "content": (
+                                "<p>Un festival développé par des passionnés pour tous les curieux. Experts ou néophytes. "
+                                "Petits et grands ! Tous les actual plays seront traduits en direct en langue des signes.</p>"
+                            ),
+                        },
+                    },
+                ],
             )
             home_page.add_child(instance=apropos)
             apropos.save_revision().publish()
