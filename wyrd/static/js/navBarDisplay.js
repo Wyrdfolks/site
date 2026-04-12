@@ -16,6 +16,9 @@ const NAV_VISIBILITY_THRESHOLD_MOBILE = 28;
 const SCREEN_WIDTH_THRESHOLD = 768;
 
 const isDesktop = window.matchMedia(`(min-width: ${SCREEN_WIDTH_THRESHOLD}px)`);
+const navBar = document.getElementById("navbar");
+const drawer = document.getElementById("nav-side-drawer");
+const navHeight = navBar?.getBoundingClientRect().height || 0;
 
 /**
  * @typedef {Object} NavScrollState
@@ -105,21 +108,21 @@ function updateNavVisibility(state, deltaY) {
 }
 
 /**
- * @param {HTMLElement} navbar
  * @param {string} color
  */
-function applyNavColor(navbar, color = DEFAULT_COLOR) {
-  navbar.classList.remove("purple", "green", "pink");
-  navbar.classList.add(color);
+function applyNavColor(color = DEFAULT_COLOR) {
+  navBar?.classList.remove("purple", "green", "pink");
+  navBar?.classList.add(color);
+  drawer?.classList.remove("purple", "green", "pink");
+  drawer?.classList.add(color);
 }
 
 /**
  * @param {HTMLElement} navbar
- * @param {boolean} show
  */
-function toggleNavDisplay(navbar, show) {
-  navbar.classList.toggle("nav-hidden", !show);
-  navbar.setAttribute("data-nav-visible", show ? "true" : "false");
+function toggleNavDisplay(show) {
+  navBar?.classList.toggle("nav-hidden", !show);
+  navBar?.setAttribute("data-nav-visible", show ? "true" : "false");
 }
 
 /**
@@ -193,7 +196,6 @@ function setNavMenuState({ drawer, backdrop, toggleButton }, open) {
 function initNavMenuToggle() {
   const toggleButton = document.getElementById("nav-menu-toggle");
   const closeButton = document.getElementById("nav-menu-close");
-  const drawer = document.getElementById("nav-side-drawer");
   const backdrop = document.getElementById("nav-menu-backdrop");
 
   if (!toggleButton || !drawer || !backdrop) return;
@@ -233,13 +235,11 @@ function initNavMenuToggle() {
 
 (function () {
   function initNavColorSwitching() {
-    const navBar = document.getElementById("navbar");
-    const navHeight = navBar?.getBoundingClientRect().height || 0;
     if (!navBar) return;
 
     const sections = Array.from(document.querySelectorAll("[data-nav-color]"));
 
-    if (!sections.length) return applyNavColor(navBar, DEFAULT_COLOR);
+    if (!sections.length) return applyNavColor(DEFAULT_COLOR);
 
     /** @type {NavScrollState} */
     const navScrollState = {
@@ -250,7 +250,7 @@ function initNavMenuToggle() {
     };
 
     function syncNavColor() {
-      applyNavColor(navBar, detectActiveSectionColor(sections));
+      applyNavColor(detectActiveSectionColor(sections));
     }
 
     function onScroll() {
@@ -267,17 +267,17 @@ function initNavMenuToggle() {
 
       if (showNavByDefault) {
         resetNavScrollState(navScrollState);
-        toggleNavDisplay(navBar, true);
+        toggleNavDisplay(true);
         syncNavColor();
         return;
       }
 
       const navVisible = updateNavVisibility(navScrollState, deltaY);
-      toggleNavDisplay(navBar, navVisible);
+      toggleNavDisplay(navVisible);
       syncNavColor();
     }
 
-    toggleNavDisplay(navBar, true);
+    toggleNavDisplay(true);
     syncNavColor();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", syncNavColor);

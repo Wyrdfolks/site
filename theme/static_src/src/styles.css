@@ -25,6 +25,7 @@ html {
   --color-wyrd-pink-900: #811c57;
   --color-wyrd-pink-950: #47090e;
   --color-wyrd-yellow-500: #f3f48e;
+  --color-wyrd-green-100: #d2f9e1;
   --color-wyrd-green-500: #7cf6a8;
   --color-wyrd-green-800: #1d643d;
   --color-wyrd-green-900: #154d2e;
@@ -60,6 +61,7 @@ html {
   --color-wyrd-pink-900: var(--color-wyrd-pink-900);
   --color-wyrd-pink-950: var(--color-wyrd-pink-950);
   --color-wyrd-yellow-500: var(--color-wyrd-yellow-500);
+  --color-wyrd-green-100: var(--color-wyrd-green-100);
   --color-wyrd-green-500: var(--color-wyrd-green-500);
   --color-wyrd-green-800: var(--color-wyrd-green-800);
   --color-wyrd-green-900: var(--color-wyrd-green-900);

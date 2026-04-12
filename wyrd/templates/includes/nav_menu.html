@@ -8,7 +8,7 @@
         <button
 			id="nav-menu-close"
 			type="button"
-			class="rounded-full h-12 w-12 md:top-6 top-5 flex items-center justify-center bg-white text-wyrd-indigo-900 absolute"
+			class="rounded-full h-12 w-12 md:top-6 top-5 flex items-center justify-center absolute"
 			aria-label="Fermer le menu"
 		>
             <svg 
@@ -42,14 +42,13 @@
 
 		<div class="flex flex-col mt-auto">
 			{% for link in header_settings.nav_menu_bottom_links.all %}
-                <div class="w-full border-b border-wyrd-indigo-100 py-2">
-                    {% if link.page %}
-                        {% pageurl link.page as link_url %}
-					{% render_button label=link.label url=link_url variant="ghost" size="small" %}
-                    {% elif link.external_url %}
-					{% render_button label=link.label url=link.external_url variant="ghost" size="small" target="_blank" rel="noopener" %}
-                    {% endif %}
-                </div>
+                {% if link.page %}
+                    {% pageurl link.page as link_url %}
+				{% render_button label=link.label url=link_url variant="ghost" size="small" %}
+                {% elif link.external_url %}
+				{% render_button label=link.label url=link.external_url variant="ghost" size="small" target="_blank" rel="noopener" %}
+                {% endif %}
+				<hr class="my-2" />
 			{% endfor %}
 		</div>
 	</nav>

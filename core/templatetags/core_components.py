@@ -25,7 +25,7 @@ def build_button_classes(
 ) -> str:
     class_names = ["btn", BUTTON_VARIANT_CLASSES.get(variant, "btn-primary")]
 
-    if variant == "secondary":
+    if variant == "secondary" or variant == "ghost":
         class_names.append(BUTTON_SECONDARY_COLOR_CLASSES.get(color, "btn-purple"))
     if variant == "ghost" and size == "small":
         class_names.append("btn-small")
@@ -44,7 +44,7 @@ def render_button(
     variant: Literal["primary", "secondary", "ghost"] = "primary",
     color: Literal[
         "pink", "purple", "green"
-    ] = "purple",  ## only applied to secondary variant
+    ] = "purple",  ## only applied to secondary and ghost variants
     size: Literal["small", "medium"] = "medium",  ## only applied to ghost variant
     disabled: bool = False,
     additional_class: str = "",

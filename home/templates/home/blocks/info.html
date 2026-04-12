@@ -29,7 +29,7 @@
             </div>
 
             {% if block.directions_link or block.faq_link %}
-                <div class="flex flex-row">
+                <div class="flex flex-row max-md:justify-center">
                     {% if block.directions_link.page %}
                         {% pageurl block.directions_link.page as directions_link %}
                         {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" %}

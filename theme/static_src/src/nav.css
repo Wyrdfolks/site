@@ -39,6 +39,45 @@
   color: var(--color-wyrd-pink-950);
 }
 
+#nav-side-drawer.pink {
+  background-color: var(--color-wyrd-pink-500);
+}
+
+#nav-side-drawer.pink #nav-menu-close {
+  background-color: var(--color-wyrd-pink-300);
+  color: var(--color-wyrd-pink-950);
+}
+
+#nav-side-drawer.pink hr {
+  color: var(--color-wyrd-pink-900);
+}
+
+#nav-side-drawer.green {
+  background-color: var(--color-wyrd-green-900);
+}
+
+#nav-side-drawer.green hr {
+  color: var(--color-wyrd-green-500);
+}
+
+#nav-side-drawer.green #nav-menu-close {
+  background-color: var(--color-wyrd-green-500);
+  color: var(--color-wyrd-green-900);
+}
+
+#nav-side-drawer.purple {
+  background-color: var(--color-wyrd-purple-500);
+}
+
+#nav-side-drawer.purple hr {
+  color: white;
+}
+
+#nav-side-drawer.purple #nav-menu-close {
+  background-color: white;
+  color: var(--color-wyrd-indigo-900);
+}
+
 /* Classes for nav menu close button */
 
 #nav-menu-close .nav-menu-close-icon {

@@ -49,8 +49,34 @@
 /* Button ghost variant */
 
 .btn-ghost {
-  @apply relative bg-transparent text-white hover:text-wyrd-indigo-100;
+  @apply relative bg-transparent;
   @apply md:text-h3-desktop md:leading-h3-desktop text-h3-mobile leading-h3-mobile;
+  color: var(--btn-ghost-text, white);
+}
+
+.btn-ghost:hover {
+  color: var(--btn-ghost-hover-text, var(--color-wyrd-indigo-100));
+}
+
+.btn-ghost.purple,
+#navbar.purple .btn-ghost,
+#nav-side-drawer.purple .btn-ghost {
+  --btn-ghost-text: white;
+  --btn-ghost-hover-text: var(--color-wyrd-indigo-100);
+}
+
+.btn-ghost.green,
+#navbar.green .btn-ghost,
+#nav-side-drawer.green .btn-ghost {
+  --btn-ghost-text: var(--color-wyrd-green-500);
+  --btn-ghost-hover-text: var(--color-wyrd-green-100);
+}
+
+.btn-ghost.pink,
+#navbar.pink .btn-ghost,
+#nav-side-drawer.pink .btn-ghost {
+  --btn-ghost-text: var(--color-wyrd-pink-950);
+  --btn-ghost-hover-text: var(--color-wyrd-pink-900);
 }
 
 .btn.btn-ghost svg.ghost-arrow {
