@@ -1,8 +1,7 @@
 from .base import *
 import os
 
-# TEMP for staging
-DEBUG = False  # os.environ.get("DEBUG", "False").strip().lower() == "true"
+DEBUG = os.environ.get("DEBUG", "False").strip().lower() == "true"
 
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",

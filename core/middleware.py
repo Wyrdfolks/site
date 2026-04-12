@@ -18,6 +18,9 @@ class StagingPasswordMiddleware:
         if not password:
             return self.get_response(request)
 
+        if request.path.startswith(settings.STATIC_URL) or request.path.startswith(settings.MEDIA_URL):
+            return self.get_response(request)
+
         auth_header = request.META.get("HTTP_AUTHORIZATION", "")
         if auth_header.startswith("Basic "):
             try:
