@@ -1,4 +1,4 @@
-{% load wagtailcore_tags core_components %}
+{% load wagtailcore_tags wagtailimages_tags core_components %}
 
 <section 
     data-nav-color="pink"
@@ -7,7 +7,15 @@
     <div class="flex flex-col md:flex-row items-center justify-center flex-1 gap-6 lg:gap-32 md:gap-16 lg:m-6 mx-auto p-14 sm:p-16 max-w-full">
         
         <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit w-fit p-1 md:p-2 rotate-[8deg]">
-            <div class="relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop text-white font-bold text-center max-w-full">
+            <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop max-w-full">
+                {% if block.picture %}
+                    {% image block.picture fill-800x800 as info_image %}
+                    <img
+                        src="{{ info_image.url }}"
+                        alt="{{ block.title }}"
+                        class="w-full h-full object-cover"
+                    >
+                {% endif %}
             </div>        
         </div>
 

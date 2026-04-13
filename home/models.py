@@ -10,6 +10,7 @@ from wagtail.blocks import (
     ListBlock,
     PageChooserBlock,
 )
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import FieldPanel
 
@@ -75,6 +76,7 @@ class EspacesBlock(StructBlock):
         SnippetChooserBlock("core.Monde"),
         label="Mondes",
     )
+    picture = ImageChooserBlock(label="Image", required=False)
 
     class Meta:
         icon = "globe"
@@ -113,6 +115,7 @@ class InfoBlock(StructBlock):
     schedule = RichTextBlock(label="Horaires", required=False)
     directions_link = LinkBlock(label="Lien vers la page d'accès", required=False)
     faq_link = LinkBlock(label="Lien vers la FAQ", required=False)
+    picture = ImageChooserBlock(label="Image", required=False)
 
     class Meta:
         icon = "info-circle"
