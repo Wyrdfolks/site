@@ -2,7 +2,7 @@
 
 {# title #}
 <section class="py-16 md:py-24 px-14 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex" data-nav-color="purple">
-    <div class="w-full max-w-7xl m-auto">
+    <div class="w-full max-w-xl md:max-w-7xl m-auto">
         <h1 class="text-center wrap-break-word">
             {{ block.title }}
         </h1>
@@ -11,8 +11,8 @@
 
 {# cards #}
 <section class="py-16 md:py-24 px-10 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center" data-nav-color="purple">
-    <div class="max-w-7xl mx-auto h-full flex items-center justify-center">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+    <div class="max-w-xl sm:max-w-xl md:max-w-7xl mx-auto h-full flex items-center justify-center">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-6">
             {% for guest_item in block.guests %}
                 {% if forloop.counter0|divisibleby:2 %}
                     {% with guest=guest_item size="small" additional_class="rotate-[3deg]" %}
@@ -31,7 +31,7 @@
 {# cta and teaser #}
 {% if block.teaser_text or block.cta %}
     <section class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center" data-nav-color="purple">
-        <div class="h-full max-w-7xl m-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+        <div class="h-full max-w-lg md:max-w-7xl m-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
             {% if block.teaser_text %}
                 <h1 class="text-center h-[275px] flex items-center">
                     {{ block.teaser_text }}

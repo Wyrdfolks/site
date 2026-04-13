@@ -4,7 +4,7 @@
     data-nav-color="pink"
     class="home-section bg-wyrd-pink-500 text-wyrd-pink-900 flex items-center flex-row"
 >
-    <div class="flex flex-col md:flex-row items-center justify-center flex-1 gap-6 lg:gap-32 md:gap-16 lg:m-6 mx-auto p-14 sm:p-16 max-w-full">
+    <div class="flex flex-col md:flex-row items-center justify-center flex-1 gap-6 lg:gap-32 md:gap-16 sm:gap-12 lg:m-6 mx-auto p-14 sm:p-16 max-w-full">
         
         <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit w-fit p-1 md:p-2 rotate-[8deg]">
             <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop max-w-full">
@@ -19,9 +19,9 @@
             </div>        
         </div>
 
-        <div class="flex flex-col gap-6 md:gap-16 lg:w-[640px] max-md:mt-2">
+        <div class="flex flex-col gap-6 sm:gap-8 md:gap-16 lg:w-[640px] max-md:mt-2">
             <h2 class="max-md:text-center">{{ block.title }}</h2>
-            <div class="grid grid-cols-2 gap-6 md:gap-12 max-w-4xl mx-auto">
+            <div class="grid grid-cols-2 gap-6 md:gap-12 sm:max-w-md md:max-w-4xl mx-auto">
                 {% if block.access %}
                     <div>
                         <h4 class="font-semibold uppercase">Accès</h4>
