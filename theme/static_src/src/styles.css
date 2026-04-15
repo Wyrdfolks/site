@@ -125,6 +125,8 @@ html {
   --width-btn-mobile: 56px;
   --height-navbar-desktop: 85px;
   --height-navbar-mobile: 88px;
+  --spacing-header-desktop: 85px;
+  --spacing-header-mobile: 88px;
 
   --height-card-s-desktop: 250px;
   --width-card-s-desktop: 250px;
@@ -187,6 +189,19 @@ h2 {
 
 footer a.social-media-icon:hover {
   @apply text-wyrd-indigo-300;
+}
+
+body.template-apropos {
+  @apply bg-wyrd-purple-500 text-white;
+}
+
+body.template-faq {
+  @apply bg-wyrd-pink-500 text-wyrd-pink-950;
+}
+
+body.template-faq section,
+body.template-apropos section {
+  @apply min-h-screen;
 }
 
 /**

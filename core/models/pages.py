@@ -57,9 +57,23 @@ class ProgrammationTabBlock(StructBlock):
         label = "Tab"
 
 
+class AboutCategoryBlock(StructBlock):
+    title = CharBlock(label="Titre de la catégorie")
+    content = RichTextBlock(label="Contenu", required=False)
+
+    class Meta:
+        icon = "list-ul"
+        label = "Catégorie"
+
+
 class AProposPage(Page):
     subtitle = models.CharField("Sous-titre", max_length=255, blank=True)
-    content = RichTextField("Contenu", blank=True)
+    content = StreamField(
+        [("category", AboutCategoryBlock())],
+        blank=True,
+        use_json_field=True,
+        verbose_name="Contenu",
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel("subtitle"),
