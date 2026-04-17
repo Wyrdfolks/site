@@ -32,6 +32,15 @@
     {% endwith %}
 {% endblock %}
 
+{# Hide the footer if a landing page block is present #}
+{% block footer %}
+    {% with landing_block=page.body|first_landing %}
+        {% if not landing_block %}
+            {% include "includes/footer.html" %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
 {% block extra_js %}
     <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
