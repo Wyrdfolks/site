@@ -137,7 +137,6 @@
     --height-map-desktop: 500px;
     --height-map-mobile: 250px;
     --animate-marquee-desktop: marquee 20s linear infinite;
-    --animate-marquee-mobile: marquee 10s linear infinite;
   }
 }
 @layer base {
@@ -396,8 +395,14 @@
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
   }
   .mt-auto {
     margin-top: auto;
@@ -407,9 +412,6 @@
   }
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);
-  }
-  .mb-2 {
-    margin-bottom: calc(var(--spacing) * 2);
   }
   .mb-3 {
     margin-bottom: calc(var(--spacing) * 3);
@@ -453,6 +455,9 @@
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
   .h-9 {
     height: calc(var(--spacing) * 9);
   }
@@ -464,6 +469,9 @@
   }
   .h-31 {
     height: calc(var(--spacing) * 31);
+  }
+  .h-80 {
+    height: calc(var(--spacing) * 80);
   }
   .h-\[275px\] {
     height: 275px;
@@ -495,14 +503,14 @@
   .h-screen {
     height: 100vh;
   }
-  .min-h-6 {
-    min-height: calc(var(--spacing) * 6);
-  }
-  .min-h-12 {
-    min-height: calc(var(--spacing) * 12);
+  .min-h-8 {
+    min-height: calc(var(--spacing) * 8);
   }
   .min-h-13 {
     min-height: calc(var(--spacing) * 13);
+  }
+  .min-h-20 {
+    min-height: calc(var(--spacing) * 20);
   }
   .min-h-44 {
     min-height: calc(var(--spacing) * 44);
@@ -518,6 +526,9 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
   }
   .w-9 {
     width: calc(var(--spacing) * 9);
@@ -579,11 +590,11 @@
   .max-w-xl {
     max-width: var(--container-xl);
   }
-  .min-w-6 {
-    min-width: calc(var(--spacing) * 6);
+  .min-w-8 {
+    min-width: calc(var(--spacing) * 8);
   }
-  .min-w-12 {
-    min-width: calc(var(--spacing) * 12);
+  .min-w-20 {
+    min-width: calc(var(--spacing) * 20);
   }
   .flex-1 {
     flex: 1;
@@ -629,9 +640,6 @@
   }
   .animate-marquee-desktop {
     animation: var(--animate-marquee-desktop);
-  }
-  .animate-marquee-mobile {
-    animation: var(--animate-marquee-mobile);
   }
   .cursor-pointer {
     cursor: pointer;
@@ -1275,11 +1283,6 @@
       margin-top: var(--spacing-header-desktop);
     }
   }
-  .md\:mb-2 {
-    @media (width >= 48rem) {
-      margin-bottom: calc(var(--spacing) * 2);
-    }
-  }
   .md\:block {
     @media (width >= 48rem) {
       display: block;
@@ -1303,6 +1306,11 @@
   .md\:h-6 {
     @media (width >= 48rem) {
       height: calc(var(--spacing) * 6);
+    }
+  }
+  .md\:h-20 {
+    @media (width >= 48rem) {
+      height: calc(var(--spacing) * 20);
     }
   }
   .md\:h-\[424px\] {
@@ -1335,11 +1343,6 @@
       height: 100vh;
     }
   }
-  .md\:min-h-12 {
-    @media (width >= 48rem) {
-      min-height: calc(var(--spacing) * 12);
-    }
-  }
   .md\:min-h-80 {
     @media (width >= 48rem) {
       min-height: calc(var(--spacing) * 80);
@@ -1353,6 +1356,11 @@
   .md\:w-6 {
     @media (width >= 48rem) {
       width: calc(var(--spacing) * 6);
+    }
+  }
+  .md\:w-20 {
+    @media (width >= 48rem) {
+      width: calc(var(--spacing) * 20);
     }
   }
   .md\:w-card-s-desktop {
@@ -1385,19 +1393,9 @@
       max-width: none;
     }
   }
-  .md\:min-w-12 {
-    @media (width >= 48rem) {
-      min-width: calc(var(--spacing) * 12);
-    }
-  }
   .md\:flex-1 {
     @media (width >= 48rem) {
       flex: 1;
-    }
-  }
-  .md\:animate-marquee-desktop {
-    @media (width >= 48rem) {
-      animation: var(--animate-marquee-desktop);
     }
   }
   .md\:grid-cols-2 {
@@ -1649,11 +1647,6 @@
       display: flex;
     }
   }
-  .lg\:h-50 {
-    @media (width >= 64rem) {
-      height: calc(var(--spacing) * 50);
-    }
-  }
   .lg\:w-1\/3 {
     @media (width >= 64rem) {
       width: calc(1/3 * 100%);
@@ -1793,6 +1786,14 @@
   100% {
     transform: translateX(-50%);
   }
+}
+.marquee-mobile {
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+.marquee-desktop {
+  animation: marquee 30s linear infinite;
+  width: max-content;
 }
 .btn {
   width: fit-content;

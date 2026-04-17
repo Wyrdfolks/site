@@ -66,3 +66,13 @@
     transform: translateX(-50%);
   }
 }
+
+.marquee-mobile {
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+
+.marquee-desktop {
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}

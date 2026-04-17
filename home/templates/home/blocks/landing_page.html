@@ -24,22 +24,41 @@
             </a>
         </div>
     </div>
-    <div class="w-full bg-wyrd-green-900 text-wyrd-green-500">
-        <div class="h-31 lg:h-50 flex items-center animate-marquee-mobile md:animate-marquee-desktop whitespace-nowrap mx-auto landing-page-ticker">
+    {# Mobile ticker view, in the main section #}
+    <div class="w-full overflow-hidden bg-wyrd-green-900 text-wyrd-green-500 md:hidden">
+        <div class="h-31 flex items-center marquee-mobile whitespace-nowrap mx-auto">
             {% for text in block.ticker_text %}
-                <h2 class="px-4 md:px-8 mt-2">{{ text }}</h2>
-                <div class="md:mb-2 md:min-h-12 md:min-w-12 min-w-6 min-h-6">
+                <h1 class="px-6 mt-3">{{ text }}</h1>
+                <div class="self-center h-8 w-8 min-h-8 min-w-8">
                     {% include "svg/d20.svg" %}
                 </div>
             {% endfor %}
-            
-            {# Duplicate for desktop view #}
+            {# Duplicate for seamless loop #}
             {% for text in block.ticker_text %}
-                <h2 class="px-8 mt-2 max-md:hidden">{{ text }}</h2>
-                <div class="mb-2 min-h-12 min-w-12 max-md:hidden">
+                <h1 class="px-6 mt-3">{{ text }}</h1>
+                <div class="self-center min-h-8 min-w-8">
                     {% include "svg/d20.svg" %}
                 </div>
             {% endfor %}
         </div>
+    </div>
+</section>
+
+{# Desktop ticker view, in its own section #}
+<section class="w-full overflow-hidden bg-wyrd-green-900 text-wyrd-green-500 max-md:hidden">
+    <div class="h-80 flex items-center marquee-desktop whitespace-nowrap mx-auto">
+        {% for text in block.ticker_text %}
+            <h1 class="px-8 mt-5">{{ text }}</h1>
+            <div class="self-center md:h-20 md:w-20 min-h-20 min-w-20">
+                {% include "svg/d20.svg" %}
+            </div>
+        {% endfor %}
+        {# Duplicate for seamless loop #}
+        {% for text in block.ticker_text %}
+            <h1 class="px-8 mt-5">{{ text }}</h1>
+            <div class="self-center md:h-20 md:w-20 min-h-20 min-w-20">
+                {% include "svg/d20.svg" %}
+            </div>
+        {% endfor %}
     </div>
 </section>
