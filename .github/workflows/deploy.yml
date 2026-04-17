@@ -33,5 +33,5 @@ jobs:
           DEPLOY_USER: ${{ secrets.USER }}
           DEPLOY_ACCOUNT: ${{ secrets.ACCOUNT }}
           DEPLOY_SITE_ID: ${{ github.ref_name == 'main' && secrets.PROD_SITE_ID || secrets.DEV_SITE_ID  }}
-          DEPLOY_ENV: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+          DEPLOY_ENV: ${{ github.ref_name == 'main' && 'www' || 'dev' }}
         run: fab deploy
