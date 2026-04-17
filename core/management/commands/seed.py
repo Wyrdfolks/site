@@ -30,7 +30,7 @@ class Command(BaseCommand):
         self.stdout.write("  Création des liens social media...")
         socials_data = [
             ("Facebook", "https://facebook.com/wyrdfestival", "facebook"),
-            ("Instagram", "https://instagram.com/wyrdfestival", "instagram"),
+            ("Instagram", "https://www.instagram.com/wyrd.folks/", "instagram"),
             ("WhatsApp", "https://wa.me/wyrdfestival", "other"),
             ("YouTube", "https://youtube.com/@wyrdfestival", "youtube"),
             ("Threads", "https://threads.net/@wyrdfestival", "other"),
@@ -158,7 +158,7 @@ class Command(BaseCommand):
                     "tagline": "Zéro prérequis. Observe, joue ou viens en famille",
                     "ticket_url": {
                         "page": None,
-                        "external_url": "https://example.com/billetterie",
+                        "external_url": "https://www.helloasso.com/associations/wyrd/evenements/billetterie-wyrd-2026",
                     },
                     "about_url": {
                         "page": None,
@@ -236,7 +236,7 @@ class Command(BaseCommand):
                     },
                     "ticket_url": {
                         "page": None,
-                        "external_url": "https://example.com/billetterie",
+                        "external_url": "https://www.helloasso.com/associations/wyrd/evenements/billetterie-wyrd-2026",
                     },
                     "about_text": "Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026",
                 },
@@ -547,7 +547,11 @@ class Command(BaseCommand):
                     ("Réserver une table", None, "https://example.com/reservation"),
                 ]
                 nav_bar_right_links = [
-                    ("Billetterie", None, "https://example.com/billetterie"),
+                    (
+                        "Billetterie",
+                        None,
+                        "https://www.helloasso.com/associations/wyrd/evenements/billetterie-wyrd-2026",
+                    ),
                 ]
                 nav_menu_top_links = [
                     ("C'est quoi Wyrd ?", pages_for_nav.get("À Propos"), ""),
