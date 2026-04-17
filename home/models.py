@@ -5,6 +5,7 @@ from wagtail.fields import StreamField
 from wagtail.blocks import (
     StructBlock,
     CharBlock,
+    TextBlock,
     URLBlock,
     RichTextBlock,
     ListBlock,
@@ -36,6 +37,45 @@ class LinkBlock(StructBlock):
     class Meta:
         icon = "link"
         label = "Lien"
+
+
+class LandingPageBlock(StructBlock):
+    title = CharBlock(
+        label="Titre",
+        placeholder="Incarne l'histoire",
+        default="Incarne l'histoire",
+    )
+    subtitle = TextBlock(
+        label="Sous-titre",
+        placeholder="L'histoire s'écrit. Le site aussi.\nEn attendant, la suite est par ici...",
+        default="L'histoire s'écrit. Le site aussi.\nEn attendant, la suite est par ici...",
+    )
+    tagline = CharBlock(
+        label="Tagline",
+        placeholder="Cité Fertile - Pantin - 11 oct. 2026",
+        default="Cité Fertile - Pantin - 11 oct. 2026",
+    )
+    ticket_url = URLBlock(
+        label="Lien billetterie",
+        default="https://www.helloasso.com/associations/wyrd/evenements/billetterie-wyrd-2026",
+    )
+    instagram_url = URLBlock(
+        label="Lien Instagram", default="https://www.instagram.com/wyrd.folks/"
+    )
+    ticker_text = ListBlock(
+        CharBlock(label="Texte"),
+        label="Textes défilants",
+        default=[
+            "zero prerequis",
+            "observe",
+            "joue en famille",
+        ],
+    )
+
+    class Meta:
+        icon = "home"
+        label = "Landing page Ludiverse"
+        description = "Landing page de la page d'accueil du site pour Ludiverse, avec titre, sous-titre, tagline et liens vers la billetterie et Instagram. Si ce bloc est utilisé, aucun autre block de la page ne sera affiché."
 
 
 class HeroBlock(StructBlock):
@@ -155,6 +195,7 @@ class HeroFomoBlock(StructBlock):
 class HomePage(Page):
     body = StreamField(
         [
+            ("landing_page", LandingPageBlock()),
             ("hero", HeroBlock()),
             ("presentation", PresentationBlock()),
             ("espaces", EspacesBlock()),

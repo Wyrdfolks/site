@@ -1,0 +1,67 @@
+{% load wagtailcore_tags core_components %}
+
+<section 
+    data-nav-color="purple"
+    class="bg-wyrd-purple-500 text-white flex flex-col justify-center home-section relative">
+    <div class="md:pb-32 md:pt-32 pt-24 max-w-lg sm:max-w-xl md:max-w-7xl mx-auto px-4 lg:px-32 items-center justify-center text-center gap-6 md:gap-12 flex flex-col my-auto">
+        
+        <h4 class="uppercase">{{ block.tagline }}</h4>
+        <h1 class="hero">{{ block.title }}</h1>
+        <h4 class="max-w-3xs sm:max-w-lg">
+            {{ block.subtitle|linebreaksbr }}
+        </h4>
+
+        <div class="flex items-center justify-center gap-px">
+            {% render_button label="Prendre ma place" url=block.ticket_url variant="primary" additional_class="btn-rounded" %}
+            <a
+                href="{{ block.instagram_url }}"
+                target="_blank"
+                class="btn btn-primary btn-circle"
+                rel="noreferrer noopener"
+                aria-label="Instagram Wyrd"
+            >
+                <span>{% include "svg/instagram.svg" %}</span>
+            </a>
+        </div>
+    </div>
+    {# Mobile ticker view, in the main section #}
+    <div class="w-full overflow-hidden bg-wyrd-green-900 text-wyrd-green-500 md:hidden">
+        <div class="h-31 flex items-center marquee-mobile whitespace-nowrap mx-auto">
+            {% for text in block.ticker_text %}
+                <h1 class="px-6 mt-3">{{ text }}</h1>
+                <div class="self-center h-8 w-8 max-w-8 max-h-8">
+                    {% include "svg/d20.svg" %}
+                </div>
+            {% endfor %}
+            {# Duplicate for seamless loop #}
+            {% for text in block.ticker_text %}
+                <h1 class="px-6 mt-3">{{ text }}</h1>
+                <div class="self-center h-8 w-8 max-w-8 max-h-8">
+                    {% include "svg/d20.svg" %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# Desktop ticker view, in its own section #}
+<section 
+    data-nav-color="purple"
+    class="home-section landing-page-ticker max-h-fit! h-fit! min-h-fit! w-full overflow-hidden bg-wyrd-green-900 text-wyrd-green-500 max-md:hidden"
+>
+    <div class="h-80 flex items-center marquee-desktop whitespace-nowrap mx-auto">
+        {% for text in block.ticker_text %}
+            <h1 class="px-8 mt-5">{{ text }}</h1>
+            <div class="self-center h-20 w-20 max-w-20 max-h-20">
+                {% include "svg/d20.svg" %}
+            </div>
+        {% endfor %}
+        {# Duplicate for seamless loop #}
+        {% for text in block.ticker_text %}
+            <h1 class="px-8 mt-5">{{ text }}</h1>
+            <div class="self-center h-20 w-20 max-w-20 max-h-20">
+                {% include "svg/d20.svg" %}
+            </div>
+        {% endfor %}
+    </div>
+</section>

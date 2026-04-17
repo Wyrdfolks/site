@@ -57,3 +57,22 @@
     transform: scale(1) rotate(0deg);
   }
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-mobile {
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+
+.marquee-desktop {
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}

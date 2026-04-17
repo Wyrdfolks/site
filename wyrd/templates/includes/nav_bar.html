@@ -24,32 +24,34 @@
             {% endif %}
         </div>
 
-        <button
-            id="nav-menu-toggle"
-            type="button"
-            class="btn btn-secondary nav-menu-toggle btn-circle"
-            aria-controls="nav-side-drawer"
-            aria-expanded="false"
-            aria-label="Ouvrir le menu"
-        >
-            {# Desktop #}
-            <span class="hidden md:inline">...</span>
-            {# Hamburger menu icon for mobile #}
-            <svg
-                class="md:hidden"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                stroke="currentColor"
+        {% if header_settings.nav_menu_top_links.all or header_settings.nav_menu_bottom_links.all %}
+            <button
+                id="nav-menu-toggle"
+                type="button"
+                class="btn btn-secondary nav-menu-toggle btn-circle"
+                aria-controls="nav-side-drawer"
+                aria-expanded="false"
+                aria-label="Ouvrir le menu"
             >
-                <line y1="7.5" x2="24" y2="7.5" />
-                <line y1="11.5" x2="24" y2="11.5" />
-                <line y1="15.5" x2="24" y2="15.5" />
-            </svg>
-        </button>
+                {# Desktop #}
+                <span class="hidden md:inline">...</span>
+                {# Hamburger menu icon for mobile #}
+                <svg
+                    class="md:hidden"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    stroke="currentColor"
+                >
+                    <line y1="7.5" x2="24" y2="7.5" />
+                    <line y1="11.5" x2="24" y2="11.5" />
+                    <line y1="15.5" x2="24" y2="15.5" />
+                </svg>
+            </button>
+        {% endif %}
     </div>
 
     <a 

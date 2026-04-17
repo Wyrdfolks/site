@@ -11,7 +11,15 @@
   display: none;
 }
 
-.btn.btn-circle {
+.btn.btn-rounded,
+.btn-primary.btn-rounded,
+.btn-secondary.btn-rounded {
+  @apply rounded-full;
+}
+
+.btn.btn-circle,
+.btn-primary.btn-circle,
+.btn-secondary.btn-circle {
   @apply rounded-full p-0!;
   @apply w-btn-mobile h-btn-mobile md:w-btn-desktop md:h-btn-desktop;
 }

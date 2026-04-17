@@ -141,6 +141,9 @@ html {
   --width-map-mobile: 250px;
   --height-map-desktop: 500px;
   --height-map-mobile: 250px;
+
+  --animate-marquee-desktop: marquee 20s linear infinite;
+  --animate-marquee-mobile: marquee 10s linear infinite;
 }
 
 h1 {
