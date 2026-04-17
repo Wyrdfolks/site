@@ -1,33 +1,35 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static %}
+{% load wagtailcore_tags wagtailimages_tags static home_filters %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 
 {% block content %}
-    {% for block in page.body %}
-        {% if block.block_type == 'hero' %}
-            {% include "home/blocks/hero.html" with block=block.value %}
-
-        {% elif block.block_type == 'presentation' %}
-            {% include "home/blocks/presentation.html" with block=block.value %}
-
-        {% elif block.block_type == 'espaces' %}
-            {% include "home/blocks/espaces.html" with block=block.value %}
-
-        {% elif block.block_type == 'guests' %}
-            {% include "home/blocks/guests.html" with block=block.value %}
-
-        {% elif block.block_type == 'info' %}
-            {% include "home/blocks/info.html" with block=block.value %}
-
-        {% elif block.block_type == 'ticker' %}
-            {% include "home/blocks/ticker.html" with block=block.value %}
-
-        {% elif block.block_type == 'hero_fomo' %}
-            {% include "home/blocks/hero_fomo.html" with block=block.value %}
+    {# If a landing page block is present, display ONLY that block #}
+    {% with landing_block=page.body|first_landing %}
+        {% if landing_block %}
+            {% include "home/blocks/landing_page.html" with block=landing_block.value %}
+        {# Otherwise, display all other blocks in order #}
+        {% else %}
+            {% for block in page.body %}
+                {% if block.block_type == 'hero' %}
+                    {% include "home/blocks/hero.html" with block=block.value %}
+                {% elif block.block_type == 'presentation' %}
+                    {% include "home/blocks/presentation.html" with block=block.value %}
+                {% elif block.block_type == 'espaces' %}
+                    {% include "home/blocks/espaces.html" with block=block.value %}
+                {% elif block.block_type == 'guests' %}
+                    {% include "home/blocks/guests.html" with block=block.value %}
+                {% elif block.block_type == 'info' %}
+                    {% include "home/blocks/info.html" with block=block.value %}
+                {% elif block.block_type == 'ticker' %}
+                    {% include "home/blocks/ticker.html" with block=block.value %}
+                {% elif block.block_type == 'hero_fomo' %}
+                    {% include "home/blocks/hero_fomo.html" with block=block.value %}
+                {% endif %}
+            {% endfor %}
         {% endif %}
-    {% endfor %}
+    {% endwith %}
 {% endblock %}
 
 {% block extra_js %}

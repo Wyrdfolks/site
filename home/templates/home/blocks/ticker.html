@@ -2,19 +2,9 @@
     data-nav-color="green"
     class="bg-wyrd-green-900 text-wyrd-green-500 py-12 overflow-hidden home-section flex flex-row items-center max-md:h-fit! max-md:min-h-fit!"
 >
-    <div class="flex items-center animate-marquee whitespace-nowrap mx-auto">
+    <div class="flex items-center animate-marquee-desktop whitespace-nowrap mx-auto">
         {% for text in block.texts %}
             <h1 class="px-7 md:px-8 mt-2">{{ text }}</h1>
         {% endfor %}
     </div>
 </section>
-
-<style>
-    @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-    .animate-marquee {
-        animation: marquee 30s linear infinite;
-    }
-</style>
