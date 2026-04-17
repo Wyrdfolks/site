@@ -1977,7 +1977,7 @@
 }
 #navbar.purple {
   background-color: var(--color-wyrd-purple-500);
-  color: var(--color-wyrd-purple-100);
+  color: var(white);
 }
 #navbar {
   transition: transform 220ms ease, opacity 220ms ease, background-color 180ms ease, color 180ms ease;
