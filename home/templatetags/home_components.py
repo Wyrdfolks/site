@@ -4,12 +4,26 @@ from django import template
 register = template.Library()
 
 COLORS = ["yellow", "pink", "purple", "green", "blue"]
+BOARD_IMAGES = [
+    "img/board_1.png",
+    "img/board_2.png",
+    "img/board_3.png",
+    "img/board_4.png",
+    "img/board_5.png",
+]
 
 
 @register.filter
 def color_by_index(index):
     """Cycle through colors based on index."""
     return COLORS[int(index) % len(COLORS)]
+
+
+def board_image_by_index(index: int | None) -> str:
+    """Cycle through board images based on index."""
+    if index is None:
+        return BOARD_IMAGES[0]
+    return BOARD_IMAGES[int(index) % len(BOARD_IMAGES)]
 
 
 @register.inclusion_tag("home/components/presentation_card.html")
@@ -28,9 +42,11 @@ def render_presentation_card(
     }.get(color, "card-purple bg-wyrd-purple-500 text-white")
 
     classes = " ".join(filter(None, [color_classes, additional_class]))
+    board_image = board_image_by_index(index)
 
     return {
         "title": title,
         "class_name": classes,
         "index": index,
+        "board_image": board_image,
     }

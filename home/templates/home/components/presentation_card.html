@@ -1,9 +1,17 @@
+{% load static %}
 {# Card of presentation section. Use by calling {% render_presentation_card ... %} from home_components. #}
 <div 
-    class="presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute {{ class_name }}"
+    class="presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
     {% if index is not None %} data-card-index="{{ index }}"{% endif %}
 >
-    <div class="card-content w-full text-center">
+    <div class="flex-1 min-h-0 w-full overflow-hidden flex items-center justify-center md:p-6 p-1">
+        <img
+            src="{% static board_image %}"
+            alt="illustration de panneaux directionnels"
+            class="pointer-events-none block max-h-full max-w-full w-full h-full object-contain"
+        />
+    </div>
+    <div class="card-content relative z-10 w-full text-center">
         {% if title %}
             <p class="presentation-card-title text-2xs md:text-xl font-bold normal-case max-md:leading-2xs">
                 {{ title|lower|capfirst }}
