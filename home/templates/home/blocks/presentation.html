@@ -3,18 +3,23 @@
 <section
     data-nav-color="pink"
     class="flex flex-col items-center justify-center px-12 sm:px-16 py-16 md:py-24 home-section bg-wyrd-pink-500 text-wyrd-pink-900 text-center overflow-hidden" 
+    data-home-presentation
 >
-    <div class="relative lg:w-[740px] max-w-md md:max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col">        
-        <h2 class="text-center tracking-hero">
-            {{ block.title }}
-        </h2>
+    <div class="relative lg:w-[740px] max-w-md md:max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col presentation-stage">
+        <div class="z-0 presentation-copy">
+            <h2 class="text-center tracking-hero mb-2">
+                {{ block.title }}
+            </h2>
         
-        {% if block.description %}
-            <p class="text-center">{{ block.description }}</p>
-        {% endif %}
-        
-        {% for card_item in block.cards %}
-            {% render_presentation_card title=card_item color=forloop.counter0|color_by_index index=forloop.counter0 %}
-        {% endfor %}
+            {% if block.description %}
+                <p class="text-center">{{ block.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="presentation-card-scene absolute inset-0 z-20 mx-auto w-full max-w-[760px] pointer-events-none" data-home-presentation-cards>
+            {% for card_item in block.cards %}
+                {% render_presentation_card title=card_item color=forloop.counter0|color_by_index index=forloop.counter0 %}
+            {% endfor %}
+        </div>
     </div>
 </section>

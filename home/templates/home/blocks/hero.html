@@ -1,23 +1,25 @@
 {% load wagtailcore_tags core_components %}
 {% load static %}
 
-<section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 flex flex-col justify-center md:py-32 home-section relative" data-nav-color="purple">
+<section class="bg-wyrd-purple-500 text-wyrd-purple-100 py-24 flex flex-col justify-center md:py-32 home-section relative" data-nav-color="purple" data-home-hero>
     <div class="max-w-lg sm:max-w-xl md:max-w-7xl mx-auto px-4 md:px-32 items-center justify-center text-center gap-6 md:gap-12 flex flex-col">
         {% if block.tagline %}
             <h4 class="uppercase">{{ block.tagline }}</h4>
         {% endif %}
 
-        <h1 class="hero relative text-white w-min">
+        <h1 class="hero relative text-white w-min" data-home-hero-title>
             <span class="relative z-10">{{ block.title }}</span>
             <img
                 src="{% static 'img/wyrd.png' %}"
                 alt="Tête de la mascotte Wyrd"
-                class="pointer-events-none absolute md:w-64 w-22 md:-top-8 rotate-8 md:-left-48 -left-15 -top-3 z-10"
+                class="absolute md:w-64 w-22 md:-top-8 rotate-8 md:-left-48 -left-15 -top-3 z-10"
+                data-home-hero-sticker
             />
             <img
                 src="{% static 'img/d20_green.png' %}"
                 alt="Dé à 20 faces vert"
-                class="pointer-events-none absolute -right-12 -bottom-5 md:-right-34 md:-bottom-15 md:w-42 w-15 z-0"
+                class="absolute -right-12 -bottom-5 md:-right-34 md:-bottom-15 md:w-42 w-15 z-0"
+                data-home-hero-sticker
             />            
         </h1>
         {% if block.subtitle %}

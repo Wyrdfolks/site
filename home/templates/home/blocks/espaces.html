@@ -23,14 +23,8 @@
             </text>
         </svg>
     </div>
-</section>
 
-<section 
-    class="flex flex-col items-center justify-center py-16 md:py-24 home-section bg-wyrd-green-900 text-wyrd-green-500" 
-    data-nav-color="green"
-    data-espaces-section="subtitle"
->
-    <div class="max-w-xl md:max-w-5xl mx-auto px-12 gap-3 flex flex-col" data-espaces-subtitle-content>
+    <div class="max-w-xl md:max-w-5xl mx-auto px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-subtitle-content>
         {% if block.subtitle %}
             <h3 class="text-center">{{ block.subtitle }}</h3>
         {% endif %}
@@ -41,20 +35,23 @@
     <section 
         class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 bg-wyrd-green-900 text-wyrd-green-500 md:h-screen" 
         data-nav-color="green"
+        data-espaces-mondes
     >
-        <div class="md:flex-1 flex items-center justify-center max-md:hidden">
+        <div class="md:flex-1 flex items-center justify-center max-md:hidden" data-espaces-mondes-card>
         {# todo add map and highlight area on hover #}
         {% with size="large" photo=block.picture title=block.title %}
             {% include "includes/picture_card.html" %}
         {% endwith %}
         </div>
 
-        <div class="md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-y-auto h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12">
-            {% for monde_item in block.mondes %}
-                {% with monde=monde_item %}
-                    {% include "includes/monde_card.html" with zone_index=forloop.counter %}
-                {% endwith %}
-            {% endfor %}
+        <div class="md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12" data-espaces-mondes-list>
+            <div data-espaces-mondes-list-scroll>
+                {% for monde_item in block.mondes %}
+                    {% with monde=monde_item %}
+                        {% include "includes/monde_card.html" with zone_index=forloop.counter %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
         </div>
     </section>
 {% endif %}

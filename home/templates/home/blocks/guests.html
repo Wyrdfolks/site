@@ -1,45 +1,49 @@
 {% load core_components %}
 
-{# title #}
-<section class="py-16 md:py-24 px-14 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex" data-nav-color="purple">
-    <div class="w-full max-w-xl md:max-w-7xl m-auto">
-        <h1 class="text-center wrap-break-word">
-            {{ block.title }}
-        </h1>
-    </div>
-</section>
-
-{# cards #}
-<section class="py-16 md:py-24 px-10 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center" data-nav-color="purple">
-    <div class="max-w-xl sm:max-w-xl md:max-w-7xl mx-auto h-full flex items-center justify-center">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-6">
-            {% for guest_item in block.guests %}
-                {% if forloop.counter0|divisibleby:2 %}
-                    {% with guest=guest_item size="small" additional_class="rotate-[3deg]" %}
-                        {% include "includes/guest_card.html" %}
-                    {% endwith %}
-                {% else %}
-                    {% with guest=guest_item size="small" additional_class="-rotate-[3deg]" %}
-                        {% include "includes/guest_card.html" %}
-                    {% endwith %}
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-{# cta and teaser #}
-{% if block.teaser_text or block.cta %}
-    <section class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center" data-nav-color="purple">
-        <div class="h-full max-w-lg md:max-w-7xl m-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
-            {% if block.teaser_text %}
-                <h1 class="text-center h-[275px] flex items-center">
-                    {{ block.teaser_text }}
+<section
+    class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center"
+    data-nav-color="purple"
+    data-home-guests-cards
+>
+    <div class="home-guests-scene" data-home-guests-scene>
+        <div class="home-guests-stage">
+            <div class="home-guests-title-layer">
+                <h1 class="text-center wrap-break-word" data-home-guests-title>
+                    {{ block.title }}
                 </h1>
-            {% endif %}            
-            {% if block.cta %}            
-                {% render_button label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
+            </div>
+
+            <div class="home-guests-track-viewport" data-home-guests-viewport>
+                <div class="home-guests-track flex" data-home-guests-track>
+                    {% for guest_item in block.guests %}
+                        <div class="home-guests-card-item" data-home-guests-card-item>
+                            {% if forloop.counter0|divisibleby:2 %}
+                                {% with guest=guest_item size="small" additional_class="rotate-[3deg] w-full" %}
+                                    {% include "includes/guest_card.html" %}
+                                {% endwith %}
+                            {% else %}
+                                {% with guest=guest_item size="small" additional_class="-rotate-[3deg] w-full" %}
+                                    {% include "includes/guest_card.html" %}
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if block.teaser_text %}
+                <div class="home-guests-teaser-layer">
+                    <h1 class="text-center" data-home-guests-teaser-text>
+                        {{ block.teaser_text }}
+                    </h1>
+                </div>
             {% endif %}
         </div>
+
+        {% if block.cta %}
+            <div class="home-guests-cta">
+                {% render_button label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
+            </div>
+        {% endif %}
+    </div>
 </section>
-{% endif %}
