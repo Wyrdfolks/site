@@ -509,6 +509,9 @@
   .h-80 {
     height: calc(var(--spacing) * 80);
   }
+  .h-\[50vh\]\! {
+    height: 50vh !important;
+  }
   .h-\[300px\] {
     height: 300px;
   }
@@ -1247,6 +1250,11 @@
       @media (hover: hover) {
         color: var(--color-wyrd-indigo-900);
       }
+    }
+  }
+  .motion-reduce\:overflow-y-auto {
+    @media (prefers-reduced-motion: reduce) {
+      overflow-y: auto;
     }
   }
   .max-md\:mt-2 {

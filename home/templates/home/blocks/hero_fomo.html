@@ -5,7 +5,7 @@
         <div class="relative w-full h-full min-h-[560px] md:min-h-[680px]" data-home-fomo-stage>
             {# Primary content #}
             <div class="absolute inset-0 flex items-center justify-center" data-home-fomo-primary>
-                <div class="max-w-xl md:max-w-5xl mx-auto px-6 md:px-8 flex flex-col gap-16 text-center items-center" data-home-fomo-fade-target>
+                <div class="max-w-xl md:max-w-5xl mx-auto px-6 md:px-8 flex flex-col gap-16 text-center items-center" data-home-fomo-fade-target data-home-fomo-primary-content>
                     <h1>{{ block.title }}</h1>
 
                     <div class="flex flex-col gap-6 max-md:gap-16 items-center">
@@ -16,7 +16,7 @@
                             {% render_button label="Sur Discord" url=block.discord_url.external_url variant="primary" %}
                         {% endif %}
 
-                        <div class="flex flex-row md:flex-col gap-2 md:gap-6 items-center">
+                        <div class="flex flex-row md:flex-col gap-2 md:gap-6 items-center" data-home-fomo-social-stack>
                             {% if block.discord_url.page or block.discord_url.external_url %}
                                 <p class="uppercase font-medium hidden md:block">
                                     Mais aussi...
@@ -40,7 +40,7 @@
 
             {# Secondary content (description + CTA), revealed later while scene stays pinned #}
             <div class="absolute inset-0 flex items-center md:items-end justify-center pb-0 md:pb-14" data-home-fomo-secondary>
-                <div class="max-w-xl md:max-w-7xl mx-auto px-8 flex flex-col gap-16 text-center md:h-[424px] justify-end items-center">
+                <div class="max-w-xl md:max-w-7xl mx-auto px-8 flex flex-col gap-16 text-center md:h-[424px] justify-end items-center" data-home-fomo-secondary-content>
                     <h4 class="font-medium">
                         Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026
                     </h4>

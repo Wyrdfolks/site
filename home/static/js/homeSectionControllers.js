@@ -148,7 +148,8 @@
     /** @type {Array<{ element: Element, handler: () => void }>} */
     const hoverHandlers = [];
     elements.forEach((element) => {
-      const handler = () => handleElementHover(/** @type {HTMLElement} */ (element));
+      const handler = () =>
+        handleElementHover(/** @type {HTMLElement} */ (element));
       hoverHandlers.push({ element, handler });
       element.addEventListener("mouseenter", handler);
     });
@@ -424,11 +425,7 @@
 
     // Subtitle starts only after the hero text travel completes.
     sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 7.95);
-    sceneTimeline.to(
-      subtitleContent,
-      { autoAlpha: 0.35, duration: 1.15 },
-      9.4,
-    );
+    sceneTimeline.to(subtitleContent, { autoAlpha: 0.35, duration: 1.15 }, 9.4);
 
     return createSectionController({
       onEnter: () => {},

@@ -45,7 +45,7 @@
         </div>
 
         <div class="md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12" data-espaces-mondes-list>
-            <div data-espaces-mondes-list-scroll>
+            <div data-espaces-mondes-list-scroll class="motion-reduce:overflow-y-auto">
                 {% for monde_item in block.mondes %}
                     {% with monde=monde_item %}
                         {% include "includes/monde_card.html" with zone_index=forloop.counter %}
