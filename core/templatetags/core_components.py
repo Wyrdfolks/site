@@ -62,8 +62,8 @@ def render_button(
     return {
         "href": url or "",
         "label": label,
+        "variant": variant,
         "classes": classes,
-        "show_icon": variant == "ghost",
         "target": target,
         "rel": f"noopener noreferrer {rel}" if rel else "noopener noreferrer",
         "is_disabled": disabled,

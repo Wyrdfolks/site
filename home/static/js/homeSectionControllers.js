@@ -176,21 +176,6 @@
   }
 
   /**
-   * Initialize hover-based inertia animations for guest cards.
-   *
-   * @returns {() => void} Cleanup function
-   */
-  function initGuestsCardHoverAnimations() {
-    return initWiggleHoverAnimations("[data-home-guests-card-item]", {
-      velocityScale: 0.04,
-      wiggleRange: 18,
-      hoverDuration: 0.18,
-      wiggleDuration: 0.32,
-      returnDuration: 0.55,
-    });
-  }
-
-  /**
    * Build a controller for the hero section animations.
    *
    * @param {{ heroIntroDuration: number, heroOutroDuration: number, heroStickerDuration: number }} params
@@ -710,11 +695,7 @@
         gsap.set(copyElements, { autoAlpha: 0 });
         spreadTimeline.to(
           copyElements,
-          {
-            autoAlpha: 1,
-            duration: 1.2,
-            stagger: 0.2,
-          },
+          { autoAlpha: 1, duration: 1.2, stagger: 0.2 },
           0,
         );
       }
@@ -742,7 +723,7 @@
       spreadTimeline.eventCallback("onComplete", startFloating);
     }
 
-    // card floating animation
+    // card floating animation on scroll end, with drift and rotation
     function startFloating() {
       if (floatingActive) return;
 
@@ -752,13 +733,28 @@
       cards.forEach((card, index) => {
         const cycle = gsap.timeline({ repeat: -1, yoyo: true });
         const direction = index % 2 === 0 ? 1 : -1;
+        const yDrift = gsap.utils.random(12, 28);
+        const xDrift = gsap.utils.random(3, 10);
+        const rotationDrift = gsap.utils.random(2.4, 6.5);
+        const driftDuration = gsap.utils.random(2.8, 4.6) + index * 0.2;
+        const settleDuration = gsap.utils.random(2.4, 3.8);
+
         cycle.to(card, {
-          y: `+=${direction * 20}`,
-          x: `+=${direction * 5}`,
-          rotation: `+=${direction * 5}`,
-          duration: 3.2 + index * 0.35,
+          y: `+=${direction * yDrift}`,
+          x: `+=${direction * xDrift}`,
+          rotation: `+=${direction * rotationDrift}`,
+          duration: driftDuration,
           ease: "sine.inOut",
         });
+
+        cycle.to(card, {
+          y: `+=${-direction * yDrift * 0.4}`,
+          x: `+=${direction * xDrift * 0.3}`,
+          rotation: `+=${-direction * rotationDrift * 0.35}`,
+          duration: settleDuration,
+          ease: "sine.inOut",
+        });
+
         floatingTweens.push(cycle);
       });
     }
@@ -864,7 +860,7 @@
       const startOffset = guestsViewport.clientWidth + 80;
       const mobileExtraTravel =
         window.innerWidth < 768 ? guestsViewport.clientWidth * 0.8 : 0;
-      const endOffset = effectiveTravel + 120 + mobileExtraTravel;
+      const endOffset = effectiveTravel + 180 + mobileExtraTravel;
       const sceneScrollDistance = Math.max(
         effectiveTravel * 7 + window.innerHeight * 5,
         window.innerHeight * 10,
@@ -874,31 +870,71 @@
         window.innerHeight * 4,
       );
 
-      gsap.set(guestsTrack, { x: startOffset, autoAlpha: 1 });
+      gsap.set(guestsTrack, {
+        x: startOffset,
+        autoAlpha: 1,
+        position: "relative",
+        zIndex: 3,
+      });
+      gsap.set(guestCardItems, {
+        y: 0,
+        rotation: 0,
+        transformOrigin: "50% 50%",
+      });
 
       if (guestsTitle instanceof HTMLElement)
-        gsap.set(guestsTitle, { xPercent: 115, autoAlpha: 0.35 });
+        gsap.set(guestsTitle, {
+          xPercent: 0,
+          autoAlpha: 1,
+          position: "relative",
+          zIndex: 1,
+        });
       if (guestsTeaserText instanceof HTMLElement)
         gsap.set(guestsTeaserText, { xPercent: 180, autoAlpha: 0.35 });
 
       sceneTimeline = gsap.timeline({ defaults: { ease: "none" } });
 
-      if (guestsTitle instanceof HTMLElement) {
-        sceneTimeline.to(guestsTitle, { autoAlpha: 1, duration: 0.25 });
-        sceneTimeline.fromTo(
-          guestsTitle,
-          { xPercent: 115 },
-          { xPercent: 0, duration: 2.2 },
-          0,
-        );
-        sceneTimeline.to(guestsTitle, {
-          xPercent: -115,
-          autoAlpha: 1,
-          duration: 3,
+      const setCardY = [];
+      const setCardRotation = [];
+
+      const cardMotionProfiles = guestCardItems.map((_, index) => ({
+        direction: index % 2 === 0 ? 1 : -1,
+        yAmplitude: 17 + index * 2.1,
+        rotationAmplitude: 5.2 + index * 0.7,
+        phase: index * 0.9,
+        cycleCount: 2.8 + index * 0.25,
+      }));
+
+      guestCardItems.forEach((card, index) => {
+        setCardY[index] = gsap.quickTo(card, "y", {
+          duration: 0.46,
+          ease: "power2.out",
+        });
+        setCardRotation[index] = gsap.quickTo(card, "rotation", {
+          duration: 0.46,
+          ease: "power2.out",
+        });
+      });
+
+      function applyCardMotion(progress) {
+        guestCardItems.forEach((card, index) => {
+          const profile = cardMotionProfiles[index];
+          const wave =
+            progress * profile.cycleCount * Math.PI * 2 + profile.phase;
+          const y = Math.sin(wave) * profile.yAmplitude * profile.direction;
+          const rotation =
+            (Math.cos(wave * 1.08) * profile.rotationAmplitude +
+              Math.sin(wave * 0.54) * profile.rotationAmplitude * 0.35) *
+            profile.direction;
+
+          setCardY[index](y);
+          setCardRotation[index](rotation);
         });
       }
 
-      sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 10 });
+      if (guestsTitle instanceof HTMLElement)
+        sceneTimeline.to(guestsTitle, { autoAlpha: 0, duration: 2.8 }, 0.2);
+      sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 10 }, 0);
 
       if (guestsTeaserText instanceof HTMLElement) {
         sceneTimeline.to(guestsTeaserText, { autoAlpha: 1, duration: 0.25 });
@@ -925,7 +961,11 @@
         animation: sceneTimeline,
         invalidateOnRefresh: true,
         anticipatePin: 1,
+        onRefresh: (self) => applyCardMotion(self.progress),
+        onUpdate: (self) => applyCardMotion(self.progress),
       });
+
+      applyCardMotion(0);
     }
 
     function buildArtifacts() {
@@ -934,9 +974,12 @@
 
     buildArtifacts();
 
-    const sceneTargets = [guestsTrack, guestsTitle, guestsTeaserText].filter(
-      (target) => target instanceof HTMLElement,
-    );
+    const sceneTargets = [
+      guestsTrack,
+      guestsTitle,
+      guestsTeaserText,
+      ...guestCardItems,
+    ].filter((target) => target instanceof HTMLElement);
 
     return createSectionController({
       onEnter: () => gsap.set(sceneTargets, { force3D: true }),
@@ -953,7 +996,6 @@
   window.wyrdUi.homeSectionControllers = {
     createNoOpSectionController,
     createSectionController,
-    initGuestsCardHoverAnimations,
     initHeroStickerHoverAnimations,
     createHeroSectionController,
     createHeroFomoFadeController,

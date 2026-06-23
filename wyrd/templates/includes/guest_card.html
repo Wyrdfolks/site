@@ -1,28 +1,35 @@
 {% load wagtailimages_tags wagtailcore_tags %}
 
-<div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden border md:border-2 border-wyrd-indigo-900 p-2{% if additional_class %} {{ additional_class }}{% endif %}">
-    <div class="flex flex-col items-center {% if size == 'small' %} max-sm:w-card-s-mobile {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile {% endif %}">
-        <div class="overflow-hidden relative max-w-full bg-wyrd-purple-100 w-full rounded-xl md:rounded-3xl {% if size == 'small' %} max-sm:card-s-mobile card-s-desktop max-sm:h-card-s-mobile h-card-s-desktop {% elif size == 'large' %} h-card-l-desktop max-sm:h-card-l-mobile max-sm:w-card-l-mobile w-card-l-desktop {% endif %} text-white font-bold text-center">
-            {% if guest.photo %}
-                {% image guest.photo fill-400x400 as guest_img %}
-                <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="w-full h-full object-cover">
-                <h4 class="absolute bottom-1 md:bottom-2 left-0 w-full font-bold">{{ guest.title }}</h4>
-            {% else %}
-                <h4 class="absolute bottom-1 md:bottom-2 left-0 w-full font-bold">?</h4>
-            {% endif %}
-        </div>
+<div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden border md:border-2 border-wyrd-indigo-900 w-fit p-2{% if additional_class %} {{ additional_class }}{% endif %}">
+    <div class="flex flex-col items-center">
+        <div class="{% if size == 'small' %} w-card-s-desktop max-sm:w-card-s-mobile md:min-h-105
+                {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile 
+                {% endif %}">
+            <div class="relative overflow-hidden bg-wyrd-purple-100 rounded-xl md:rounded-3xl text-white font-bold text-center
+                    {% if size == 'small' %} w-card-s-desktop h-card-s-desktop max-sm:w-card-s-mobile max-sm:h-card-s-mobile
+                    {% elif size == 'large' %} w-card-l-desktop h-card-l-desktop max-sm:w-card-l-mobile max-sm:h-card-l-mobile
+                    {% endif %}">
+                {% if guest.photo %}
+                    {% image guest.photo fill-400x400 as guest_img %}
+                    <img src="{{ guest_img.url }}" alt="{{ guest.title }}" class="block w-full h-full object-cover">
+                    <h4 class="absolute bottom-1 md:bottom-2 left-0 w-full font-bold">{{ guest.title }}</h4>
+                {% else %}
+                    <h4 class="absolute bottom-1 md:bottom-2 left-0 w-full font-bold">?</h4>
+                {% endif %}
+            </div>
         
-        <div class="p-2 md:p-4 w-full text-center">
-            {% if guest.subtitle %}
-                <h5 class="font-bold uppercase text-wyrd-purple-500">
-                    {{ guest.subtitle }}
-                </h5>
-            {% endif %}
-            {% if guest.description %}
-                <div class="text-wyrd-indigo-300 font-bold text-2xs leading-2xs md:text-lg md:leading-5 line-clamp-5">
-                    {{ guest.description|richtext }}
-                </div>
-            {% endif %}
+            <div class="p-2 md:p-4 w-full text-center">
+                {% if guest.subtitle %}
+                    <h5 class="font-bold uppercase text-wyrd-purple-500">
+                        {{ guest.subtitle }}
+                    </h5>
+                {% endif %}
+                {% if guest.description %}
+                    <div class="text-wyrd-indigo-300 font-bold text-2xs leading-2xs md:text-lg md:leading-5 line-clamp-5">
+                        {{ guest.description|richtext }}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

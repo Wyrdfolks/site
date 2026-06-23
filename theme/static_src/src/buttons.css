@@ -26,32 +26,72 @@
 
 /* Button primary variant */
 .btn-primary {
+  --btn-elastic-ease-out: linear(
+    0,
+    0.5737 7.6%,
+    0.8382 11.87%,
+    0.9463 14.19%,
+    1.0292 16.54%,
+    1.0886 18.97%,
+    1.1258 21.53%,
+    1.137 22.97%,
+    1.1424 24.48%,
+    1.1423 26.1%,
+    1.1366 27.86%,
+    1.1165 31.01%,
+    1.0507 38.62%,
+    1.0219 42.57%,
+    0.9995 46.99%,
+    0.9872 51.63%,
+    0.9842 58.77%,
+    1.0011 81.26%,
+    1
+  );
   @apply relative inline-flex items-center justify-center overflow-hidden;
   @apply bg-white text-wyrd-indigo-900 rounded-lg;
   @apply uppercase tracking-tight h-btn-mobile md:h-btn-desktop px-6 py-3;
-  @apply ease-in-out transition-colors duration-300;
+  transform-origin: 50% 100%;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.45s var(--btn-elastic-ease-out),
+    color 0.2s ease;
 }
 
 .btn-primary::before {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   background: var(--color-wyrd-indigo-900);
-  z-index: 0;
   transform: translateY(100%);
-  transition: transform 0.35s ease;
+  transition: transform 0.85s var(--btn-elastic-ease-out);
+  z-index: 0;
 }
 
-.btn-primary > span {
+.btn-primary:active {
+  transform: translateY(1px) scaleX(0.955) scaleY(0.954);
+}
+
+.btn-primary[data-button-variant="primary"] {
+  background-color: white;
+}
+
+.btn-primary-label {
+  @apply relative inline-flex items-center justify-center h-full w-full px-6;
   z-index: 1;
 }
 
-.btn-primary:hover::before {
-  transform: translateY(0);
-}
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary[data-button-variant="primary"]:is(:hover, :focus-visible) {
+    transform: translateY(-3px) scaleX(0.99) scaleY(0.985);
+    color: white;
+  }
 
-.btn-primary:hover {
-  color: white;
+  .btn-primary[data-button-variant="primary"]:is(
+      :hover,
+      :focus-visible
+    )::before {
+    transform: translateY(0);
+  }
 }
 
 /* Button ghost variant */

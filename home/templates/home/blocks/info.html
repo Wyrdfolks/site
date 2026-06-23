@@ -21,16 +21,16 @@
 
         <div class="flex flex-col gap-6 sm:gap-8 md:gap-16 lg:w-[640px] max-md:mt-2">
             <h2 class="max-md:text-center">{{ block.title }}</h2>
-            <div class="grid grid-cols-2 gap-6 md:gap-12 sm:max-w-md md:max-w-4xl mx-auto">
+            <div class="grid grid-cols-2 gap-6 md:gap-12 sm:max-w-md md:max-w-4xl">
                 {% if block.access %}
-                    <div>
-                        <h4 class="font-semibold uppercase">Accès</h4>
+                    <div class="text-body-mobile">
+                        <h5 class="font-extrabold! uppercase mb-2.5">Accès</h5>
                         {{ block.access|safe }}
                     </div>
                 {% endif %}
                 {% if block.schedule %}
-                    <div>
-                        <h4 class="font-semibold uppercase">Horaires</h4>
+                    <div class="text-body-mobile">
+                        <h5 class="font-extrabold! uppercase mb-2.5">Horaires</h5>
                         {{ block.schedule|safe }}
                     </div>
                 {% endif %}
@@ -40,16 +40,16 @@
                 <div class="flex flex-row max-md:justify-center">
                     {% if block.directions_link.page %}
                         {% pageurl block.directions_link.page as directions_link %}
-                        {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" %}
+                        {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" additional_class="font-medium!" %}
                     {% elif block.directions_link.external_url %}
-                            {% render_button label="Comment venir ?" url=block.directions_link.external_url variant="secondary" color="pink" %}
+                            {% render_button label="Comment venir ?" url=block.directions_link.external_url variant="secondary" color="pink" additional_class="font-medium!" %}
                     {% endif %}
 
                     {% if block.faq_link.page %}
                         {% pageurl block.faq_link.page as faq_link %}
-                        {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" %}
+                        {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" additional_class="font-medium!" %}
                     {% elif block.faq_link.external_url %}
-                        {% render_button label="FAQ" url=block.faq_link.external_url variant="secondary" color="pink" %}
+                        {% render_button label="FAQ" url=block.faq_link.external_url variant="secondary" color="pink" additional_class="font-medium!" %}
                     {% endif %}
                 </div>
             {% endif %}

@@ -249,8 +249,6 @@
 
     const cleanupHeroHoverAnimations =
       controllersApi.initHeroStickerHoverAnimations();
-    const cleanupGuestsHoverAnimations =
-      controllersApi.initGuestsCardHoverAnimations?.() || (() => {});
     const backgroundTransitionArtifacts = initSectionBackgroundTransitions();
 
     // Ensure current section gets an initial enter callback on first load.

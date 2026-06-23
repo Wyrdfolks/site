@@ -1,7 +1,7 @@
 {% load core_components %}
 
 <section
-    class="py-16 md:py-24 bg-wyrd-purple-500 text-wyrd-purple-100 home-section flex items-center"
+    class="py-16 md:py-24 bg-wyrd-purple-500 text-white home-section flex items-center"
     data-nav-color="purple"
     data-home-guests-cards
 >
@@ -18,11 +18,11 @@
                     {% for guest_item in block.guests %}
                         <div class="home-guests-card-item" data-home-guests-card-item>
                             {% if forloop.counter0|divisibleby:2 %}
-                                {% with guest=guest_item size="small" additional_class="rotate-[3deg] w-full" %}
+                                {% with guest=guest_item size="small" additional_class="rotate-[3deg]" %}
                                     {% include "includes/guest_card.html" %}
                                 {% endwith %}
                             {% else %}
-                                {% with guest=guest_item size="small" additional_class="-rotate-[3deg] w-full" %}
+                                {% with guest=guest_item size="small" additional_class="-rotate-[3deg]" %}
                                     {% include "includes/guest_card.html" %}
                                 {% endwith %}
                             {% endif %}

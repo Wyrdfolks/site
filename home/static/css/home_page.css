@@ -64,7 +64,7 @@ h1 {
 
 .home-guests-stage {
   width: 100%;
-  min-height: clamp(280px, 56vh, 480px);
+  min-height: clamp(280px, 56vh, 520px);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -97,7 +97,7 @@ h1 {
   justify-content: center;
   padding-inline: clamp(1rem, 6vw, 4rem);
   pointer-events: none;
-  z-index: 2;
+  z-index: 0;
 }
 
 .home-guests-track-viewport {
@@ -107,7 +107,8 @@ h1 {
   display: flex;
   align-items: center;
   overflow: hidden;
-  z-index: 1;
+  position: relative;
+  z-index: 2;
 }
 
 .home-guests-track {
@@ -123,7 +124,7 @@ h1 {
 
 .home-guests-card-item {
   flex: 0 0 auto;
-  width: min(72vw, 260px);
+  width: fit-content;
   will-change: transform;
 }
 
@@ -279,10 +280,6 @@ h1 {
   .monde-card + .monde-card {
     padding-top: 64px;
     margin-top: 64px;
-  }
-
-  .home-guests-card-item {
-    width: 250px;
   }
 
   .home-guests-scene {
