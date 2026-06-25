@@ -172,7 +172,8 @@
    * @returns {() => void} Cleanup function
    */
   function initHeroStickerHoverAnimations() {
-    return initWiggleHoverAnimations("[data-home-hero-sticker]");
+    initWiggleHoverAnimations("[data-home-hero-sticker]");
+    initWiggleHoverAnimations("[data-home-fomo-sticker]");
   }
 
   /**
@@ -890,7 +891,12 @@
           zIndex: 1,
         });
       if (guestsTeaserText instanceof HTMLElement)
-        gsap.set(guestsTeaserText, { xPercent: 180, autoAlpha: 0.35 });
+        gsap.set(guestsTeaserText, {
+          xPercent: 0,
+          autoAlpha: 0,
+          position: "relative",
+          zIndex: 1,
+        });
 
       sceneTimeline = gsap.timeline({ defaults: { ease: "none" } });
 
@@ -937,18 +943,14 @@
       sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 10 }, 0);
 
       if (guestsTeaserText instanceof HTMLElement) {
-        sceneTimeline.to(guestsTeaserText, { autoAlpha: 1, duration: 0.25 });
-        sceneTimeline.fromTo(
+        sceneTimeline.to(
           guestsTeaserText,
-          { xPercent: 180 },
-          { xPercent: 0, duration: 5 },
-          ">",
+          {
+            autoAlpha: 1,
+            duration: 3.4,
+          },
+          6,
         );
-        sceneTimeline.to(guestsTeaserText, {
-          xPercent: -115,
-          autoAlpha: 1,
-          duration: 4.2,
-        });
       }
 
       sceneTrigger = ScrollTrigger.create({

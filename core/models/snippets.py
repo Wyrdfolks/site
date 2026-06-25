@@ -11,6 +11,7 @@ SOCIAL_MEDIA_TYPES = [
     ("tiktok", "TikTok"),
     ("youtube", "YouTube"),
     ("discord", "Discord"),
+    ("twitch", "Twitch"),
     ("other", "Autre"),
 ]
 

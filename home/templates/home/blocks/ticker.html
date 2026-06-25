@@ -1,3 +1,5 @@
+{% load static %}
+
 <section 
     data-nav-color="green"
     class="bg-wyrd-green-900 text-wyrd-green-500 py-12 overflow-hidden home-section flex flex-row items-center max-md:h-fit! min-h-fit! h-[50vh]!"
@@ -5,17 +7,21 @@
     <div class="flex items-center animate-marquee-desktop whitespace-nowrap mx-auto">
         {% for text in block.texts %}
             <h1 class="px-7 md:px-8 mt-2">{{ text }}</h1>
-             <div class="self-center h-20 w-20 max-w-20 max-h-20">
-                {% include "svg/d20.svg" %}
-            </div>
+            <img
+                src="{% static 'img/d20_green.png' %}"
+                alt="Dé vert à 20 faces"
+                class="w-12 h-12 md:h-20 md:w-20 self-center md:mb-4"
+            />
         {% endfor %}
         
         {# Duplicate for seamless loop #}
         {% for text in block.ticker_text %}
             <h1 class="px-8 mt-5">{{ text }}</h1>
-            <div class="self-center h-20 w-20 max-w-20 max-h-20">
-                {% include "svg/d20.svg" %}
-            </div>
+            <img
+                src="{% static 'img/d20_green.png' %}"
+                alt="Dé vert à 20 faces"
+                class="w-12 h-12 md:h-20 md:w-20 self-center md:mb-4"
+            />
         {% endfor %}
     </div>
 </section>
