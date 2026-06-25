@@ -82,7 +82,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .btn-primary[data-button-variant="primary"]:is(:hover, :focus-visible) {
-    transform: translateY(-3px) scaleX(0.99) scaleY(0.985);
+    transform: translateY(-5px) scaleX(0.97) scaleY(0.96);
     color: white;
   }
 
@@ -165,8 +165,7 @@
   color: var(--btn-secondary-text, white);
   transition:
     background-color 0.2s ease,
-    color 0.2s ease,
-    border-radius 0.25s ease;
+    color 0.2s ease;
 }
 
 .btn-secondary:hover,

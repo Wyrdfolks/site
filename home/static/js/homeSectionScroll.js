@@ -65,55 +65,122 @@
   }
 
   /**
-   * Build scrubbed background transitions so section colors blend instead
-   * of switching abruptly at boundaries.
+   * Build section-activation theme transitions. When a section is active in
+   * the viewport center, animate body colors to that section's theme.
    *
    * @returns {Array<{ kill: () => void }>}
    */
-  function initSectionBackgroundTransitions() {
+  function initSectionThemeTransitions() {
     const sections = Array.from(document.querySelectorAll("[data-nav-color]"));
-    if (sections.length < 2) return [];
+    if (sections.length === 0) return [];
 
     /** @type {Array<{ kill: () => void }> } */
-    const backgroundArtifacts = [];
+    const themeArtifacts = [];
 
-    let previousColor = window.getComputedStyle(sections[0]).backgroundColor;
+    const rootStyles = window.getComputedStyle(document.documentElement);
 
-    sections.forEach((section, index) => {
+    /**
+     * @param {string} cssVar
+     * @param {string} fallback
+     * @returns {string}
+     */
+    function resolveColorVar(cssVar, fallback) {
+      return rootStyles.getPropertyValue(cssVar).trim() || fallback;
+    }
+
+    const themeByNavColor = {
+      purple: {
+        backgroundColor: resolveColorVar("--color-wyrd-purple-500", "#5a43f2"),
+        color: resolveColorVar("--color-wyrd-purple-100", "#f2ecff"),
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-900", "#0c3b2d"),
+        color: resolveColorVar("--color-wyrd-green-500", "#6ef2a3"),
+      },
+      pink: {
+        backgroundColor: resolveColorVar("--color-wyrd-pink-500", "#f47ab2"),
+        color: resolveColorVar("--color-wyrd-pink-900", "#4d1430"),
+      },
+    };
+
+    const fallbackTheme = themeByNavColor.purple;
+    const sectionThemeMap = new Map();
+    let activeSection = null;
+
+    sections.forEach((section) => {
       if (!(section instanceof HTMLElement)) return;
-
-      const currentColor = window.getComputedStyle(section).backgroundColor;
-
-      if (index === 0) {
-        section.style.backgroundColor = currentColor;
-        previousColor = currentColor;
-        return;
-      }
-
-      // Start from previous section color and blend toward current as the
-      // new section scrolls in.
-      section.style.backgroundColor = previousColor;
-
-      const blendTween = gsap.to(section, {
-        backgroundColor: currentColor,
-        ease: "none",
-        paused: true,
+      const navColor = section.dataset.navColor || "";
+      sectionThemeMap.set(section, {
+        navColor: themeByNavColor[navColor] ? navColor : "purple",
+        theme: themeByNavColor[navColor] || fallbackTheme,
       });
-
-      const blendTrigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top 90%",
-        end: "top 40%",
-        scrub: 1,
-        animation: blendTween,
-        invalidateOnRefresh: true,
-      });
-
-      backgroundArtifacts.push(blendTween, blendTrigger);
-      previousColor = currentColor;
     });
 
-    return backgroundArtifacts;
+    /**
+     * @param {HTMLElement} section
+     */
+    function applyThemeFromSection(section, immediate = false) {
+      const sectionTheme = sectionThemeMap.get(section);
+      if (!sectionTheme) return;
+
+      window.wyrdUi = window.wyrdUi || {};
+      window.wyrdUi.activeNavColor = sectionTheme.navColor;
+      window.dispatchEvent(
+        new CustomEvent("wyrd:theme-color-change", {
+          detail: { navColor: sectionTheme.navColor },
+        }),
+      );
+
+      gsap.to([document.documentElement, document.body], {
+        backgroundColor: sectionTheme.theme.backgroundColor,
+        color: sectionTheme.theme.color,
+        duration: immediate ? 0 : 0.7,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    }
+
+    function getMostVisibleSection() {
+      const viewportHeight = window.innerHeight;
+      let winner = null;
+      let maxVisiblePx = -1;
+
+      sections.forEach((section) => {
+        if (!(section instanceof HTMLElement)) return;
+        const rect = section.getBoundingClientRect();
+        const visiblePx =
+          Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+
+        if (visiblePx > maxVisiblePx) {
+          maxVisiblePx = visiblePx;
+          winner = section;
+        }
+      });
+
+      return winner;
+    }
+
+    function syncThemeToMostVisible(immediate = false) {
+      const winner = getMostVisibleSection();
+      if (!(winner instanceof HTMLElement)) return;
+      if (winner === activeSection && !immediate) return;
+      activeSection = winner;
+      applyThemeFromSection(winner, immediate);
+    }
+
+    const globalThemeTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: "top top",
+      end: "bottom bottom",
+      onRefresh: () => syncThemeToMostVisible(true),
+      onUpdate: () => syncThemeToMostVisible(false),
+    });
+
+    themeArtifacts.push(globalThemeTrigger);
+
+    syncThemeToMostVisible(true);
+
+    return themeArtifacts;
   }
 
   function initHomeSectionScroll() {
@@ -210,6 +277,10 @@
         controllersApi.createPresentationSectionController(),
       );
 
+      registerSectionController("[data-home-ticker]", () =>
+        controllersApi.createTickerSectionController(),
+      );
+
       registerSectionController('[data-espaces-section="hero"]', () =>
         controllersApi.createEspacesSectionController({
           desktopMedia,
@@ -249,7 +320,7 @@
 
     const cleanupHeroHoverAnimations =
       controllersApi.initHeroStickerHoverAnimations();
-    const backgroundTransitionArtifacts = initSectionBackgroundTransitions();
+    const themeTransitionArtifacts = initSectionThemeTransitions();
 
     // Ensure current section gets an initial enter callback on first load.
     const initialIndex = getClosestStopIndex(stops);
@@ -314,9 +385,8 @@
       window.removeEventListener("pagehide", teardownHomeSectionScroll);
 
       stopTriggers.forEach((trigger) => trigger.kill());
-      backgroundTransitionArtifacts.forEach((artifact) => artifact.kill());
+      themeTransitionArtifacts.forEach((artifact) => artifact.kill());
       cleanupHeroHoverAnimations();
-      cleanupGuestsHoverAnimations();
       cleanupLenisBridge();
       destroySectionControllers();
       window.__homeSectionScrollInitialized = false;

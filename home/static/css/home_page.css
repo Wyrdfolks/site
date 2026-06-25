@@ -24,6 +24,12 @@ section.home-section:not(.landing-page-ticker) {
   min-height: 100vh;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  section.home-section[data-nav-color] {
+    background-color: transparent !important;
+  }
+}
+
 h1 {
   font-family: "Groovy Bumpie", cursive;
 }

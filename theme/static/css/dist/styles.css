@@ -135,7 +135,6 @@
     --width-map-mobile: 250px;
     --height-map-desktop: 500px;
     --height-map-mobile: 250px;
-    --animate-marquee-desktop: marquee 20s linear infinite;
   }
 }
 @layer base {
@@ -523,8 +522,8 @@
   .h-80 {
     height: calc(var(--spacing) * 80);
   }
-  .h-\[50vh\]\! {
-    height: 50vh !important;
+  .h-\[40vh\]\! {
+    height: 40vh !important;
   }
   .h-\[300px\] {
     height: 300px;
@@ -730,9 +729,6 @@
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
   }
-  .animate-marquee-desktop {
-    animation: var(--animate-marquee-desktop);
-  }
   .cursor-pointer {
     cursor: pointer;
   }
@@ -908,17 +904,11 @@
   .bg-wyrd-pink-100 {
     background-color: var(--color-wyrd-pink-100);
   }
-  .bg-wyrd-pink-500 {
-    background-color: var(--color-wyrd-pink-500);
-  }
   .bg-wyrd-pink-700 {
     background-color: var(--color-wyrd-pink-700);
   }
   .bg-wyrd-purple-100 {
     background-color: var(--color-wyrd-purple-100);
-  }
-  .bg-wyrd-purple-300 {
-    background-color: var(--color-wyrd-purple-300);
   }
   .bg-wyrd-purple-500 {
     background-color: var(--color-wyrd-purple-500);
@@ -1133,9 +1123,6 @@
   .text-wyrd-indigo-900 {
     color: var(--color-wyrd-indigo-900);
   }
-  .text-wyrd-pink-900 {
-    color: var(--color-wyrd-pink-900);
-  }
   .text-wyrd-purple-100 {
     color: var(--color-wyrd-purple-100);
   }
@@ -1238,6 +1225,46 @@
   .motion-reduce\:overflow-y-auto {
     @media (prefers-reduced-motion: reduce) {
       overflow-y: auto;
+    }
+  }
+  .motion-reduce\:bg-wyrd-green-900 {
+    @media (prefers-reduced-motion: reduce) {
+      background-color: var(--color-wyrd-green-900);
+    }
+  }
+  .motion-reduce\:bg-wyrd-pink-500 {
+    @media (prefers-reduced-motion: reduce) {
+      background-color: var(--color-wyrd-pink-500);
+    }
+  }
+  .motion-reduce\:bg-wyrd-purple-300 {
+    @media (prefers-reduced-motion: reduce) {
+      background-color: var(--color-wyrd-purple-300);
+    }
+  }
+  .motion-reduce\:bg-wyrd-purple-500 {
+    @media (prefers-reduced-motion: reduce) {
+      background-color: var(--color-wyrd-purple-500);
+    }
+  }
+  .motion-reduce\:text-white {
+    @media (prefers-reduced-motion: reduce) {
+      color: var(--color-white);
+    }
+  }
+  .motion-reduce\:text-wyrd-green-500 {
+    @media (prefers-reduced-motion: reduce) {
+      color: var(--color-wyrd-green-500);
+    }
+  }
+  .motion-reduce\:text-wyrd-pink-900 {
+    @media (prefers-reduced-motion: reduce) {
+      color: var(--color-wyrd-pink-900);
+    }
+  }
+  .motion-reduce\:text-wyrd-purple-100 {
+    @media (prefers-reduced-motion: reduce) {
+      color: var(--color-wyrd-purple-100);
     }
   }
   .max-md\:mt-2 {
@@ -1450,11 +1477,6 @@
   .md\:mt-header-desktop {
     @media (width >= 48rem) {
       margin-top: var(--spacing-header-desktop);
-    }
-  }
-  .md\:mb-4 {
-    @media (width >= 48rem) {
-      margin-bottom: calc(var(--spacing) * 4);
     }
   }
   .md\:block {
@@ -2116,7 +2138,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .btn-primary[data-button-variant="primary"]:is(:hover, :focus-visible) {
-    transform: translateY(-3px) scaleX(0.99) scaleY(0.985);
+    transform: translateY(-5px) scaleX(0.97) scaleY(0.96);
     color: white;
   }
   .btn-primary[data-button-variant="primary"]:is( :hover, :focus-visible )::before {
@@ -2202,7 +2224,7 @@
   will-change: transform;
   background-color: var(--btn-secondary-bg, var(--color-wyrd-purple-300));
   color: var(--btn-secondary-text, white);
-  transition: background-color 0.2s ease, color 0.2s ease, border-radius 0.25s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 .btn-secondary:hover, .btn-secondary.btn-green:hover, .btn-secondary.btn-purple:hover, .btn-secondary.btn-pink:hover, #navbar.purple .btn-secondary:hover, #navbar.green .btn-secondary:hover, #navbar.pink .btn-secondary:hover {
   animation: btn-bounce 0.46s cubic-bezier(0.25, 0.8, 0.25, 1) both;
