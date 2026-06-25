@@ -49,7 +49,7 @@
   );
   @apply relative inline-flex items-center justify-center overflow-hidden;
   @apply bg-white text-wyrd-indigo-900 rounded-lg;
-  @apply uppercase tracking-tight h-btn-mobile md:h-btn-desktop px-6 py-3;
+  @apply uppercase tracking-tight h-btn-mobile md:h-btn-desktop px-1 py-3;
   transform-origin: 50% 100%;
   -webkit-tap-highlight-color: transparent;
   transition:
@@ -82,7 +82,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .btn-primary[data-button-variant="primary"]:is(:hover, :focus-visible) {
-    transform: translateY(-5px) scaleX(0.97) scaleY(0.96);
+    transform: translateY(-5px) scaleX(0.98) scaleY(0.95);
     color: white;
   }
 
