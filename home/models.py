@@ -110,6 +110,7 @@ class PresentationBlock(StructBlock):
 
 
 class EspacesBlock(StructBlock):
+    intro = CharBlock(label="Introduction", required=False)
     title = CharBlock(label="Titre")
     subtitle = CharBlock(label="Sous-titre", required=False)
     mondes = ListBlock(

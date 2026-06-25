@@ -3,6 +3,12 @@
     data-nav-color="green"
     data-espaces-section="hero"
 >
+    <div class="max-w-xl md:max-w-5xl mx-auto px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-intro-content>
+        {% if block.intro %}
+            <h3 class="text-center">{{ block.intro }}</h3>
+        {% endif %}
+    </div>
+
     <div class="max-w-7xl mx-auto sm:mx-6 lg:mx-8 gap-3 flex flex-col motion-reduce:text-wyrd-green-500 relative h-[300px] w-full" data-espaces-hero-content>
         <svg
             width="2000"

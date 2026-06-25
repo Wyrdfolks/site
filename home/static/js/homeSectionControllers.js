@@ -363,12 +363,16 @@
     const espacesSection = document.querySelector(
       '[data-espaces-section="hero"]',
     );
+    const introContent = espacesSection?.querySelector(
+      "[data-espaces-intro-content]",
+    );
     const heroContent = espacesSection?.querySelector(
       "[data-espaces-hero-content]",
     );
     const subtitleContent = espacesSection?.querySelector(
       "[data-espaces-subtitle-content]",
     );
+    const heroTextPath = heroContent?.querySelector("textPath");
 
     if (
       !(espacesSection instanceof HTMLElement) ||
@@ -378,11 +382,36 @@
       return createNoOpSectionController();
     }
 
-    gsap.set(heroContent, {
-      xPercent: desktopMedia.matches ? 50 : 22,
-      autoAlpha: 0.45,
+    gsap.set(espacesSection, { position: "relative" });
+    if (introContent instanceof HTMLElement) {
+      gsap.set(introContent, {
+        autoAlpha: 0,
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        xPercent: -50,
+        yPercent: -50,
+        marginTop: 0,
+        zIndex: 3,
+      });
+    }
+    gsap.set(heroContent, { autoAlpha: 0 });
+    gsap.set(subtitleContent, {
+      autoAlpha: 0,
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      xPercent: -50,
+      yPercent: -50,
+      marginTop: 0,
+      zIndex: 2,
     });
-    gsap.set(subtitleContent, { autoAlpha: 0 });
+
+    if (heroTextPath instanceof SVGTextPathElement) {
+      gsap.set(heroTextPath, {
+        attr: { startOffset: desktopMedia.matches ? "170%" : "182%" },
+      });
+    }
 
     const sceneTimeline = gsap.timeline({
       scrollTrigger: {
@@ -398,20 +427,57 @@
       defaults: { ease: "none" },
     });
 
-    // Slow right-to-left travel for curved hero text.
-    sceneTimeline.to(
-      heroContent,
-      {
-        xPercent: desktopMedia.matches ? -130 : -75,
-        autoAlpha: 1,
-        duration: 7.6,
-      },
-      0,
-    );
+    // Reveal hero title by moving along its curved SVG path.
+    if (heroTextPath instanceof SVGTextPathElement) {
+      if (introContent instanceof HTMLElement) {
+        sceneTimeline.to(introContent, { autoAlpha: 1, duration: 1.15 }, 0);
+        sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
+      }
 
-    // Subtitle starts only after the hero text travel completes.
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 7.95);
-    sceneTimeline.to(subtitleContent, { autoAlpha: 0.35, duration: 1.15 }, 9.4);
+      sceneTimeline.set(heroContent, { autoAlpha: 1 }, 2.08);
+      sceneTimeline.to(
+        heroTextPath,
+        {
+          attr: { startOffset: "50%" },
+          duration: 5.8,
+          ease: "power2.out",
+        },
+        2.1,
+      );
+
+      sceneTimeline.to(
+        heroTextPath,
+        {
+          attr: { startOffset: desktopMedia.matches ? "-48%" : "-34%" },
+          duration: 2.4,
+          ease: "power2.in",
+        },
+        8,
+      );
+    } else {
+      // Fallback for environments where SVG textPath is not available.
+      if (introContent instanceof HTMLElement) {
+        sceneTimeline.to(introContent, { autoAlpha: 1, duration: 1.15 }, 0);
+        sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
+      }
+
+      sceneTimeline.set(heroContent, { autoAlpha: 1 }, 2.08);
+
+      sceneTimeline.fromTo(
+        heroContent,
+        { xPercent: desktopMedia.matches ? 50 : 22, autoAlpha: 0.45 },
+        {
+          xPercent: desktopMedia.matches ? -220 : -115,
+          autoAlpha: 1,
+          duration: 8.2,
+        },
+        2.1,
+      );
+    }
+
+    // Subtitle appears centered as the title finishes leaving the frame.
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 9.35);
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.6);
 
     return createSectionController({
       onEnter: () => {},
@@ -471,12 +537,42 @@
       if (listTravel <= 0) return;
 
       gsap.set(listScrollTarget, { y: 0 });
+      gsap.set(mondesList, { autoAlpha: 0, xPercent: 10 });
       if (mondesCard instanceof HTMLElement) {
-        gsap.set(mondesCard, { autoAlpha: 1 });
+        gsap.set(mondesCard, { autoAlpha: 0, xPercent: -10 });
       }
 
       sceneTimeline = gsap.timeline({ defaults: { ease: "none" } });
-      sceneTimeline.to(listScrollTarget, { y: -listTravel, duration: 1 });
+
+      if (mondesCard instanceof HTMLElement) {
+        sceneTimeline.to(
+          mondesCard,
+          {
+            autoAlpha: 1,
+            xPercent: 0,
+            duration: 0.22,
+            ease: "power2.out",
+          },
+          0,
+        );
+      }
+
+      sceneTimeline.to(
+        mondesList,
+        {
+          autoAlpha: 1,
+          xPercent: 0,
+          duration: 0.22,
+          ease: "power2.out",
+        },
+        0,
+      );
+
+      sceneTimeline.to(
+        listScrollTarget,
+        { y: -listTravel, duration: 0.78 },
+        0.22,
+      );
 
       sceneTrigger = ScrollTrigger.create({
         trigger: mondesSection,
@@ -530,13 +626,76 @@
       return createNoOpSectionController();
     }
 
+    const primaryStickers = Array.from(
+      fomoSection.querySelectorAll("[data-home-fomo-sticker]"),
+    );
+
+    /**
+     * Split a text element into word spans for staggered reveal animation.
+     * (for HERO-FOMO section)
+     * @param {Element[]} targets
+     * @returns {HTMLElement[]}
+     */
+    function buildWordRevealTargets(targets) {
+      const words = [];
+
+      targets.forEach((target) => {
+        if (!(target instanceof HTMLElement)) return;
+        const sourceText = target.textContent?.trim() || "";
+        if (!sourceText) return;
+
+        target.textContent = "";
+        const fragment = document.createDocumentFragment();
+        sourceText.split(/\s+/).forEach((word, index, array) => {
+          const wordSpan = document.createElement("span");
+          wordSpan.textContent = word;
+          wordSpan.className = "home-word-reveal-word";
+          wordSpan.style.display = "inline-block";
+          fragment.appendChild(wordSpan);
+          words.push(wordSpan);
+          if (index < array.length - 1)
+            fragment.appendChild(document.createTextNode(" "));
+        });
+        target.appendChild(fragment);
+      });
+
+      return words;
+    }
+
+    const primaryWordTargets = buildWordRevealTargets(
+      Array.from(primaryContent.querySelectorAll("h1, h2, h3, h4, p")),
+    );
+    const secondaryWordTargets = buildWordRevealTargets(
+      Array.from(secondaryContent.querySelectorAll("h1, h2, h3, h4, p")),
+    );
+
+    const primaryRevealTargets =
+      primaryWordTargets.length > 0 ? primaryWordTargets : [primaryContent];
+    const secondaryRevealTargets =
+      secondaryWordTargets.length > 0
+        ? secondaryWordTargets
+        : [secondaryContent];
+
     // Apply initial state immediately so DOM style changes are visible at init.
-    gsap.set(primaryContent, {
-      autoAlpha: 0.12,
-      scale: 0.7,
+    gsap.set(primaryContent, { autoAlpha: 1 });
+    gsap.set(secondaryContent, { autoAlpha: 0 });
+    gsap.set(primaryStickers, {
+      autoAlpha: 1,
+      scale: 0,
       transformOrigin: "50% 50%",
     });
-    gsap.set(secondaryContent, { autoAlpha: 0 });
+    gsap.set(primaryRevealTargets, {
+      autoAlpha: 1,
+      yPercent: 0,
+      scaleY: 1,
+      rotate: 0,
+    });
+    gsap.set(secondaryRevealTargets, {
+      autoAlpha: 0,
+      yPercent: 100,
+      scaleY: 0,
+      rotate: 10,
+    });
 
     const fadeTimeline = gsap.timeline({
       scrollTrigger: {
@@ -552,17 +711,56 @@
       defaults: { ease: "none" },
     });
 
-    // Slow reveal of first panel, then crossfade to second panel.
-    fadeTimeline.to(
-      primaryContent,
-      { autoAlpha: 1, scale: 1, duration: 2.2 },
-      0,
+    // Primary panel: title reveal + stickers, then fade to secondary panel.
+    fadeTimeline.fromTo(
+      primaryRevealTargets,
+      {
+        autoAlpha: 0,
+        yPercent: 100,
+        scaleY: 0,
+        rotate: 10,
+      },
+      {
+        autoAlpha: 1,
+        yPercent: 0,
+        scaleY: 1,
+        rotate: 0,
+        duration: 1,
+        ease: "elastic.out(0.75, 0.6)",
+        stagger: 0.035,
+      },
+      0.2,
     );
-    fadeTimeline.to(primaryContent, { autoAlpha: 1, duration: 0.6 }, 2.2);
-    fadeTimeline.to(primaryContent, { autoAlpha: 0, duration: 1.2 }, 2.8);
-    // Pause between panels to avoid overlap during content replacement.
-    fadeTimeline.to(secondaryContent, { autoAlpha: 0, duration: 0.5 }, 4.0);
-    fadeTimeline.to(secondaryContent, { autoAlpha: 1, duration: 1.2 }, 4.5);
+
+    fadeTimeline.to(
+      primaryStickers,
+      {
+        scale: 1,
+        duration: 0.4,
+        ease: "back.out(3)",
+        stagger: 0.2,
+      },
+      "<",
+    );
+
+    fadeTimeline.to(primaryContent, { autoAlpha: 0, duration: 0.9 }, 2.8);
+    fadeTimeline.to(secondaryContent, { autoAlpha: 1, duration: 0.4 }, 3.15);
+
+    // secondary panel: tagline + CTA reveal
+    fadeTimeline.fromTo(
+      secondaryRevealTargets,
+      { autoAlpha: 0, yPercent: 100, scaleY: 0, rotate: 10 },
+      {
+        autoAlpha: 1,
+        yPercent: 0,
+        scaleY: 1,
+        rotate: 0,
+        duration: 1,
+        ease: "elastic.out(0.75, 0.6)",
+        stagger: 0.035,
+      },
+      3.35,
+    );
 
     return createSectionController({
       onEnter: () => {},
@@ -572,7 +770,6 @@
       destroy: () => {
         fadeTimeline.scrollTrigger?.kill();
         fadeTimeline.kill();
-        delete fomoSection.dataset.homeFomoFadeInitialized;
       },
     });
   }
