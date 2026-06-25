@@ -194,7 +194,9 @@ footer a.social-media-icon:hover {
   @apply text-wyrd-indigo-300;
 }
 
-body.template-apropos {
+body.template-apropos,
+body.template-programmation,
+body.template-404 {
   @apply bg-wyrd-purple-500 text-white;
 }
 
@@ -203,7 +205,9 @@ body.template-faq {
 }
 
 body.template-faq section,
-body.template-apropos section {
+body.template-apropos section,
+body.template-programmation section,
+body.template-404 section {
   @apply min-h-screen;
 }
 

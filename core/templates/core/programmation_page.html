@@ -4,59 +4,45 @@
 {% block body_class %}template-programmation{% endblock %}
 
 {% block content %}
-<section class="py-16 md:py-24">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4">{{ page.title }}</h1>
+<section data-nav-color="purple">
+    <div class="text-white flex flex-col items-center justify-center px-6 py-16 md:px-24 md:py-24 mt-header-mobile md:mt-header-desktop max-w-7xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-6 relative md:h-66 h-40">
+            {{ page.title }}
+            <div class="absolute bottom-3 md:bottom-12 left-1/2 -translate-x-1/2 w-fit flex">
+                (
+                <div class="text-sm md:text-lg font-bricolage w-18 md:w-28 font-medium tracking-tight md:-mx-4 mx-1.5 md:mt-2 -mt-1">
+                    Et on est fier de lui
+                </div>
+                )
+            </div>
+        </h1>
+        
         {% if page.subtitle %}
-            <p class="text-xl text-gray-500 text-center mb-12">{{ page.subtitle }}</p>
+            <p class="sm:text-2xl text-lg text-center mb-14">{{ page.subtitle }}</p>
         {% endif %}
 
         {% if page.tabs %}
-            <div class="flex flex-wrap gap-2 justify-center mb-12" id="tabs-nav">
-                {% for tab in page.tabs %}
-                    <button onclick="showTab('tab-{{ forloop.counter0 }}')"
-                            class="tab-btn px-6 py-2 rounded-full text-sm font-medium border border-gray-300 hover:bg-gray-900 hover:text-white transition-colors {% if forloop.first %}bg-gray-900 text-white{% endif %}"
-                            data-tab="tab-{{ forloop.counter0 }}">
-                        {{ tab.value.title }}
-                    </button>
-                {% endfor %}
-            </div>
+            <div class="flex flex-col gap-6 md:gap-12 max-w-7xl mx-auto">
+                <div class="flex flex-row flex-wrap justify-center" id="tabs-nav">
+                    {% for tab in page.tabs %}
+                        <button onclick="showTab('tab-{{ forloop.counter0 }}')"
+                                class="uppercase h-14.5 tab-btn px-6 py-2 rounded-full text-lg font-bold bg-wyrd-purple-300 hover:bg-wyrd-purple-100 hover:text-wyrd-indigo-700  transition-colors {% if forloop.first %} bg-white text-wyrd-indigo-900 {% else %} bg-wyrd-purple-300 text-white {% endif %}"
+                                data-tab="tab-{{ forloop.counter0 }}">
+                            {{ tab.value.title }}
+                        </button>
+                    {% endfor %}
+                </div>            
+                <p class="text-center text-base font-normal">
+                    Des histoires se créent en direct. Tu regardes, tu votes, tu influes
+                    Temps forts, actual plays, tables rondes.
+                </p>
+            <div>
 
             {% for tab in page.tabs %}
                 <div class="tab-content {% if not forloop.first %}hidden{% endif %}" id="tab-{{ forloop.counter0 }}">
                     <div class="space-y-6">
                         {% for animation in tab.value.animations %}
-                            <div class="bg-white rounded-lg shadow-sm p-6">
-                                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                                    <div class="flex-1">
-                                        <h3 class="text-xl font-bold mb-1">{{ animation.value.title }}</h3>
-                                        <p class="text-sm text-gray-500 mb-3">
-                                            {{ animation.value.date }} &middot; {{ animation.value.start_time }}
-                                        </p>
-                                        {% if animation.value.description %}
-                                            <div class="text-gray-600 prose prose-sm">
-                                                {{ animation.value.description|safe }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-
-                                    {% if animation.value.guests %}
-                                        <div class="flex flex-wrap gap-2 md:flex-col md:items-end">
-                                            {% for guest_item in animation.value.guests %}
-                                                {% with guest=guest_item.value %}
-                                                    <div class="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1">
-                                                        {% if guest.photo %}
-                                                            {% image guest.photo fill-24x24 as guest_thumb %}
-                                                            <img src="{{ guest_thumb.url }}" alt="{{ guest.title }}" class="w-6 h-6 rounded-full object-cover">
-                                                        {% endif %}
-                                                        <span class="text-sm font-medium">{{ guest.title }}</span>
-                                                    </div>
-                                                {% endwith %}
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
+                            {% include "includes/schedule_item.html" with animation=animation animation_id="animation-"|add:tab.value.title|add:"-"|add:forloop.counter %}
                         {% endfor %}
                     </div>
                 </div>
@@ -68,13 +54,84 @@
 
 {% block extra_js %}
 <script>
+    (() => {
+        const OPEN_CLASSES = ['opacity-100', 'translate-y-0'];
+        const CLOSED_CLASSES = ['opacity-0', 'translate-y-2'];
+        const scheduleItems = document.querySelectorAll('[data-schedule-item]');
+
+        scheduleItems.forEach((item) => {
+            const trigger = item.querySelector('[data-schedule-trigger]');
+            const answer = item.querySelector('[data-schedule-details]');
+            const answerInner = item.querySelector('[data-schedule-details-inner]');
+            const icon = item.querySelector('[data-schedule-icon]');
+
+            if (!trigger || !answer || !answerInner || !icon) return;
+
+            // on open/close, set appropriate aria attributes, 
+            // rotate icon and trigger animation classes
+            const setOpenState = (open) => {
+                trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+                answer.setAttribute('aria-hidden', open ? 'false' : 'true');
+                answer.inert = !open;
+                icon.style.transform = open ? 'rotate(45deg)' : 'rotate(0deg)';
+                answerInner.classList.remove(...(open ? CLOSED_CLASSES : OPEN_CLASSES));
+                answerInner.classList.add(...(open ? OPEN_CLASSES : CLOSED_CLASSES));
+            };
+
+            setOpenState(false); // init in closed state
+
+            const openAnswer = () => {
+                answer.hidden = false;
+                answer.style.height = '0px';
+                setOpenState(true);
+                requestAnimationFrame(() => {
+                    answer.style.height = `${answer.scrollHeight}px`;
+                });
+            };
+
+            const closeAnswer = () => {
+                answer.style.height = `${answer.scrollHeight}px`;
+                setOpenState(false);
+                requestAnimationFrame(() => {answer.style.height = '0px'});
+            };
+
+            // toggle open/close state on click
+            const onClickQuestion = () => {
+                const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+                if (isOpen) closeAnswer();
+                else openAnswer();
+            };
+
+            // after closing animation, set height to auto to allow 
+            // for dynamic content height, and set aria expanded attribute 
+            // to closed for accessibility
+            const onTransitionEnd = (event) => {
+                if (event.propertyName !== 'height') return;
+                if (trigger.getAttribute('aria-expanded') === 'true' && answer.style.height !== '0px') {
+                    answer.style.height = 'auto';
+                    return;
+                }
+
+                if (trigger.getAttribute('aria-expanded') === 'false' && answer.style.height === '0px') {
+                    answer.hidden = true;
+                }
+            };
+
+            trigger.addEventListener('click', onClickQuestion);
+            answer.addEventListener('transitionend', onTransitionEnd);
+        });
+    })();
+
     function showTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('bg-gray-900', 'text-white');
+            btn.classList.remove('bg-white', 'text-wyrd-indigo-900');
+            btn.classList.add('bg-wyrd-purple-300', 'text-white');
         });
         document.getElementById(tabId).classList.remove('hidden');
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('bg-gray-900', 'text-white');
+        const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+        activeBtn.classList.remove('bg-wyrd-purple-300', 'text-white');
+        activeBtn.classList.add('bg-white', 'text-wyrd-indigo-900');
     }
 </script>
 {% endblock %}
