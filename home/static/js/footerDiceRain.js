@@ -64,8 +64,9 @@
     ? ALL_DICE_TEXTURES
     : ALL_DICE_TEXTURES.slice(15);
   const FLOOR_THICKNESS_PX = 80;
+  const SPAWN_OVERFLOW_PX = DIE_SIZE_PX * 0.6;
 
-  /** @type {null | { container: HTMLElement, engine: any, render: any, runner: any, timeouts: number[], textureIndex: number, onResize: () => void }} */
+  /** @type {null | { container: HTMLElement, engine: any, render: any, runner: any, timeouts: number[], textureIndex: number, spawnY: number, onResize: () => void }} */
   let sceneState = null;
 
   function getRandomNumber(min, max) {
@@ -98,7 +99,6 @@
     Composite,
     canvasWidth,
     canvasHeight,
-    visibleFloorBottom,
   ) {
     const wallDepth = FLOOR_THICKNESS_PX;
     const floorWidth = canvasWidth + wallDepth * 2;
@@ -106,7 +106,7 @@
 
     const floor = Bodies.rectangle(
       canvasWidth / 2,
-      visibleFloorBottom - FLOOR_VISUAL_OFFSET_PX + floorHeight / 2,
+      canvasHeight - FLOOR_VISUAL_OFFSET_PX + floorHeight / 2,
       floorWidth,
       floorHeight,
       { isStatic: true, render: { visible: false } },
@@ -160,10 +160,11 @@
     sceneState.textureIndex += 1;
 
     const dieScale = dieSize / TEXTURE_REFERENCE_SIZE;
+    const spawnY = sceneState.spawnY;
 
     const die = Bodies.rectangle(
       getRandomNumber(spawnMin, spawnMax),
-      -dieSize,
+      spawnY,
       dieSize,
       dieSize,
       {
@@ -242,13 +243,9 @@
 
     const { Engine, Render, Runner } = window.Matter;
 
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight;
-    const targetRect = target.getBoundingClientRect();
-    const visibleFloorBottom = Math.max(
-      0,
-      Math.min(targetRect.bottom, window.innerHeight),
-    );
+    const canvasWidth = target.clientWidth;
+    const canvasHeight = target.clientHeight;
+    const spawnY = -SPAWN_OVERFLOW_PX;
 
     const engine = Engine.create();
     engine.world.gravity.y = GRAVITY_Y;
@@ -281,6 +278,7 @@
       runner,
       timeouts: [],
       textureIndex: 0,
+      spawnY,
       onResize,
     };
 
@@ -290,7 +288,6 @@
       window.Matter.Composite,
       canvasWidth,
       canvasHeight,
-      visibleFloorBottom,
     );
 
     Render.run(render);
@@ -316,11 +313,7 @@
 
     if (!sceneState) return;
 
-    gsap.fromTo(
-      target,
-      { autoAlpha: 0 },
-      { autoAlpha: 1, duration: 0.35, ease: "power1.out" },
-    );
+    gsap.set(target, { autoAlpha: 1 });
 
     spawnDiceRain();
   }
