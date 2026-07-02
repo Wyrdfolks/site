@@ -206,19 +206,6 @@
       defaults: { ease: "none" },
     });
 
-    pinTimeline.to(
-      heroTitle,
-      {
-        autoAlpha: 0,
-        scale: 0.55,
-        yPercent: -12,
-        z: -260,
-        transformOrigin: "50% 50%",
-        transformPerspective: 1000,
-      },
-      0,
-    );
-
     function playIntro() {
       gsap.killTweensOf(heroStickers);
 
