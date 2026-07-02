@@ -647,7 +647,18 @@
       Array.from(content.querySelectorAll("h1, h2, h3, h4, p")),
     );
 
-    const revealTargets = wordTargets.length > 0 ? wordTargets : [content];
+    const ctaAndSocialTargets = Array.from(
+      content.querySelectorAll(
+        "[data-home-fomo-cta], [data-home-fomo-social-stack], [data-home-fomo-social-links]",
+      ),
+    ).filter((target) => target instanceof HTMLElement);
+
+    const revealTargets = Array.from(
+      new Set([
+        ...(wordTargets.length > 0 ? wordTargets : [content]),
+        ...ctaAndSocialTargets,
+      ]),
+    );
 
     // Apply initial state immediately so DOM style changes are visible at init.
     gsap.set(content, { autoAlpha: 1 });

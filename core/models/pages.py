@@ -13,6 +13,8 @@ from wagtail.blocks import (
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import FieldPanel
 
+from home.models import LinkBlock
+
 
 class FAQItemBlock(StructBlock):
     question = CharBlock(label="Question")
@@ -50,7 +52,15 @@ class AnimationBlock(StructBlock):
 
 
 class ProgrammationTabBlock(StructBlock):
-    title = CharBlock(label="Titre du tab")
+    title = CharBlock(
+        label="Titre du tab",
+        help_text="Lieu du festival (tables, scènes, stands, etc.)",
+    )
+    link = LinkBlock(
+        label="Lien",
+        required=False,
+        help_text="Lien à ouvrir dans un nouvel onglet plutôt que d'afficher les animations de cette catégorie (ex: lien vers l'inscription aux tables)",
+    )
     animations = ListBlock(AnimationBlock(), label="Animations")
 
     class Meta:

@@ -93,13 +93,7 @@
    * @param {number} visibleFloorBottom
    * @returns {void}
    */
-  function createBounds(
-    world,
-    Bodies,
-    Composite,
-    canvasWidth,
-    canvasHeight,
-  ) {
+  function createBounds(world, Bodies, Composite, canvasWidth, canvasHeight) {
     const wallDepth = FLOOR_THICKNESS_PX;
     const floorWidth = canvasWidth + wallDepth * 2;
     const floorHeight = wallDepth;
