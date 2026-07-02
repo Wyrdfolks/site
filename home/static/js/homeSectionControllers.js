@@ -439,7 +439,7 @@
         heroTextPath,
         {
           attr: { startOffset: "50%" },
-          duration: 5.8,
+          duration: 7,
           ease: "power2.out",
         },
         2.1,
@@ -448,11 +448,11 @@
       sceneTimeline.to(
         heroTextPath,
         {
-          attr: { startOffset: desktopMedia.matches ? "-48%" : "-34%" },
-          duration: 2.4,
+          attr: { startOffset: desktopMedia.matches ? "-62%" : "-42%" },
+          duration: 3,
           ease: "power2.in",
         },
-        8,
+        9.2,
       );
     } else {
       // Fallback for environments where SVG textPath is not available.
@@ -467,17 +467,17 @@
         heroContent,
         { xPercent: desktopMedia.matches ? 50 : 22, autoAlpha: 0.45 },
         {
-          xPercent: desktopMedia.matches ? -220 : -115,
+          xPercent: desktopMedia.matches ? -260 : -140,
           autoAlpha: 1,
-          duration: 8.2,
+          duration: 10,
         },
         2.1,
       );
     }
 
     // Subtitle appears centered as the title finishes leaving the frame.
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 9.35);
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.6);
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.25);
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 13.5);
 
     return createSectionController({
       onEnter: () => {},
