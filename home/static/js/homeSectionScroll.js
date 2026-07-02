@@ -91,7 +91,7 @@
     const themeByNavColor = {
       purple: {
         backgroundColor: resolveColorVar("--color-wyrd-purple-500", "#5a43f2"),
-        color: resolveColorVar("--color-wyrd-purple-100", "#f2ecff"),
+        color: "white",
       },
       green: {
         backgroundColor: resolveColorVar("--color-wyrd-green-900", "#0c3b2d"),
