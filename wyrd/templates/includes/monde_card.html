@@ -1,11 +1,11 @@
 {% load wagtailcore_tags core_components %}
 
-<div class="monde-card flex flex-col items-start w-full text-wyrd-green-500 gap-6">
+<div class="monde-card flex flex-col items-start w-full motion-reduce:text-wyrd-green-500 gap-6">
     <div class="flex uppercase">
-        <div class="bg-wyrd-green-500 text-wyrd-green-900 rounded-full px-4 py-2 cursor-pointer">
+        <div class="monde-zone motion-reduce:bg-wyrd-green-500 motion-reduce:text-wyrd-green-900">
             Zone
         </div>
-        <div class="bg-wyrd-green-500 text-wyrd-green-900 rounded-full px-4 py-2 w-[42px] text-center cursor-pointer">
+        <div class="monde-zone motion-reduce:bg-wyrd-green-500 motion-reduce:text-wyrd-green-900 w-[42px] text-center">
             {{ zone_index }}
         </div>
     </div>
@@ -14,6 +14,6 @@
         {{ monde.description|richtext }}
     {% endif %}
     {% if monde.cta_text and monde.cta_link %}
-        {% render_button label=monde.cta_text url=monde.cta_link variant="primary" color="purple" %}
+        {% render_button label=monde.cta_text url=monde.cta_link variant="primary" %}
     {% endif %}
 </div>

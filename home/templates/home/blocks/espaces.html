@@ -4,7 +4,7 @@
     data-nav-color="green"
     data-espaces-section="hero"
 >
-    <div class="max-w-xl md:max-w-5xl mx-auto px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-intro-content>
+    <div class="w-full max-w-xl md:max-w-5xl mx-auto px-10 md:px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-intro-content>
         {% if block.intro %}
             <h3 class="text-center">{{ block.intro }}</h3>
         {% endif %}
@@ -21,7 +21,7 @@
                 <path id="curve" d="M 250,225 Q 1000,75 1750,225" fill="none"/>
             </defs>
             <text 
-                class="text-center font-groovy text-hero-mobile leading-hero-mobile md:text-[220px] md:leading-[180px] tracking-tight" 
+                class="text-center font-groovy text-[120px] leading-[100px] md:text-[220px] md:leading-[180px] tracking-tight" 
                 fill="var(--color-wyrd-green-500)"
             >
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
@@ -31,7 +31,7 @@
         </svg>
     </div>
 
-    <div class="max-w-xl md:max-w-5xl mx-auto px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-subtitle-content>
+    <div class="max-w-xl w-full px-10 md:max-w-5xl mx-auto md:px-12 gap-3 flex flex-col mt-6 md:mt-12" data-espaces-subtitle-content>
         {% if block.subtitle %}
             <h3 class="text-center">{{ block.subtitle }}</h3>
         {% endif %}
@@ -52,7 +52,7 @@
         {% endwith %}
         </div>
 
-        <div class="md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12" data-espaces-mondes-list>
+        <div class="monde-list md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12" data-espaces-mondes-list>
             <div data-espaces-mondes-list-scroll class="motion-reduce:overflow-y-auto">
                 {% for monde_item in block.mondes %}
                     {% with monde=monde_item %}

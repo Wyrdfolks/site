@@ -183,24 +183,47 @@
 
 .btn-secondary.btn-purple,
 #navbar.purple .btn-secondary {
-  background-color: var(--color-wyrd-purple-400);
   --btn-secondary-bg: var(--color-wyrd-purple-400);
-  color: white;
   --btn-secondary-text: white;
 }
 
 .btn-secondary.btn-green,
 #navbar.green .btn-secondary {
-  background-color: var(--color-wyrd-green-800);
   --btn-secondary-bg: var(--color-wyrd-green-800);
-  color: white;
   --btn-secondary-text: white;
 }
 
 .btn-secondary.btn-pink,
 #navbar.pink .btn-secondary {
-  background-color: var(--color-wyrd-pink-300);
   --btn-secondary-bg: var(--color-wyrd-pink-300);
-  color: var(--color-wyrd-pink-950);
   --btn-secondary-text: var(--color-wyrd-pink-950);
+}
+
+/* Homepage dynamic theme for all section secondary buttons
+   applies only when motion is allowed. In reduced-motion mode,
+   per-button static color classes remain in effect. */
+@media (prefers-reduced-motion: no-preference) {
+  body.template-homepage[data-active-nav-color="purple"]
+    main
+    section.home-section
+    .btn-secondary {
+    --btn-secondary-bg: var(--color-wyrd-purple-400);
+    --btn-secondary-text: white;
+  }
+
+  body.template-homepage[data-active-nav-color="green"]
+    main
+    section.home-section
+    .btn-secondary {
+    --btn-secondary-bg: var(--color-wyrd-green-800);
+    --btn-secondary-text: white;
+  }
+
+  body.template-homepage[data-active-nav-color="pink"]
+    main
+    section.home-section
+    .btn-secondary {
+    --btn-secondary-bg: var(--color-wyrd-pink-300);
+    --btn-secondary-text: var(--color-wyrd-pink-950);
+  }
 }
