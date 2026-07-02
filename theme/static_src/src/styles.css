@@ -31,6 +31,7 @@ html {
   --color-wyrd-green-900: #154d2e;
   --color-wyrd-indigo-100: #e2e1f0;
   --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-500: #261f4e;
   --color-wyrd-indigo-700: #130e30;
   --color-wyrd-indigo-900: #060412;
   --color-wyrd-gray-300: #d2c9e4;
@@ -67,6 +68,7 @@ html {
   --color-wyrd-green-900: var(--color-wyrd-green-900);
   --color-wyrd-indigo-100: var(--color-wyrd-indigo-100);
   --color-wyrd-indigo-300: var(--color-wyrd-indigo-300);
+  --color-wyrd-indigo-500: var(--color-wyrd-indigo-500);
   --color-wyrd-indigo-700: var(--color-wyrd-indigo-700);
   --color-wyrd-indigo-900: var(--color-wyrd-indigo-900);
   --color-wyrd-gray-300: var(--color-wyrd-gray-300);
