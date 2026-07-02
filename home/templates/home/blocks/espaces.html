@@ -1,4 +1,5 @@
 <section 
+    id="home-espaces"
     class="flex flex-col items-center justify-center py-16 md:py-24 home-section motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 overflow-hidden" 
     data-nav-color="green"
     data-espaces-section="hero"
@@ -20,7 +21,7 @@
                 <path id="curve" d="M 250,225 Q 1000,75 1750,225" fill="none"/>
             </defs>
             <text 
-                class="text-center font-groovy text-h1-mobile leading-h1-mobile md:text-h1-desktop md:leading-h1-desktop" 
+                class="text-center font-groovy text-hero-mobile leading-hero-mobile md:text-[220px] md:leading-[180px] tracking-tight" 
                 fill="var(--color-wyrd-green-500)"
             >
                 <textPath href="#curve" startOffset="50%" text-anchor="middle">
@@ -39,6 +40,7 @@
 
 {% if block.mondes|length > 0 %}
     <section 
+        id="home-espaces-mondes"
         class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 md:h-screen" 
         data-nav-color="green"
         data-espaces-mondes

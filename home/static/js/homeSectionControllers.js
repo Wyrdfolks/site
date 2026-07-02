@@ -206,19 +206,6 @@
       defaults: { ease: "none" },
     });
 
-    pinTimeline.to(
-      heroTitle,
-      {
-        autoAlpha: 0,
-        scale: 0.55,
-        yPercent: -12,
-        z: -260,
-        transformOrigin: "50% 50%",
-        transformPerspective: 1000,
-      },
-      0,
-    );
-
     function playIntro() {
       gsap.killTweensOf(heroStickers);
 
@@ -439,7 +426,7 @@
         heroTextPath,
         {
           attr: { startOffset: "50%" },
-          duration: 5.8,
+          duration: 7,
           ease: "power2.out",
         },
         2.1,
@@ -448,11 +435,11 @@
       sceneTimeline.to(
         heroTextPath,
         {
-          attr: { startOffset: desktopMedia.matches ? "-48%" : "-34%" },
-          duration: 2.4,
+          attr: { startOffset: desktopMedia.matches ? "-62%" : "-42%" },
+          duration: 3,
           ease: "power2.in",
         },
-        8,
+        9.2,
       );
     } else {
       // Fallback for environments where SVG textPath is not available.
@@ -467,17 +454,17 @@
         heroContent,
         { xPercent: desktopMedia.matches ? 50 : 22, autoAlpha: 0.45 },
         {
-          xPercent: desktopMedia.matches ? -220 : -115,
+          xPercent: desktopMedia.matches ? -260 : -140,
           autoAlpha: 1,
-          duration: 8.2,
+          duration: 10,
         },
         2.1,
       );
     }
 
     // Subtitle appears centered as the title finishes leaving the frame.
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 9.35);
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.6);
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.25);
+    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 13.5);
 
     return createSectionController({
       onEnter: () => {},
@@ -610,23 +597,17 @@
   function createHeroFomoFadeController() {
     const fomoSection = document.querySelector("[data-home-fomo]");
     const fomoStage = fomoSection?.querySelector("[data-home-fomo-stage]");
-    const primaryContent = fomoSection?.querySelector(
-      "[data-home-fomo-primary]",
-    );
-    const secondaryContent = fomoSection?.querySelector(
-      "[data-home-fomo-secondary]",
-    );
+    const content = fomoSection?.querySelector("[data-home-fomo-content]");
 
     if (
       !(fomoSection instanceof HTMLElement) ||
       !(fomoStage instanceof HTMLElement) ||
-      !(primaryContent instanceof HTMLElement) ||
-      !(secondaryContent instanceof HTMLElement)
+      !(content instanceof HTMLElement)
     ) {
       return createNoOpSectionController();
     }
 
-    const primaryStickers = Array.from(
+    const fomoStickers = Array.from(
       fomoSection.querySelectorAll("[data-home-fomo-sticker]"),
     );
 
@@ -662,39 +643,35 @@
       return words;
     }
 
-    const primaryWordTargets = buildWordRevealTargets(
-      Array.from(primaryContent.querySelectorAll("h1, h2, h3, h4, p")),
-    );
-    const secondaryWordTargets = buildWordRevealTargets(
-      Array.from(secondaryContent.querySelectorAll("h1, h2, h3, h4, p")),
+    const wordTargets = buildWordRevealTargets(
+      Array.from(content.querySelectorAll("h1, h2, h3, h4, p")),
     );
 
-    const primaryRevealTargets =
-      primaryWordTargets.length > 0 ? primaryWordTargets : [primaryContent];
-    const secondaryRevealTargets =
-      secondaryWordTargets.length > 0
-        ? secondaryWordTargets
-        : [secondaryContent];
+    const ctaAndSocialTargets = Array.from(
+      content.querySelectorAll(
+        "[data-home-fomo-cta], [data-home-fomo-social-stack], [data-home-fomo-social-links]",
+      ),
+    ).filter((target) => target instanceof HTMLElement);
+
+    const revealTargets = Array.from(
+      new Set([
+        ...(wordTargets.length > 0 ? wordTargets : [content]),
+        ...ctaAndSocialTargets,
+      ]),
+    );
 
     // Apply initial state immediately so DOM style changes are visible at init.
-    gsap.set(primaryContent, { autoAlpha: 1 });
-    gsap.set(secondaryContent, { autoAlpha: 0 });
-    gsap.set(primaryStickers, {
+    gsap.set(content, { autoAlpha: 1 });
+    gsap.set(fomoStickers, {
       autoAlpha: 1,
       scale: 0,
       transformOrigin: "50% 50%",
     });
-    gsap.set(primaryRevealTargets, {
+    gsap.set(revealTargets, {
       autoAlpha: 1,
       yPercent: 0,
       scaleY: 1,
       rotate: 0,
-    });
-    gsap.set(secondaryRevealTargets, {
-      autoAlpha: 0,
-      yPercent: 100,
-      scaleY: 0,
-      rotate: 10,
     });
 
     const fadeTimeline = gsap.timeline({
@@ -713,7 +690,7 @@
 
     // Primary panel: title reveal + stickers, then fade to secondary panel.
     fadeTimeline.fromTo(
-      primaryRevealTargets,
+      revealTargets,
       {
         autoAlpha: 0,
         yPercent: 100,
@@ -733,7 +710,7 @@
     );
 
     fadeTimeline.to(
-      primaryStickers,
+      fomoStickers,
       {
         scale: 1,
         duration: 0.4,
@@ -743,24 +720,7 @@
       "<",
     );
 
-    fadeTimeline.to(primaryContent, { autoAlpha: 0, duration: 0.9 }, 2.8);
-    fadeTimeline.to(secondaryContent, { autoAlpha: 1, duration: 0.4 }, 3.15);
-
-    // secondary panel: tagline + CTA reveal
-    fadeTimeline.fromTo(
-      secondaryRevealTargets,
-      { autoAlpha: 0, yPercent: 100, scaleY: 0, rotate: 10 },
-      {
-        autoAlpha: 1,
-        yPercent: 0,
-        scaleY: 1,
-        rotate: 0,
-        duration: 1,
-        ease: "elastic.out(0.75, 0.6)",
-        stagger: 0.035,
-      },
-      3.35,
-    );
+    fadeTimeline.to(content, { autoAlpha: 0, duration: 0.9 }, 2.8);
 
     return createSectionController({
       onEnter: () => {},
@@ -1152,12 +1112,8 @@
         window.innerWidth < 768 ? guestsViewport.clientWidth * 0.8 : 0;
       const endOffset = effectiveTravel + 180 + mobileExtraTravel;
       const sceneScrollDistance = Math.max(
-        effectiveTravel * 7 + window.innerHeight * 5,
-        window.innerHeight * 10,
-      );
-      const teaserScrollDistance = Math.max(
-        effectiveTravel * 2.25 + window.innerHeight * 1.8,
-        window.innerHeight * 4,
+        effectiveTravel * 4 + window.innerHeight * 2.8,
+        window.innerHeight * 5.6,
       );
 
       gsap.set(guestsTrack, {
@@ -1228,17 +1184,17 @@
       }
 
       if (guestsTitle instanceof HTMLElement)
-        sceneTimeline.to(guestsTitle, { autoAlpha: 0, duration: 2.8 }, 0.2);
-      sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 10 }, 0);
+        sceneTimeline.to(guestsTitle, { autoAlpha: 0, duration: 2.1 }, 0.15);
+      sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 7.6 }, 0);
 
       if (guestsTeaserText instanceof HTMLElement) {
         sceneTimeline.to(
           guestsTeaserText,
           {
             autoAlpha: 1,
-            duration: 3.4,
+            duration: 2.4,
           },
-          6,
+          4.8,
         );
       }
 
@@ -1246,7 +1202,7 @@
         trigger: guestsCardsSection,
         start: "top top",
         end: () => `+=${sceneScrollDistance}`,
-        scrub: 5,
+        scrub: 2,
         pin: guestsCardsSection,
         pinSpacing: true,
         animation: sceneTimeline,

@@ -1,6 +1,7 @@
-{% load core_components %}
+{% load core_components home_filters %}
 
 <section
+    id="home-guests"
     class="py-16 md:py-24 motion-reduce:bg-wyrd-purple-500 motion-reduce:text-white home-section flex items-center"
     data-nav-color="purple"
     data-home-guests-cards
@@ -41,9 +42,13 @@
         </div>
 
         {% if block.cta %}
-            <div class="home-guests-cta">
-                {% render_button label=block.cta.label url=block.cta.url variant="primary" color="purple" %}
-            </div>
+            {% with cta_link=block.cta.url|linkblock_url %}
+                {% if cta_link %}
+                    <div class="home-guests-cta">
+                        {% render_button label=block.cta.label url=cta_link variant="primary" color="purple" %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         {% endif %}
     </div>
 </section>

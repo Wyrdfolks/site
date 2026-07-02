@@ -1,6 +1,7 @@
-{% load wagtailcore_tags wagtailimages_tags core_components %}
+{% load wagtailcore_tags wagtailimages_tags core_components home_filters %}
 
 <section 
+    id="home-info"
     data-nav-color="pink"
     class="home-section motion-reduce:bg-wyrd-pink-500 motion-reduce:text-wyrd-pink-900 flex items-center flex-row"
 >
@@ -38,19 +39,17 @@
 
             {% if block.directions_link or block.faq_link %}
                 <div class="flex flex-row max-md:justify-center">
-                    {% if block.directions_link.page %}
-                        {% pageurl block.directions_link.page as directions_link %}
-                        {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" additional_class="font-medium!" %}
-                    {% elif block.directions_link.external_url %}
-                            {% render_button label="Comment venir ?" url=block.directions_link.external_url variant="secondary" color="pink" additional_class="font-medium!" %}
-                    {% endif %}
+                    {% with directions_link=block.directions_link|linkblock_url %}
+                        {% if directions_link %}
+                            {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" additional_class="font-medium!" %}
+                        {% endif %}
+                    {% endwith %}
 
-                    {% if block.faq_link.page %}
-                        {% pageurl block.faq_link.page as faq_link %}
-                        {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" additional_class="font-medium!" %}
-                    {% elif block.faq_link.external_url %}
-                        {% render_button label="FAQ" url=block.faq_link.external_url variant="secondary" color="pink" additional_class="font-medium!" %}
-                    {% endif %}
+                    {% with faq_link=block.faq_link|linkblock_url %}
+                        {% if faq_link %}
+                            {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" additional_class="font-medium!" %}
+                        {% endif %}
+                    {% endwith %}
                 </div>
             {% endif %}
         </div>

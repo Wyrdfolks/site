@@ -1,13 +1,12 @@
-{% load wagtailcore_tags core_components %}
+{% load wagtailcore_tags core_components home_filters %}
 {% load static %}
 
-<section class="motion-reduce:bg-wyrd-purple-300 motion-reduce:text-white p-4 md:p-6 home-section flex flex-col items-stretch justify-stretch" data-nav-color="purple" data-home-fomo>
+<section id="home-hero-fomo" class="motion-reduce:bg-wyrd-purple-300 motion-reduce:text-white p-4 md:p-6 home-section flex flex-col items-stretch justify-stretch" data-nav-color="purple" data-home-fomo>
     <div class="bg-wyrd-purple-500 w-full h-full rounded-3xl flex-1 overflow-visible">
         <div class="relative w-full h-full min-h-[560px] md:min-h-[680px]" data-home-fomo-stage>
-            {# Primary content #}
-            <div class="absolute inset-0 flex items-center justify-center" data-home-fomo-primary>
-                <div class="mx-auto max-w-xl md:max-w-5xl relative">
-                    <div class="px-6 md:px-8 flex flex-col gap-16 text-center items-center" data-home-fomo-fade-target data-home-fomo-primary-content>
+            <div class="absolute inset-0 flex items-center justify-center" data-home-fomo-content>
+                <div class="mx-auto max-w-xl md:max-w-4xl relative">
+                    <div class="px-6 md:px-8 flex flex-col gap-16 text-center items-center" data-home-fomo-fade-target data-home-fomo-content-content>
                         <h1>{{ block.title }}</h1>
 
                         <img
@@ -25,25 +24,28 @@
                         />
 
                         <div class="flex flex-col gap-6 max-md:gap-16 items-center z-10">
-                            {% if block.discord_url.page %}
-                                {% pageurl block.discord_url.page as discord_link %}
-                                {% render_button label="Sur Discord" url=discord_link variant="primary" %}
-                            {% elif block.discord_url.external_url %}
-                                {% render_button label="Sur Discord" url=block.discord_url.external_url variant="primary" %}
-                            {% endif %}
+                            {% with discord_link=block.discord_url|linkblock_url %}
+                                {% if discord_link %}
+                                    <div data-home-fomo-cta>
+                                        {% render_button label="Sur Discord" url=discord_link variant="primary" %}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
 
                             <div class="flex flex-row md:flex-col gap-2 md:gap-6 items-center" data-home-fomo-social-stack>
-                                {% if block.discord_url.page or block.discord_url.external_url %}
-                                    <p class="uppercase font-medium hidden md:block">
-                                        Mais aussi...
-                                    </p>
-                                    <p class="uppercase font-medium md:hidden">
-                                        Mais aussi :
-                                    </p>
-                                {% endif %}
+                                {% with discord_link=block.discord_url|linkblock_url %}
+                                    {% if discord_link %}
+                                        <p class="uppercase font-medium hidden md:block">
+                                            Mais aussi...
+                                        </p>
+                                        <p class="uppercase font-medium md:hidden">
+                                            Mais aussi :
+                                        </p>
+                                    {% endif %}
+                                {% endwith %}
 
                                 {% if block.social_links %}
-                                    <div class="flex justify-center gap-2">
+                                    <div class="flex justify-center gap-2" data-home-fomo-social-links>
                                         {% for link in block.social_links %}
                                             {% include "includes/social_media_icon_link.html" with link=link %}
                                         {% endfor %}
@@ -66,21 +68,6 @@
                             data-home-fomo-sticker
                         />
                     </div>
-                </div>
-            </div>
-
-            {# Secondary content (description + CTA), revealed later while scene stays pinned #}
-            <div class="absolute inset-0 flex items-center md:items-end justify-center pb-0 md:pb-14" data-home-fomo-secondary>
-                <div class="max-w-xl md:max-w-7xl mx-auto px-8 flex flex-col gap-16 text-center md:h-[424px] justify-end items-center" data-home-fomo-secondary-content>
-                    <h4 class="font-medium">
-                        Wyrd - Festival de jeu de rôle immersif - Cité Fertile, Pantin - 11 octobre 2026
-                    </h4>
-                    {% if block.ticket_url.page %}
-                        {% pageurl block.ticket_url.page as ticket_link %}
-                        {% render_button label="Prendre ma place" url=ticket_link variant="primary" %}
-                    {% elif block.ticket_url.external_url %}
-                        {% render_button label="Prendre ma place" url=block.ticket_url.external_url variant="primary" %}
-                    {% endif %}
                 </div>
             </div>
         </div>

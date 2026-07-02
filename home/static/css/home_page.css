@@ -178,11 +178,11 @@ h1 {
     padding-block: clamp(1.5rem, 4vh, 2.75rem);
   }
 
-  [data-home-fomo-primary-content] {
+  [data-home-fomo-content-content] {
     padding-top: 72px;
   }
 
-  [data-home-fomo] [data-home-fomo-primary],
+  [data-home-fomo] [data-home-fomo-content],
   [data-home-fomo] [data-home-fomo-secondary] {
     position: static;
     inset: auto;
@@ -193,7 +193,7 @@ h1 {
     padding: 0;
   }
 
-  [data-home-fomo] [data-home-fomo-primary-content],
+  [data-home-fomo] [data-home-fomo-content-content],
   [data-home-fomo] [data-home-fomo-secondary-content] {
     width: 100%;
     max-width: 72rem;

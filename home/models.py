@@ -10,6 +10,7 @@ from wagtail.blocks import (
     RichTextBlock,
     ListBlock,
     PageChooserBlock,
+    ChoiceBlock,
 )
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -19,17 +20,49 @@ from wagtail.admin.panels import FieldPanel
 
 
 class LinkBlock(StructBlock):
+    HOMEPAGE_SECTION_CHOICES = [
+        ("home-hero", "Accueil - Hero"),
+        ("home-presentation", "Accueil - Presentation"),
+        ("home-espaces", "Accueil - Espaces"),
+        ("home-espaces-mondes", "Accueil - Espaces mondes"),
+        ("home-guests", "Accueil - Invites"),
+        ("home-info", "Accueil - Infos pratiques"),
+        ("home-ticker", "Accueil - Ticker"),
+        ("home-hero-fomo", "Accueil - Hero FOMO"),
+    ]
+
     page = PageChooserBlock(label="Page interne", required=False)
+    section_anchor = ChoiceBlock(
+        choices=HOMEPAGE_SECTION_CHOICES,
+        label="Section de la page d'accueil",
+        required=False,
+        help_text="Optionnel. Utilisé seulement si la page interne choisie est la page d'accueil.",
+    )
     external_url = URLBlock(label="URL externe", required=False)
 
     def clean(self, value):
         value = super().clean(value)
         page = value.get("page")
+        section_anchor = value.get("section_anchor")
         external_url = value.get("external_url")
 
         if page and external_url:
             raise ValidationError(
                 "Choisissez soit une page interne, soit une URL externe, pas les deux."
+            )
+
+        if section_anchor and not page:
+            raise ValidationError(
+                {
+                    "section_anchor": "Choisissez d'abord une page interne avant de renseigner une section."
+                }
+            )
+
+        if section_anchor and page and page.content_type.model != "homepage":
+            raise ValidationError(
+                {
+                    "section_anchor": "La section est disponible uniquement quand la page d'accueil est selectionnée."
+                }
             )
 
         return value
