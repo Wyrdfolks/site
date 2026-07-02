@@ -347,6 +347,7 @@
    * @returns {SectionController}
    */
   function createEspacesSectionController({ desktopMedia }) {
+    const isDesktop = desktopMedia.matches;
     const espacesSection = document.querySelector(
       '[data-espaces-section="hero"]',
     );
@@ -396,9 +397,17 @@
 
     if (heroTextPath instanceof SVGTextPathElement) {
       gsap.set(heroTextPath, {
-        attr: { startOffset: desktopMedia.matches ? "170%" : "182%" },
+        attr: { startOffset: isDesktop ? "170%" : "150%" },
       });
     }
+
+    const heroIntroStart = isDesktop ? 2.1 : 1.35;
+    const heroIntroDuration = isDesktop ? 7 : 6.4;
+    const heroOutroStart = isDesktop ? 9.2 : 8.7;
+    const heroOutroDuration = isDesktop ? 3 : 4.9;
+    const heroRevealSetAt = isDesktop ? 2.08 : 1.3;
+    const subtitleFirstAt = isDesktop ? 11.25 : 12.1;
+    const subtitleSecondAt = isDesktop ? 13.5 : 14.35;
 
     const sceneTimeline = gsap.timeline({
       scrollTrigger: {
@@ -421,25 +430,25 @@
         sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
       }
 
-      sceneTimeline.set(heroContent, { autoAlpha: 1 }, 2.08);
+      sceneTimeline.set(heroContent, { autoAlpha: 1 }, heroRevealSetAt);
       sceneTimeline.to(
         heroTextPath,
         {
           attr: { startOffset: "50%" },
-          duration: 7,
+          duration: heroIntroDuration,
           ease: "power2.out",
         },
-        2.1,
+        heroIntroStart,
       );
 
       sceneTimeline.to(
         heroTextPath,
         {
-          attr: { startOffset: desktopMedia.matches ? "-62%" : "-42%" },
-          duration: 3,
+          attr: { startOffset: isDesktop ? "-62%" : "-42%" },
+          duration: heroOutroDuration,
           ease: "power2.in",
         },
-        9.2,
+        heroOutroStart,
       );
     } else {
       // Fallback for environments where SVG textPath is not available.
@@ -448,23 +457,31 @@
         sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
       }
 
-      sceneTimeline.set(heroContent, { autoAlpha: 1 }, 2.08);
+      sceneTimeline.set(heroContent, { autoAlpha: 1 }, heroRevealSetAt);
 
       sceneTimeline.fromTo(
         heroContent,
-        { xPercent: desktopMedia.matches ? 50 : 22, autoAlpha: 0.45 },
+        { xPercent: isDesktop ? 50 : 22, autoAlpha: 0.45 },
         {
-          xPercent: desktopMedia.matches ? -260 : -140,
+          xPercent: isDesktop ? -260 : -140,
           autoAlpha: 1,
-          duration: 10,
+          duration: heroIntroDuration + heroOutroDuration,
         },
-        2.1,
+        heroIntroStart,
       );
     }
 
     // Subtitle appears centered as the title finishes leaving the frame.
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 11.25);
-    sceneTimeline.to(subtitleContent, { autoAlpha: 1, duration: 1.15 }, 13.5);
+    sceneTimeline.to(
+      subtitleContent,
+      { autoAlpha: 1, duration: 1.15 },
+      subtitleFirstAt,
+    );
+    sceneTimeline.to(
+      subtitleContent,
+      { autoAlpha: 1, duration: 1.15 },
+      subtitleSecondAt,
+    );
 
     return createSectionController({
       onEnter: () => {},
@@ -595,6 +612,12 @@
    * @returns {SectionController}
    */
   function createHeroFomoFadeController() {
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const mobilePinDistance = "+=62%";
+    const revealFromY = isDesktop ? 100 : 14;
+    const revealFromScaleY = isDesktop ? 0 : 0.9;
+    const revealFromRotate = isDesktop ? 10 : 4;
+    const revealStartAt = isDesktop ? 0.2 : 0.1;
     const fomoSection = document.querySelector("[data-home-fomo]");
     const fomoStage = fomoSection?.querySelector("[data-home-fomo-stage]");
     const content = fomoSection?.querySelector("[data-home-fomo-content]");
@@ -661,7 +684,7 @@
     );
 
     // Apply initial state immediately so DOM style changes are visible at init.
-    gsap.set(content, { autoAlpha: 1 });
+    gsap.set(content, { autoAlpha: 1, yPercent: isDesktop ? 0 : -8 });
     gsap.set(fomoStickers, {
       autoAlpha: 1,
       scale: 0,
@@ -674,53 +697,117 @@
       rotate: 0,
     });
 
-    const fadeTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: fomoSection,
-        start: "top top",
-        end: "+=180%",
-        pin: fomoSection,
-        pinSpacing: true,
-        scrub: 1.25,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
-      defaults: { ease: "none" },
-    });
+    let fadeTimeline = null;
+    let mobilePinTimeline = null;
 
-    // Primary panel: title reveal + stickers, then fade to secondary panel.
-    fadeTimeline.fromTo(
-      revealTargets,
-      {
-        autoAlpha: 0,
-        yPercent: 100,
-        scaleY: 0,
-        rotate: 10,
-      },
-      {
-        autoAlpha: 1,
-        yPercent: 0,
-        scaleY: 1,
-        rotate: 0,
-        duration: 1,
-        ease: "elastic.out(0.75, 0.6)",
-        stagger: 0.035,
-      },
-      0.2,
-    );
+    if (isDesktop) {
+      fadeTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: fomoSection,
+          start: "top top",
+          end: "+=180%",
+          pin: fomoSection,
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+        defaults: { ease: "none" },
+      });
 
-    fadeTimeline.to(
-      fomoStickers,
-      {
-        scale: 1,
-        duration: 0.4,
-        ease: "back.out(3)",
-        stagger: 0.2,
-      },
-      "<",
-    );
+      fadeTimeline.fromTo(
+        revealTargets,
+        {
+          autoAlpha: 0,
+          yPercent: revealFromY,
+          scaleY: revealFromScaleY,
+          rotate: revealFromRotate,
+        },
+        {
+          autoAlpha: 1,
+          yPercent: 0,
+          scaleY: 1,
+          rotate: 0,
+          duration: 1,
+          ease: "elastic.out(0.75, 0.6)",
+          stagger: 0.035,
+        },
+        revealStartAt,
+      );
 
-    fadeTimeline.to(content, { autoAlpha: 0, duration: 0.9 }, 2.8);
+      fadeTimeline.to(
+        fomoStickers,
+        {
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(3)",
+          stagger: 0.2,
+        },
+        "<",
+      );
+
+      fadeTimeline.to(content, { autoAlpha: 0, duration: 0.9 }, 2.8);
+    } else {
+      fadeTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: fomoSection,
+          start: "top 60%",
+          end: "top 40%",
+          scrub: 2,
+          invalidateOnRefresh: true,
+        },
+        defaults: { ease: "none" },
+      });
+
+      fadeTimeline.fromTo(
+        revealTargets,
+        {
+          autoAlpha: 0,
+          yPercent: revealFromY,
+          scaleY: revealFromScaleY,
+          rotate: revealFromRotate,
+        },
+        {
+          autoAlpha: 1,
+          yPercent: 0,
+          scaleY: 1,
+          rotate: 0,
+          duration: 1,
+          ease: "elastic.out(0.75, 0.6)",
+          stagger: 0.035,
+        },
+        0,
+      );
+
+      fadeTimeline.to(
+        fomoStickers,
+        {
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(3)",
+          stagger: 0.2,
+        },
+        "<",
+      );
+
+      mobilePinTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: fomoSection,
+          start: "top top",
+          end: mobilePinDistance,
+          pin: fomoSection,
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+        defaults: { ease: "none" },
+      });
+
+      // Keep content visible first, then fade during the second part of the pin.
+      mobilePinTimeline.to(content, { autoAlpha: 1, duration: 0.55 }, 0);
+      mobilePinTimeline.to(content, { autoAlpha: 0.35, duration: 0.45 }, 0.55);
+    }
 
     return createSectionController({
       onEnter: () => {},
@@ -728,6 +815,8 @@
       onEnterBack: () => {},
       onLeaveBack: () => {},
       destroy: () => {
+        mobilePinTimeline?.scrollTrigger?.kill();
+        mobilePinTimeline?.kill();
         fadeTimeline.scrollTrigger?.kill();
         fadeTimeline.kill();
       },
@@ -992,6 +1081,7 @@
       sceneTrigger?.kill();
       sceneTimeline?.kill();
 
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
       const viewportWidth = tickerSection.clientWidth;
       const trackWidth = tickerTrack.scrollWidth;
       const startOffset = Math.min(viewportWidth * 0.12, 96);
@@ -999,10 +1089,9 @@
         trackWidth - viewportWidth + startOffset + 96,
         viewportWidth * 0.75,
       );
-      const sceneScrollDistance = Math.max(
-        travelDistance * 4,
-        window.innerHeight * 3.5,
-      );
+      const sceneScrollDistance = isMobile
+        ? Math.max(travelDistance * 2.3, window.innerHeight * 1.9)
+        : Math.max(travelDistance * 4, window.innerHeight * 3.5);
 
       gsap.set(tickerTrack, {
         x: startOffset,
@@ -1020,8 +1109,9 @@
       sceneTrigger = ScrollTrigger.create({
         trigger: tickerSection,
         start: "top bottom",
-        end: "bottom top",
-        scrub: 15,
+        end: () => `+=${sceneScrollDistance}`,
+        scrub: isMobile ? 8 : 15,
+        fastScrollEnd: false,
         animation: sceneTimeline,
         invalidateOnRefresh: true,
       });
@@ -1104,17 +1194,22 @@
       sceneTrigger?.kill();
       sceneTimeline?.kill();
 
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
       const travelDistance = getTrackTravelDistance();
       const minTravel = guestsViewport.clientWidth;
       const effectiveTravel = Math.max(travelDistance, minTravel);
       const startOffset = guestsViewport.clientWidth + 80;
-      const mobileExtraTravel =
-        window.innerWidth < 768 ? guestsViewport.clientWidth * 0.8 : 0;
+      const mobileExtraTravel = isMobile ? guestsViewport.clientWidth * 0.8 : 0;
       const endOffset = effectiveTravel + 180 + mobileExtraTravel;
-      const sceneScrollDistance = Math.max(
-        effectiveTravel * 4 + window.innerHeight * 2.8,
-        window.innerHeight * 5.6,
-      );
+      const sceneScrollDistance = isMobile
+        ? Math.max(
+            effectiveTravel * 2.4 + window.innerHeight * 1.3,
+            window.innerHeight * 3.2,
+          )
+        : Math.max(
+            effectiveTravel * 4 + window.innerHeight * 2.8,
+            window.innerHeight * 5.6,
+          );
 
       gsap.set(guestsTrack, {
         x: startOffset,
@@ -1202,7 +1297,7 @@
         trigger: guestsCardsSection,
         start: "top top",
         end: () => `+=${sceneScrollDistance}`,
-        scrub: 2,
+        scrub: isMobile ? 1.4 : 2,
         pin: guestsCardsSection,
         pinSpacing: true,
         animation: sceneTimeline,

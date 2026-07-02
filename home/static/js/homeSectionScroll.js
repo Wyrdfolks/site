@@ -103,6 +103,35 @@
       },
     };
 
+    const mondeListThemeByNavColor = {
+      purple: {
+        ...themeByNavColor.purple,
+        backgroundColor: resolveColorVar("--color-wyrd-purple-400", "#9375ff"),
+        borderColor: themeByNavColor.purple.color,
+      },
+      pink: {
+        ...themeByNavColor.pink,
+        borderColor: themeByNavColor.pink.color,
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-800", "#0c3b2d"),
+        color: resolveColorVar("--color-wyrd-green-500", "#7cf6a8"),
+        borderColor: resolveColorVar("--color-wyrd-green-500", "#7cf6a8"),
+      },
+    };
+
+    const mondeZoneThemeByNavColor = {
+      pink: themeByNavColor.pink,
+      purple: {
+        backgroundColor: "white",
+        color: resolveColorVar("--color-wyrd-indigo-900", "#060412"),
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-500", "#6ef2a3"),
+        color: resolveColorVar("--color-wyrd-green-900", "#0c3b2d"),
+      },
+    };
+
     const fallbackTheme = themeByNavColor.purple;
     const sectionThemeMap = new Map();
     let activeSection = null;
@@ -123,8 +152,16 @@
       const sectionTheme = sectionThemeMap.get(section);
       if (!sectionTheme) return;
 
+      const mondeListTheme =
+        mondeListThemeByNavColor[sectionTheme.navColor] ||
+        mondeListThemeByNavColor.green;
+      const mondeZoneTheme =
+        mondeZoneThemeByNavColor[sectionTheme.navColor] ||
+        mondeZoneThemeByNavColor.green;
+
       window.wyrdUi = window.wyrdUi || {};
       window.wyrdUi.activeNavColor = sectionTheme.navColor;
+      document.body.dataset.activeNavColor = sectionTheme.navColor;
       window.dispatchEvent(
         new CustomEvent("wyrd:theme-color-change", {
           detail: { navColor: sectionTheme.navColor },
@@ -134,6 +171,11 @@
       gsap.to([document.documentElement, document.body], {
         backgroundColor: sectionTheme.theme.backgroundColor,
         color: sectionTheme.theme.color,
+        "--monde-list-bg": mondeListTheme.backgroundColor,
+        "--monde-list-text": mondeListTheme.color,
+        "--monde-card-border-color": mondeListTheme.borderColor,
+        "--monde-zone-bg": mondeZoneTheme.backgroundColor,
+        "--monde-zone-text": mondeZoneTheme.color,
         duration: immediate ? 0 : 0.7,
         ease: "power2.out",
         overwrite: "auto",
