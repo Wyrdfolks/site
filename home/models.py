@@ -129,10 +129,18 @@ class HeroBlock(StructBlock):
 
 
 class PresentationBlock(StructBlock):
+    class PresentationCardBlock(StructBlock):
+        text = CharBlock(label="Texte de la carte")
+        link = LinkBlock(label="Lien", required=False)
+
+        class Meta:
+            icon = "link"
+            label = "Carte"
+
     title = CharBlock(label="Titre")
     description = RichTextBlock(label="Description", required=False)
     cards = ListBlock(
-        CharBlock(label="Texte de la carte"),
+        PresentationCardBlock(),
         label="Cartes",
         max_num=5,
     )

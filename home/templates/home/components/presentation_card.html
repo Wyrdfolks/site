@@ -1,9 +1,17 @@
 {% load static %}
 {# Card of presentation section. Use by calling {% render_presentation_card ... %} from home_components. #}
-<div 
+{% if url %}
+<a
+    href="{{ url }}"
+    class="presentation-card pointer-events-auto shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
+    {% if index is not None %} data-card-index="{{ index }}"{% endif %}
+>
+{% else %}
+<div
     class="presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
     {% if index is not None %} data-card-index="{{ index }}"{% endif %}
 >
+{% endif %}
     <div class="flex-1 min-h-0 w-full overflow-hidden flex items-center justify-center md:p-6 p-1">
         <img
             src="{% static board_image %}"
@@ -18,4 +26,8 @@
             </p>
         {% endif %}
     </div>
+{% if url %}
+</a>
+{% else %}
 </div>
+{% endif %}

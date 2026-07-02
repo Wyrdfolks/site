@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags home_components %}
+{% load static wagtailcore_tags home_components home_filters %}
 
 <section
     id="home-presentation"
@@ -19,7 +19,9 @@
 
         <div class="presentation-card-scene absolute inset-0 z-50 mx-auto w-full max-w-[760px] pointer-events-none" data-home-presentation-cards>
             {% for card_item in block.cards %}
-                {% render_presentation_card title=card_item color=forloop.counter0|color_by_index index=forloop.counter0 %}
+                {% with card_link=card_item.link|linkblock_url %}
+                    {% render_presentation_card title=card_item.text url=card_link color=forloop.counter0|color_by_index index=forloop.counter0 %}
+                {% endwith %}
             {% endfor %}
         </div>
     </div>
