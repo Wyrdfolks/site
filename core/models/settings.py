@@ -51,17 +51,7 @@ class HeaderNavigationLink(models.Model):
 
 @register_setting
 class HeaderSettings(ClusterableModel, BaseSiteSetting):
-    logo = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Logo",
-    )
-
     panels = [
-        FieldPanel("logo"),
         MultiFieldPanel(
             [
                 InlinePanel("nav_bar_left_links", label="Liens gauche"),

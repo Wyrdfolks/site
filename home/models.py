@@ -155,7 +155,7 @@ class EspacesBlock(StructBlock):
     title = CharBlock(label="Titre")
     subtitle = CharBlock(label="Sous-titre", required=False)
     mondes = ListBlock(
-        SnippetChooserBlock("core.Monde"),
+        SnippetChooserBlock("core.Espace"),
         label="Mondes",
     )
     picture = ImageChooserBlock(label="Image", required=False)

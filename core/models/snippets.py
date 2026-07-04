@@ -20,14 +20,6 @@ SOCIAL_MEDIA_TYPES = [
 class SocialMediaLink(models.Model):
     name = models.CharField("Nom", max_length=100)
     url = models.URLField("URL")
-    icon = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Icône",
-    )
     platform_type = models.CharField(
         "Type de plateforme",
         max_length=20,
@@ -38,7 +30,6 @@ class SocialMediaLink(models.Model):
     panels = [
         FieldPanel("name"),
         FieldPanel("url"),
-        FieldPanel("icon"),
         FieldPanel("platform_type"),
     ]
 
@@ -80,11 +71,19 @@ class Guest(models.Model):
 
 
 @register_snippet
-class Monde(models.Model):
+class Espace(models.Model):
     title = models.CharField("Titre", max_length=255)
     description = RichTextField("Description", blank=True)
     cta_text = models.CharField("Texte du CTA", max_length=100, blank=True)
     cta_link = models.URLField("Lien du CTA", blank=True)
+    photo = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Photo",
+    )
 
     panels = [
         FieldPanel("title"),
@@ -96,11 +95,12 @@ class Monde(models.Model):
             ],
             heading="Call to Action",
         ),
+        FieldPanel("photo"),
     ]
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = "Monde"
-        verbose_name_plural = "Mondes"
+        verbose_name = "Espace"
+        verbose_name_plural = "Espaces"

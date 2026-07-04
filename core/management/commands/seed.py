@@ -4,7 +4,7 @@ from wagtail.models import Page, Site
 from core.models import (
     SocialMediaLink,
     Guest,
-    Monde,
+    Espace,
     AProposPage,
     FAQPage,
     ProgrammationPage,
@@ -119,7 +119,7 @@ class Command(BaseCommand):
         ]
         mondes = []
         for title, desc, cta_text, cta_link in mondes_data:
-            obj, _ = Monde.objects.get_or_create(
+            obj, _ = Espace.objects.get_or_create(
                 title=title,
                 defaults={
                     "description": f"<p>{desc}</p>",
@@ -173,11 +173,26 @@ class Command(BaseCommand):
                     "title": "Plusieurs chemins s'offrent à toi",
                     "description": "Tous les choix sont possibles ! Tu peux regarder la scène, rejoindre une table, dévaliser les stands des créateurs.ices ou faire les trois dans la même journée, dans le même lieu. Pas de règles à apprendre avant d'arriver. Pas besoin de costumes. Pas de préparation. Seul.e ou en groupe. Passionné.e ou néophyte. WYRD est un festival de jeu de rôle ouvert à tous.tes. Écrivez votre propre histoire.",
                     "cards": [
-                        "Je veux jouer",
-                        "Je viens voir",
-                        "Voir le show du soir",
-                        "On vient en famille",
-                        "Je viens flâner",
+                        {
+                            "text": "Je veux jouer",
+                            "link": {"page": None, "section_anchor": None, "external_url": ""},
+                        },
+                        {
+                            "text": "Je viens voir",
+                            "link": {"page": None, "section_anchor": None, "external_url": ""},
+                        },
+                        {
+                            "text": "Voir le show du soir",
+                            "link": {"page": None, "section_anchor": None, "external_url": ""},
+                        },
+                        {
+                            "text": "On vient en famille",
+                            "link": {"page": None, "section_anchor": None, "external_url": ""},
+                        },
+                        {
+                            "text": "Je viens flâner",
+                            "link": {"page": None, "section_anchor": None, "external_url": ""},
+                        },
                     ],
                 },
             },
