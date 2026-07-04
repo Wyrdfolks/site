@@ -478,6 +478,9 @@
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
+  .mb-12 {
+    margin-bottom: calc(var(--spacing) * 12);
+  }
   .mb-14 {
     margin-bottom: calc(var(--spacing) * 14);
   }
@@ -556,8 +559,14 @@
   .h-\[300px\] {
     height: 300px;
   }
+  .h-auto {
+    height: auto;
+  }
   .h-card-l-desktop {
     height: var(--height-card-l-desktop);
+  }
+  .h-card-l-mobile {
+    height: var(--height-card-l-mobile);
   }
   .h-card-s-desktop {
     height: var(--height-card-s-desktop);
@@ -622,6 +631,9 @@
   .min-h-screen {
     min-height: 100vh;
   }
+  .min-h-screen\! {
+    min-height: 100vh !important;
+  }
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
@@ -657,6 +669,9 @@
   }
   .w-card-l-desktop {
     width: var(--width-card-l-desktop);
+  }
+  .w-card-l-mobile {
+    width: var(--width-card-l-mobile);
   }
   .w-card-s-desktop {
     width: var(--width-card-s-desktop);
@@ -1487,6 +1502,26 @@
       margin-inline: calc(var(--spacing) * 6);
     }
   }
+  .sm\:h-card-l-desktop {
+    @media (width >= 40rem) {
+      height: var(--height-card-l-desktop);
+    }
+  }
+  .sm\:h-card-s-desktop {
+    @media (width >= 40rem) {
+      height: var(--height-card-s-desktop);
+    }
+  }
+  .sm\:w-card-l-desktop {
+    @media (width >= 40rem) {
+      width: var(--width-card-l-desktop);
+    }
+  }
+  .sm\:w-card-s-desktop {
+    @media (width >= 40rem) {
+      width: var(--width-card-s-desktop);
+    }
+  }
   .sm\:max-w-lg {
     @media (width >= 40rem) {
       max-width: var(--container-lg);
@@ -1643,6 +1678,11 @@
       margin-top: var(--spacing-header-desktop);
     }
   }
+  .md\:mb-0 {
+    @media (width >= 48rem) {
+      margin-bottom: calc(var(--spacing) * 0);
+    }
+  }
   .md\:mb-12 {
     @media (width >= 48rem) {
       margin-bottom: calc(var(--spacing) * 12);
@@ -1686,6 +1726,11 @@
   .md\:h-\[700px\] {
     @media (width >= 48rem) {
       height: 700px;
+    }
+  }
+  .md\:h-card-l-desktop {
+    @media (width >= 48rem) {
+      height: var(--height-card-l-desktop);
     }
   }
   .md\:h-card-s-desktop {
@@ -1771,6 +1816,11 @@
   .md\:w-64 {
     @media (width >= 48rem) {
       width: calc(var(--spacing) * 64);
+    }
+  }
+  .md\:w-card-l-desktop {
+    @media (width >= 48rem) {
+      width: var(--width-card-l-desktop);
     }
   }
   .md\:w-card-s-desktop {

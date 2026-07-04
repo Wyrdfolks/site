@@ -172,8 +172,13 @@
    * @returns {() => void} Cleanup function
    */
   function initHeroStickerHoverAnimations() {
-    initWiggleHoverAnimations("[data-home-hero-sticker]");
-    initWiggleHoverAnimations("[data-home-fomo-sticker]");
+    const cleanupHero = initWiggleHoverAnimations("[data-home-hero-sticker]");
+    const cleanupFomo = initWiggleHoverAnimations("[data-home-fomo-sticker]");
+
+    return () => {
+      cleanupHero();
+      cleanupFomo();
+    };
   }
 
   /**

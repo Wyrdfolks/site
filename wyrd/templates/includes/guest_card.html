@@ -2,12 +2,12 @@
 
 <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden border md:border-2 border-wyrd-indigo-900 w-fit p-2{% if additional_class %} {{ additional_class }}{% endif %}">
     <div class="flex flex-col items-center">
-        <div class="{% if size == 'small' %} w-card-s-desktop max-sm:w-card-s-mobile md:min-h-105
-                {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile 
+        <div class="{% if size == 'small' %} w-card-s-mobile md:w-card-s-desktop md:min-h-105
+            {% elif size == 'large' %} w-card-l-mobile md:w-card-l-desktop
                 {% endif %}">
             <div class="relative overflow-hidden bg-wyrd-purple-100 rounded-xl md:rounded-3xl text-white font-bold text-center
-                    {% if size == 'small' %} w-card-s-desktop h-card-s-desktop max-sm:w-card-s-mobile max-sm:h-card-s-mobile
-                    {% elif size == 'large' %} w-card-l-desktop h-card-l-desktop max-sm:w-card-l-mobile max-sm:h-card-l-mobile
+                {% if size == 'small' %} w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop
+                {% elif size == 'large' %} w-card-l-mobile h-card-l-mobile md:w-card-l-desktop md:h-card-l-desktop
                     {% endif %}">
                 {% if guest.photo %}
                     {% image guest.photo fill-400x400 as guest_img %}

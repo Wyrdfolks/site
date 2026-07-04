@@ -41,18 +41,18 @@
 {% if block.mondes|length > 0 %}
     <section 
         id="home-espaces-mondes"
-        class="home-section spaces-list flex max-md:h-fit! max-md:min-h-screen! md:flex-row flex-col md:space-between items-center justify-center p-6 motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 md:h-screen" 
+        class="home-section spaces-list flex h-auto min-h-screen md:flex-row flex-col md:space-between items-center justify-center p-6 motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 md:h-screen" 
         data-nav-color="green"
         data-espaces-mondes
     >
-        <div class="md:flex-1 flex items-center justify-center max-md:hidden" data-espaces-mondes-card>
+        <div class="hidden md:flex md:flex-1 items-center justify-center" data-espaces-mondes-card>
         {# todo add map and highlight area on hover #}
         {% with size="large" photo=block.picture title=block.title %}
             {% include "includes/picture_card.html" %}
         {% endwith %}
         </div>
 
-        <div class="monde-list md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 max-md:mb-12" data-espaces-mondes-list>
+        <div class="monde-list md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 mb-12 md:mb-0" data-espaces-mondes-list>
             <div data-espaces-mondes-list-scroll class="motion-reduce:overflow-y-auto">
                 {% for monde_item in block.mondes %}
                     {% with monde=monde_item %}
