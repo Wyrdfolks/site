@@ -413,6 +413,9 @@
     const heroRevealSetAt = isDesktop ? 2.08 : 1.3;
     const subtitleFirstAt = isDesktop ? 11.25 : 12.1;
     const subtitleSecondAt = isDesktop ? 13.5 : 14.35;
+    const introFadeInDuration = isDesktop ? 1.15 : 1.45;
+    const introFadeOutStart = isDesktop ? 1.55 : 2.7;
+    const introFadeOutDuration = isDesktop ? 0.85 : 1.15;
 
     const sceneTimeline = gsap.timeline({
       scrollTrigger: {
@@ -431,8 +434,16 @@
     // Reveal hero title by moving along its curved SVG path.
     if (heroTextPath instanceof SVGTextPathElement) {
       if (introContent instanceof HTMLElement) {
-        sceneTimeline.to(introContent, { autoAlpha: 1, duration: 1.15 }, 0);
-        sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
+        sceneTimeline.to(
+          introContent,
+          { autoAlpha: 1, duration: introFadeInDuration },
+          0,
+        );
+        sceneTimeline.to(
+          introContent,
+          { autoAlpha: 0, duration: introFadeOutDuration },
+          introFadeOutStart,
+        );
       }
 
       sceneTimeline.set(heroContent, { autoAlpha: 1 }, heroRevealSetAt);
@@ -458,8 +469,16 @@
     } else {
       // Fallback for environments where SVG textPath is not available.
       if (introContent instanceof HTMLElement) {
-        sceneTimeline.to(introContent, { autoAlpha: 1, duration: 1.15 }, 0);
-        sceneTimeline.to(introContent, { autoAlpha: 0, duration: 0.85 }, 1.55);
+        sceneTimeline.to(
+          introContent,
+          { autoAlpha: 1, duration: introFadeInDuration },
+          0,
+        );
+        sceneTimeline.to(
+          introContent,
+          { autoAlpha: 0, duration: introFadeOutDuration },
+          introFadeOutStart,
+        );
       }
 
       sceneTimeline.set(heroContent, { autoAlpha: 1 }, heroRevealSetAt);
