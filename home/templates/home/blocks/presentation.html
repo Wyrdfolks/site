@@ -19,9 +19,7 @@
 
         <div class="presentation-card-scene absolute inset-0 z-50 mx-auto w-full max-w-[760px] pointer-events-none" data-home-presentation-cards>
             {% for card_item in block.cards %}
-                {% with card_link=card_item.link|linkblock_url %}
-                    {% render_presentation_card title=card_item.text url=card_link color=forloop.counter0|color_by_index index=forloop.counter0 %}
-                {% endwith %}
+                {% render_presentation_card title=card_item.text link=card_item.link|linkblock_url color=forloop.counter0|color_by_index index=forloop.counter0 %}
             {% endfor %}
         </div>
     </div>
