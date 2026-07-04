@@ -29,6 +29,7 @@ def board_image_by_index(index: int | None) -> str:
 @register.inclusion_tag("home/components/presentation_card.html")
 def render_presentation_card(
     title: str | None = None,
+    link: str | None = None,
     color: Literal["pink", "purple", "green", "yellow", "blue"] = "purple",
     index: int | None = None,
     additional_class: str = "",
@@ -43,9 +44,11 @@ def render_presentation_card(
 
     classes = " ".join(filter(None, [color_classes, additional_class]))
     board_image = board_image_by_index(index)
+    safe_title = title.strip() if isinstance(title, str) else ""
 
     return {
-        "title": title,
+        "title": safe_title,
+        "card_url": link or "",
         "class_name": classes,
         "index": index,
         "board_image": board_image,
