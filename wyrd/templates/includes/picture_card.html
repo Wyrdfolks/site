@@ -1,7 +1,7 @@
 {% load wagtailimages_tags %}
 
 <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit p-1 md:p-2 w-fit shrink-0{% if additional_class %} {{ additional_class }}{% endif %}">
-    <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl {% if size == 'small' %} max-sm:h-card-s-mobile max-sm:w-card-s-mobile h-card-s-desktop w-card-s-desktop {% elif size == 'large' %} w-card-l-desktop max-sm:w-card-l-mobile h-card-l-desktop max-sm:h-card-l-mobile {% endif %} text-white font-bold text-center">
+    <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl {% if size == 'small' %} h-card-s-mobile w-card-s-mobile md:h-card-s-desktop md:w-card-s-desktop {% elif size == 'large' %} w-card-l-mobile h-card-l-mobile md:w-card-l-desktop md:h-card-l-desktop {% endif %} text-white font-bold text-center">
         {% with image=card.photo|default:photo card_title=card.title|default:title %}
         {% if image %}
             {% image image fill-400x400 as card_img %}

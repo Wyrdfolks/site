@@ -25,6 +25,9 @@
     window.matchMedia(`(min-width: ${window.wyrdUi.screenThreshold}px)`);
 
   const desktopMedia = window.wyrdUi.desktopMedia;
+  const isIosWebkit =
+    /iPad|iPhone|iPod/.test(window.navigator.userAgent) &&
+    /WebKit/.test(window.navigator.userAgent);
 
   /**
    * Collect all section stops in DOM order, including footer.
@@ -241,9 +244,13 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
+    // iOS browser chrome show/hide emits resize during scroll; avoid pin jitter.
+    if (isIosWebkit) ScrollTrigger.config({ ignoreMobileResize: true });
+
     function initLenisBridge() {
       if (!window.Lenis) return () => {};
       if (window.__homeLenisInitialized) return () => {};
+      if (isIosWebkit) return () => {};
 
       const lenis = new window.Lenis({
         duration: 1.05,
@@ -414,9 +421,18 @@
     });
 
     let hasTeardownRun = false;
+    let resizeRefreshTimeout = null;
 
     function onResize() {
-      ScrollTrigger.refresh();
+      if (resizeRefreshTimeout) window.clearTimeout(resizeRefreshTimeout);
+      resizeRefreshTimeout = window.setTimeout(() => {
+        resizeRefreshTimeout = null;
+        ScrollTrigger.refresh();
+      }, 180);
+    }
+
+    function onOrientationChange() {
+      window.setTimeout(() => ScrollTrigger.refresh(), 280);
     }
 
     function teardownHomeSectionScroll() {
@@ -424,17 +440,26 @@
       hasTeardownRun = true;
 
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onOrientationChange);
       window.removeEventListener("pagehide", teardownHomeSectionScroll);
+
+      if (resizeRefreshTimeout) {
+        window.clearTimeout(resizeRefreshTimeout);
+        resizeRefreshTimeout = null;
+      }
 
       stopTriggers.forEach((trigger) => trigger.kill());
       themeTransitionArtifacts.forEach((artifact) => artifact.kill());
-      cleanupHeroHoverAnimations();
+      if (typeof cleanupHeroHoverAnimations === "function") {
+        cleanupHeroHoverAnimations();
+      }
       cleanupLenisBridge();
       destroySectionControllers();
       window.__homeSectionScrollInitialized = false;
     }
 
     window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onOrientationChange);
     window.addEventListener("pagehide", teardownHomeSectionScroll);
   }
 
