@@ -396,13 +396,16 @@
     }
 
     const stopTriggers = [];
+    const lifecycleTriggerStart = isIosWebkit ? "top 72%" : "top 85%";
+    const lifecycleTriggerEnd = isIosWebkit ? "bottom 28%" : "bottom 15%";
+
     stops.forEach((stop, index) => {
       const controller = getSectionController(index);
 
       const trigger = ScrollTrigger.create({
         trigger: stop,
-        start: "top 85%",
-        end: "bottom 15%",
+        start: lifecycleTriggerStart,
+        end: lifecycleTriggerEnd,
         onEnter: () =>
           invokeWithCooldown(index, "enter", () => controller.onEnter()),
         onLeave: () =>
