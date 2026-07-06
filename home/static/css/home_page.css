@@ -160,9 +160,11 @@ h1 {
   will-change: transform;
 }
 
-.home-guests-card-item .card,
-.home-guests-card-item .card > div {
-  width: 100%;
+@media (prefers-reduced-motion: no-preference) {
+  .home-guests-card-item .card,
+  .home-guests-card-item .card > div {
+    width: 100%;
+  }
 }
 
 .home-guests-teaser-layer {
@@ -291,7 +293,6 @@ h1 {
   }
 
   .home-guests-card-item {
-    width: 100%;
     justify-self: center;
   }
 }

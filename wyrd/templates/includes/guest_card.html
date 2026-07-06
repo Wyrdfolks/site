@@ -1,6 +1,6 @@
 {% load wagtailimages_tags wagtailcore_tags %}
 
-<div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden border md:border-2 border-wyrd-indigo-900 w-fit p-2{% if additional_class %} {{ additional_class }}{% endif %}">
+<div class="card motion-reduce:mx-auto motion-reduce:w-full bg-white rounded-2xl md:rounded-4xl overflow-hidden border md:border-2 border-wyrd-indigo-900 w-fit p-2{% if additional_class %} {{ additional_class }}{% endif %}">
     <div class="flex flex-col items-center">
         <div class="{% if size == 'small' %} w-card-s-mobile md:w-card-s-desktop md:min-h-105
             {% elif size == 'large' %} w-card-l-mobile md:w-card-l-desktop
