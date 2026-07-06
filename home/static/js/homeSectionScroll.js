@@ -25,9 +25,15 @@
     window.matchMedia(`(min-width: ${window.wyrdUi.screenThreshold}px)`);
 
   const desktopMedia = window.wyrdUi.desktopMedia;
+  const userAgent = window.navigator.userAgent || "";
+  const isAppleTouchDevice =
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    (window.navigator.platform === "MacIntel" &&
+      window.navigator.maxTouchPoints > 1);
   const isIosWebkit =
-    /iPad|iPhone|iPod/.test(window.navigator.userAgent) &&
-    /WebKit/.test(window.navigator.userAgent);
+    isAppleTouchDevice &&
+    /WebKit/.test(userAgent) &&
+    !/Android/.test(userAgent);
 
   /**
    * Collect all section stops in DOM order, including footer.
@@ -234,18 +240,39 @@
     if (window.__homeSectionScrollInitialized) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const controllersApi = window.wyrdUi?.homeSectionControllers;
-    if (!controllersApi) return;
-
-    const stops = getStops();
-    if (stops.length < 2) return;
-
     window.__homeSectionScrollInitialized = true;
 
     gsap.registerPlugin(ScrollTrigger);
 
     // iOS browser chrome show/hide emits resize during scroll; avoid pin jitter.
     if (isIosWebkit) ScrollTrigger.config({ ignoreMobileResize: true });
+
+    // iOS fallback mode: keep only section theme/background transitions,
+    // disable all section pinning/motion scenes.
+    if (isIosWebkit) {
+      document.body.classList.add("ios-theme-only");
+      const themeTransitionArtifacts = initSectionThemeTransitions();
+      let hasTeardownRun = false;
+
+      function teardownThemeOnlyMode() {
+        if (hasTeardownRun) return;
+        hasTeardownRun = true;
+
+        window.removeEventListener("pagehide", teardownThemeOnlyMode);
+        document.body.classList.remove("ios-theme-only");
+        themeTransitionArtifacts.forEach((artifact) => artifact.kill());
+        window.__homeSectionScrollInitialized = false;
+      }
+
+      window.addEventListener("pagehide", teardownThemeOnlyMode);
+      return;
+    }
+
+    const controllersApi = window.wyrdUi?.homeSectionControllers;
+    if (!controllersApi) return;
+
+    const stops = getStops();
+    if (stops.length < 2) return;
 
     function initLenisBridge() {
       if (!window.Lenis) return () => {};
