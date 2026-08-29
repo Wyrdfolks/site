@@ -526,7 +526,7 @@
    * @returns {SectionController}
    */
   function createEspacesMondesController({ desktopMedia }) {
-    // skip animation the first time if the page is loaded 
+    // skip animation the first time if the page is loaded
     // with the hash targeting this section (this is to avoid
     // having half transparent and half out content on load)
     const hashTargetId = "home-espaces-mondes";
@@ -1244,21 +1244,34 @@
       sceneTimeline?.kill();
 
       const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      const trackWidth = guestsTrack.scrollWidth;
       const travelDistance = getTrackTravelDistance();
       const minTravel = guestsViewport.clientWidth;
       const effectiveTravel = Math.max(travelDistance, minTravel);
       const startOffset = guestsViewport.clientWidth + 80;
-      const mobileExtraTravel = isMobile ? guestsViewport.clientWidth * 0.8 : 0;
-      const endOffset = effectiveTravel + 180 + mobileExtraTravel;
+      const trailingRevealGap = isMobile
+        ? Math.max(120, guestsViewport.clientWidth * 0.28)
+        : Math.max(180, guestsViewport.clientWidth * 0.2);
+      // Move the full track past the left edge so teaser text can become fully readable.
+      const endOffset = trackWidth + trailingRevealGap;
+      const horizontalTravelDistance = startOffset + endOffset;
       const sceneScrollDistance = isMobile
         ? Math.max(
-            effectiveTravel * 2.4 + window.innerHeight * 1.3,
+            horizontalTravelDistance * 1.85 + window.innerHeight * 1.05,
             window.innerHeight * 3.2,
           )
         : Math.max(
-            effectiveTravel * 4 + window.innerHeight * 2.8,
+            horizontalTravelDistance * 2.9 + window.innerHeight * 2.1,
             window.innerHeight * 5.6,
           );
+
+      const trackTweenDuration = 7;
+      const teaserTweenDuration = isMobile ? 2 : 1.75;
+      const teaserCompletionBuffer = isMobile ? 0.52 : 0.62;
+      const teaserStartAt = Math.max(
+        2.4,
+        trackTweenDuration - teaserTweenDuration - teaserCompletionBuffer,
+      );
 
       gsap.set(guestsTrack, {
         x: startOffset,
@@ -1329,16 +1342,21 @@
 
       if (guestsTitle instanceof HTMLElement)
         sceneTimeline.to(guestsTitle, { autoAlpha: 0, duration: 2.1 }, 0.15);
-      sceneTimeline.to(guestsTrack, { x: -endOffset, duration: 7.6 }, 0);
+      sceneTimeline.to(
+        guestsTrack,
+        { x: -endOffset, duration: trackTweenDuration },
+        0,
+      );
 
       if (guestsTeaserText instanceof HTMLElement) {
         sceneTimeline.to(
           guestsTeaserText,
           {
             autoAlpha: 1,
-            duration: 2.4,
+            duration: teaserTweenDuration,
+            ease: "power1.out",
           },
-          4.8,
+          teaserStartAt,
         );
       }
 
@@ -1346,7 +1364,7 @@
         trigger: guestsCardsSection,
         start: "top top",
         end: () => `+=${sceneScrollDistance}`,
-        scrub: isMobile ? 1.4 : 2,
+        scrub: isMobile ? 1.1 : 1.6,
         pin: guestsCardsSection,
         pinSpacing: true,
         animation: sceneTimeline,
