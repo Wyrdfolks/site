@@ -9,14 +9,16 @@
         
         <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit w-fit p-1 md:p-2 rotate-[8deg]">
             <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop max-w-full">
-                {% if block.picture %}
-                    {% image block.picture fill-800x800 as info_image %}
-                    <img
-                        src="{{ info_image.url }}"
-                        alt="{{ block.title }}"
-                        class="w-full h-full object-cover"
-                    >
-                {% endif %}
+                {# Google Maps iframe for La Cité Fertile #}
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2622.8884007687157!2d2.3962520770775555!3d48.8984639713376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66d6d8268a265%3A0xa62cf107e05da1dc!2sLa%20Cit%C3%A9%20Fertile!5e0!3m2!1sfr!2sfr!4v1788028652525!5m2!1sfr!2sfr"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen="" 
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
             </div>        
         </div>
 
