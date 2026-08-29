@@ -30,6 +30,114 @@
     /WebKit/.test(window.navigator.userAgent);
 
   /**
+   * Initialize the hash scroll hint for the homepage:
+   * Show "scroll down" message if the page has a hash anchor.
+   * It disappears once the user shows scroll intent (actual scroll,
+   * keyboard nav) and doesn't reappear.
+   */
+  function initHashScrollHint() {
+    if (!document.body.classList.contains("template-homepage")) return;
+
+    let hint = document.querySelector("[data-home-hash-scroll-hint]");
+    // fallback to create the hint element if it doesn't exist
+    if (!(hint instanceof HTMLElement)) {
+      hint = document.createElement("p");
+      hint.hidden = true;
+      hint.setAttribute("aria-hidden", "true");
+      hint.setAttribute("data-home-hash-scroll-hint", "");
+      hint.className =
+        "fixed left-1/2 bottom-[clamp(0.875rem,3.5vh,1.5rem)] z-40 m-0 -translate-x-1/2 translate-y-1.5 rounded-full bg-black/10 px-3.5 py-1.5 text-[clamp(0.75rem,1.7vw,0.9rem)] uppercase leading-none tracking-widest opacity-0 pointer-events-none transition-all duration-200 ease-out";
+      hint.textContent = "scrollez pour animer";
+      document.body.appendChild(hint);
+    }
+
+    const hiddenClasses = ["opacity-0", "translate-y-1.5"];
+    const visibleClasses = ["opacity-100", "translate-y-0"];
+    const bounceClass = "animate-bounce";
+
+    function setHiddenState() {
+      hint.classList.remove(...visibleClasses, bounceClass);
+      hint.classList.add(...hiddenClasses);
+    }
+
+    function setVisibleState() {
+      hint.classList.remove(...hiddenClasses);
+      hint.classList.add(...visibleClasses);
+    }
+
+    if (!window.location.hash || window.location.hash === "#") {
+      hint.hidden = true;
+      setHiddenState();
+      hint.setAttribute("aria-hidden", "true");
+      return;
+    }
+
+    let dismissed = false;
+    let hasUserScrollIntent = false;
+    let intentStartY = window.scrollY;
+
+    function cleanupListeners() {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("scroll", onScroll);
+    }
+
+    function onWheel() {
+      hasUserScrollIntent = true;
+      intentStartY = window.scrollY;
+    }
+
+    function onTouchStart() {
+      hasUserScrollIntent = true;
+      intentStartY = window.scrollY;
+    }
+
+    function dismissHint() {
+      if (dismissed) return;
+      dismissed = true;
+      setHiddenState();
+      hint.setAttribute("aria-hidden", "true");
+      cleanupListeners();
+      window.setTimeout(() => (hint.hidden = true), 220);
+    }
+
+    function onKeyDown(event) {
+      const keysThatScroll = new Set([
+        "ArrowUp",
+        "ArrowDown",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+        "Space",
+      ]);
+
+      if (keysThatScroll.has(event.code) || keysThatScroll.has(event.key)) {
+        hasUserScrollIntent = true;
+        intentStartY = window.scrollY;
+      }
+    }
+
+    function onScroll() {
+      if (!hasUserScrollIntent) return;
+      if (Math.abs(window.scrollY - intentStartY) > 2) dismissHint();
+    }
+
+    hint.hidden = false;
+    hint.setAttribute("aria-hidden", "false");
+    window.requestAnimationFrame(() => {
+      setVisibleState();
+      hint.classList.add(bounceClass);
+    });
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  /**
    * Collect all section stops in DOM order, including footer.
    *
    * @returns {HTMLElement[]}
@@ -467,8 +575,12 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHomeSectionScroll);
+    document.addEventListener("DOMContentLoaded", () => {
+      initHashScrollHint();
+      initHomeSectionScroll();
+    });
   } else {
+    initHashScrollHint();
     initHomeSectionScroll();
   }
 })();
