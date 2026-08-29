@@ -40,7 +40,6 @@
 
 {% if block.mondes|length > 0 %}
     <section 
-        id="home-espaces-mondes"
         class="home-section spaces-list flex h-auto min-h-screen md:flex-row flex-col md:space-between items-center justify-center p-6 motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 md:h-screen" 
         data-nav-color="green"
         data-espaces-mondes
@@ -52,8 +51,13 @@
         {% endwith %}
         </div>
 
-        <div class="monde-list md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 mb-12 md:mb-0" data-espaces-mondes-list>
-            <div data-espaces-mondes-list-scroll class="motion-reduce:overflow-y-auto">
+        <div
+            data-espaces-mondes-list
+            class="monde-list md:flex-1 w-full flex flex-col md:h-full overflow-x-hidden md:overflow-hidden h-full md:rounded-3xl md:bg-wyrd-green-800 md:p-16 mb-12 md:mb-0" >
+            <div
+                id="home-espaces-mondes"
+                data-espaces-mondes-list-scroll
+                class="motion-reduce:overflow-y-auto">
                 {% for monde_item in block.mondes %}
                     {% with monde=monde_item %}
                         {% include "includes/monde_card.html" with zone_index=forloop.counter %}

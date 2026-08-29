@@ -526,6 +526,20 @@
    * @returns {SectionController}
    */
   function createEspacesMondesController({ desktopMedia }) {
+    // skip animation the first time if the page is loaded 
+    // with the hash targeting this section (this is to avoid
+    // having half transparent and half out content on load)
+    const hashTargetId = "home-espaces-mondes";
+    const hashTarget = `#${hashTargetId}`;
+    const shouldSkipIntroForHashLoad =
+      window.location.hash === hashTarget &&
+      !window.wyrdUi?.__espacesMondesHashIntroSkipped;
+
+    if (shouldSkipIntroForHashLoad) {
+      window.wyrdUi = window.wyrdUi || {};
+      window.wyrdUi.__espacesMondesHashIntroSkipped = true;
+    }
+
     const mondesSection = document.querySelector("[data-espaces-mondes]");
     const mondesCard = mondesSection?.querySelector(
       "[data-espaces-mondes-card]",
@@ -565,16 +579,38 @@
       if (listTravel <= 0) return;
 
       gsap.set(listScrollTarget, { y: 0 });
-      gsap.set(mondesList, { autoAlpha: 0, xPercent: 10 });
-      if (mondesCard instanceof HTMLElement) {
-        gsap.set(mondesCard, { autoAlpha: 0, xPercent: -10 });
+      if (shouldSkipIntroForHashLoad) {
+        gsap.set(mondesList, { autoAlpha: 1, xPercent: 0 });
+        if (mondesCard instanceof HTMLElement) {
+          gsap.set(mondesCard, { autoAlpha: 1, xPercent: 0 });
+        }
+      } else {
+        gsap.set(mondesList, { autoAlpha: 0, xPercent: 10 });
+        if (mondesCard instanceof HTMLElement) {
+          gsap.set(mondesCard, { autoAlpha: 0, xPercent: -10 });
+        }
       }
 
       sceneTimeline = gsap.timeline({ defaults: { ease: "none" } });
 
-      if (mondesCard instanceof HTMLElement) {
+      const listScrollStartAt = shouldSkipIntroForHashLoad ? 0 : 0.22;
+
+      if (!shouldSkipIntroForHashLoad) {
+        if (mondesCard instanceof HTMLElement) {
+          sceneTimeline.to(
+            mondesCard,
+            {
+              autoAlpha: 1,
+              xPercent: 0,
+              duration: 0.22,
+              ease: "power2.out",
+            },
+            0,
+          );
+        }
+
         sceneTimeline.to(
-          mondesCard,
+          mondesList,
           {
             autoAlpha: 1,
             xPercent: 0,
@@ -586,20 +622,9 @@
       }
 
       sceneTimeline.to(
-        mondesList,
-        {
-          autoAlpha: 1,
-          xPercent: 0,
-          duration: 0.22,
-          ease: "power2.out",
-        },
-        0,
-      );
-
-      sceneTimeline.to(
         listScrollTarget,
         { y: -listTravel, duration: 0.78 },
-        0.22,
+        listScrollStartAt,
       );
 
       sceneTrigger = ScrollTrigger.create({
