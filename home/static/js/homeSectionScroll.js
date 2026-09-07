@@ -47,7 +47,8 @@
       hint.setAttribute("data-home-hash-scroll-hint", "");
       hint.className =
         "fixed left-1/2 bottom-[clamp(0.875rem,3.5vh,1.5rem)] z-40 m-0 -translate-x-1/2 translate-y-1.5 rounded-full bg-black/10 px-3.5 py-1.5 text-[clamp(0.75rem,1.7vw,0.9rem)] uppercase leading-none tracking-widest opacity-0 pointer-events-none transition-all duration-200 ease-out";
-      hint.textContent = "scrollez pour animer";
+      hint.textContent = "Animer";
+      hint.title = "Scrollez pour animer";
       document.body.appendChild(hint);
     }
 
