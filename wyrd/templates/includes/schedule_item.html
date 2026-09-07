@@ -1,4 +1,4 @@
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags core_components %}
 
 {# wyrd/templates/includes/schedule_item.html #}
 {# Single schedule animation partial for reuse #}
@@ -16,8 +16,9 @@
     >
         <div class="flex sm:items-center sm:flex-row flex-col gap-4">
             <span class="sm:self-center bg-wyrd-purple-300 text-white rounded-full px-4 h-9 flex items-center justify-center shrink-0 text-lg tracking-tight font-medium w-fit">
-                {{ animation.start_time|time:"H" }}h
-                {% if animation.end_time %}-{{ animation.end_time|time:"H" }}h{% endif %}
+                {% if animation.start_time %}{{ animation.start_time|time_hm }}{% endif %}
+                {% if animation.end_time and animation.start_time %} - {% endif %}
+                {% if animation.end_time %}{{ animation.end_time|time_hm }}{% endif %}
             </span>
             <span class="self-center">
                 {{ animation.title }}

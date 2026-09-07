@@ -36,8 +36,8 @@ class FAQCategoryBlock(StructBlock):
 
 class AnimationBlock(StructBlock):
     title = CharBlock(label="Titre")
-    date = DateBlock(label="Date")
-    start_time = TimeBlock(label="Heure de début")
+    date = DateBlock(label="Date", required=False)
+    start_time = TimeBlock(label="Heure de début", required=False)
     end_time = TimeBlock(label="Heure de fin", required=False)
     description = RichTextBlock(label="Description", required=False)
     guests = ListBlock(
