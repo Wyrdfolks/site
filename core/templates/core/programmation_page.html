@@ -25,7 +25,7 @@
             <div class="flex flex-col mb-6 gap-6 md:mb-12 max-w-7xl mx-auto w-full">
                 <div class="flex flex-row flex-wrap justify-center" id="tabs-nav">
                     {% for tab in page.tabs %}
-                        {% with tab_link=tab.value.link|linkblock_url %}
+                        {% with tab_link=tab.value.link|linkblock_url tab_slug=tab.value.title|slugify %}
                         <a 
                             {% if tab_link %}
                                 href="{{ tab_link }}"
@@ -37,6 +37,7 @@
                             {% endif %}
                             class="uppercase tab-btn inline-flex items-center justify-center h-14.5 px-6 py-2 rounded-full text-lg font-bold leading-none hover:bg-wyrd-purple-100 hover:text-wyrd-indigo-700 transition-colors {% if forloop.first %}bg-white text-wyrd-indigo-900{% else %}bg-wyrd-purple-300 text-white{% endif %}"
                             data-tab="tab-{{ forloop.counter0 }}"
+                            data-tab-slug="{{ tab_slug }}"
                             style="text-decoration: none; cursor: pointer;">
                             {{ tab.value.title }}
                         </a>
@@ -50,8 +51,10 @@
             </div>
 
             {% for tab in page.tabs %}
-                {% with tab_link=tab.value.link|linkblock_url %}
-                <div class="w-full tab-content {% if not forloop.first or tab_link %}hidden{% endif %}" id="tab-{{ forloop.counter0 }}">
+                {% with tab_link=tab.value.link|linkblock_url tab_slug=tab.value.title|slugify %}
+                <div class="w-full tab-content {% if not forloop.first or tab_link %}hidden{% endif %}" 
+                     id="tab-{{ forloop.counter0 }}"
+                     data-tab-slug="{{ tab_slug }}">
                     <div class="space-y-6">
                         {% for animation in tab.value.animations %}
                             {% include "includes/schedule_item.html" with animation=animation animation_id="animation-"|add:tab.value.title|add:"-"|add:forloop.counter %}
@@ -148,7 +151,29 @@
          activeBtn.classList.add('bg-white', 'text-wyrd-indigo-900');
      }
 
+     // Initialisation : on regarde d'abord si l'URL contient ?q=<slug>
+     // pour présélectionner un tab (ex: lien depuis la page d'accueil).
+     // Sinon on retombe sur le comportement par défaut (premier tab visible).
      (() => {
+         const params = new URLSearchParams(window.location.search);
+         const wantedSlug = params.get('q');
+
+         let targetTab = null;
+         if (wantedSlug) {
+             targetTab = document.querySelector(`.tab-content[data-tab-slug="${CSS.escape(wantedSlug)}"]`);
+         }
+
+         if (targetTab) {
+            showTab(targetTab.id);
+            const tabsNav = document.getElementById('tabs-nav');
+            if (tabsNav) {
+                const offset = 90; // ajustez selon la hauteur de votre header fixe + marge désirée
+                const top = tabsNav.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'instant' });
+            }
+            return;
+        }
+
          const firstVisibleTab = Array.from(document.querySelectorAll('.tab-content'))
              .find((tab) => !tab.classList.contains('hidden'));
          if (!firstVisibleTab) return;
