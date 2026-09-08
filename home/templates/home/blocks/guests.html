@@ -38,9 +38,9 @@
                         <h1 class="text-center">
                             {{ block.teaser_text }}
                         </h1>
-                        <p class="text-center w-full">
+                        <p class="text-center w-full font-extralight">
                             {% for guest in block.secondary_guests %}
-                            <strong>{{ guest.title }}</strong> <i>{{guest.subtitle}}</i>{% if not forloop.last %} &#149; {% endif%}
+                            <strong class="font-extrabold">{{ guest.title }}</strong> {{guest.subtitle}}{% if not forloop.last %} &#149; {% endif%}
                             {% endfor %}
                         </p>
                     </div>
