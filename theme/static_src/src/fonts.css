@@ -58,3 +58,12 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src:
+    url("/static/fonts/BricolageGrotesque-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
