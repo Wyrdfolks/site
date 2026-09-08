@@ -174,6 +174,10 @@ class GuestsBlock(StructBlock):
     teaser_text = CharBlock(
         label="Texte d'accroche", default="Et bien plus encore...", required=False
     )
+    secondary_guests = ListBlock(
+        SnippetChooserBlock("core.Guest"),
+        label="Autre invitées",
+    )
     cta = StructBlock(
         [
             (

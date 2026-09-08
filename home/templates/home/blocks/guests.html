@@ -34,10 +34,18 @@
 
             {% if block.teaser_text %}
                 <div class="home-guests-teaser-layer">
-                    <h1 class="text-center" data-home-guests-teaser-text>
-                        {{ block.teaser_text }}
-                    </h1>
+                    <div data-home-guests-teaser-text>
+                        <h1 class="text-center">
+                            {{ block.teaser_text }}
+                        </h1>
+                        <p class="text-center w-full">
+                            {% for guest in block.secondary_guests %}
+                            <strong>{{ guest.title }}</strong> <i>{{guest.subtitle}}</i>{% if not forloop.last %} &#149; {% endif%}
+                            {% endfor %}
+                        </p>
+                    </div>
                 </div>
+                
             {% endif %}
         </div>
 
