@@ -4,14 +4,23 @@
     id="home-ticker"
     data-home-ticker
     data-nav-color="green"
-    class="motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 py-12 overflow-hidden home-section flex flex-row items-center max-md:h-fit! min-h-fit! h-[40vh]!"
+    class="motion-reduce:bg-wyrd-green-900 motion-reduce:text-wyrd-green-500 py-12 overflow-hidden home-section flex flex-row items-center h-fit! min-h-fit!"
 >
-    <div data-home-ticker-track class="flex items-center whitespace-nowrap mx-auto">
+    <div data-home-ticker-track class="marquee-mobile flex items-center whitespace-nowrap mx-auto">
         {% for text in block.texts %}
             <h1 class="px-7 md:px-8 mt-2">{{ text }}</h1>
             <img
                 src="{% static 'img/d20_green.png' %}"
                 alt="TDé vert à 20 faces"
+                class="w-12 md:h-20 md:w-20 self-center mb-4"
+            />
+        {% endfor %}
+        {# duplicate for seamless animation #}
+        {% for text in block.texts %}
+            <h1 class="px-7 md:px-8 mt-2">{{ text }}</h1>
+            <img
+                src="{% static 'img/d20_green.png' %}"
+                alt=""
                 class="w-12 md:h-20 md:w-20 self-center mb-4"
             />
         {% endfor %}

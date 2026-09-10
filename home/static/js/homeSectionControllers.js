@@ -1095,96 +1095,13 @@
   }
 
   /**
-   * ticker horizontal scroll scene.   *
+   * Keep the ticker in the section lifecycle without creating GSAP artifacts.
+   * Its duplicated markup is animated by the shared CSS marquee keyframes.
+   *
    * @returns {SectionController}
    */
   function createTickerSectionController() {
-    const tickerSection = document.querySelector("[data-home-ticker]");
-    const tickerTrack = tickerSection?.querySelector(
-      "[data-home-ticker-track]",
-    );
-
-    if (
-      !(tickerSection instanceof HTMLElement) ||
-      !(tickerTrack instanceof HTMLElement)
-    ) {
-      return createNoOpSectionController();
-    }
-
-    /** @type {gsap.core.Timeline | null} */
-    let sceneTimeline = null;
-    /** @type {ScrollTrigger | null} */
-    let sceneTrigger = null;
-    let rebuildQueued = false;
-
-    function queueRebuild() {
-      if (rebuildQueued) return;
-      rebuildQueued = true;
-      window.requestAnimationFrame(() => {
-        rebuildQueued = false;
-        buildSceneArtifacts();
-      });
-    }
-
-    function buildSceneArtifacts() {
-      sceneTrigger?.kill();
-      sceneTimeline?.kill();
-
-      const isMobile = window.matchMedia("(max-width: 767px)").matches;
-      const viewportWidth = tickerSection.clientWidth;
-      const trackWidth = tickerTrack.scrollWidth;
-      const startOffset = Math.min(viewportWidth * 0.12, 96);
-      const travelDistance = Math.max(
-        trackWidth - viewportWidth + startOffset + 96,
-        viewportWidth * 0.75,
-      );
-      const sceneScrollDistance = isMobile
-        ? Math.max(travelDistance * 2.3, window.innerHeight * 1.9)
-        : Math.max(travelDistance * 4, window.innerHeight * 3.5);
-
-      gsap.set(tickerTrack, {
-        x: startOffset,
-        autoAlpha: 1,
-        willChange: "transform",
-      });
-
-      sceneTimeline = gsap.timeline({ defaults: { ease: "none" } });
-      sceneTimeline.fromTo(
-        tickerTrack,
-        { x: startOffset },
-        { x: -travelDistance, duration: 1 },
-      );
-
-      sceneTrigger = ScrollTrigger.create({
-        trigger: tickerSection,
-        start: "top bottom",
-        end: () => `+=${sceneScrollDistance}`,
-        scrub: isMobile ? 8 : 15,
-        fastScrollEnd: false,
-        animation: sceneTimeline,
-        invalidateOnRefresh: true,
-      });
-    }
-
-    buildSceneArtifacts();
-
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(queueRebuild);
-    }
-
-    window.addEventListener("load", queueRebuild, { once: true });
-
-    return createSectionController({
-      onEnter: () => gsap.set(tickerTrack, { force3D: true }),
-      onLeave: () => gsap.set(tickerTrack, { force3D: true }),
-      onEnterBack: () => gsap.set(tickerTrack, { force3D: true }),
-      onLeaveBack: () => gsap.set(tickerTrack, { force3D: true }),
-      destroy() {
-        window.removeEventListener("load", queueRebuild);
-        sceneTrigger?.kill();
-        sceneTimeline?.kill();
-      },
-    });
+    return createNoOpSectionController();
   }
 
   /**
