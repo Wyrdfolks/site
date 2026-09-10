@@ -159,6 +159,7 @@ class EspacesBlock(StructBlock):
         label="Mondes",
     )
     picture = ImageChooserBlock(label="Image", required=False)
+    pictureLink = LinkBlock(label="Lien de l'image", required=False)
 
     class Meta:
         icon = "globe"

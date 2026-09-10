@@ -46,7 +46,7 @@
     >
         <div class="hidden md:flex md:flex-1 items-center justify-center" data-espaces-mondes-card>
         {# todo add map and highlight area on hover #}
-        {% with size="large" photo=block.picture title=block.title %}
+        {% with size="large" photo=block.picture title=block.title link=block.pictureLink %}
             {% include "includes/picture_card.html" %}
         {% endwith %}
         </div>

@@ -1,16 +1,24 @@
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags home_filters %}
 
 <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit p-1 md:p-2 w-fit shrink-0{% if additional_class %} {{ additional_class }}{% endif %}">
     <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl {% if size == 'small' %} h-card-s-mobile w-card-s-mobile md:h-card-s-desktop md:w-card-s-desktop {% elif size == 'large' %} w-card-l-mobile h-card-l-mobile md:w-card-l-desktop md:h-card-l-desktop {% endif %} text-white font-bold text-center">
-        {% with image=card.photo|default:photo card_title=card.title|default:title %}
+        {% with image=card.photo|default:photo card_title=card.title|default:title card_link=card.link|default:link %}
         {% if image %}
             {% image image fill-400x400 as card_img %}
+            {% with card_url=card_link|linkblock_url %}
+            {% if card_url %}
+                <a href="{{ card_url }}" class="w-full h-full">
+            {% endif %}
                 <img
                     src="{{ card_img.url }}"
                     alt="{{ card_title }}"
                     class="w-full h-full object-cover"
                 >
-                {% if card_title %}
+            {% if card_url %}
+                </a>
+            {% endif %}
+            {% endwith %}
+            {% if card_title %}
                 <h3 class="absolute bottom-4 left-0 w-full">
                     {{ card_title }}
                 </h3>
