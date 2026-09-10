@@ -192,6 +192,16 @@ h1 {
   width: 100%;
 }
 
+@media (max-width: 767px) {
+  .home-guests-scene {
+    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  }
+
+  .home-guests-stage {
+    min-height: clamp(360px, 68dvh, 600px);
+  }
+}
+
 [data-home-guests-title],
 [data-home-guests-teaser-text],
 [data-home-info-sentence] {
