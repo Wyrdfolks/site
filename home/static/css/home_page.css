@@ -51,6 +51,7 @@ h1 {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
 }
 
 .monde-card + .monde-card {
@@ -123,9 +124,9 @@ h1 {
   left: 0;
   right: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   padding-inline: clamp(1rem, 6vw, 4rem);
   pointer-events: none;
@@ -171,7 +172,7 @@ h1 {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(4.25rem, 11vh, 6.75rem);
+  bottom: 0;
   width: 100%;
   height: auto;
   display: flex;
@@ -189,7 +190,6 @@ h1 {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: clamp(1rem, 3vh, 2rem);
 }
 
 [data-home-guests-title],
@@ -263,7 +263,6 @@ h1 {
   .home-guests-teaser-layer {
     position: static;
     width: 100%;
-    height: auto;
     padding-inline: 0;
     justify-content: center;
     pointer-events: auto;
@@ -271,6 +270,7 @@ h1 {
 
   .home-guests-teaser-layer {
     margin-top: 40px;
+    height: auto;
   }
 
   .home-guests-title-layer {

@@ -2,7 +2,7 @@
 
 <section
     id="home-guests"
-    class="py-16 md:py-24 motion-reduce:bg-wyrd-purple-500 motion-reduce:text-white home-section flex items-center"
+    class="py-8 md:py-24 motion-reduce:bg-wyrd-purple-500 motion-reduce:text-white home-section flex items-center content-between"
     data-nav-color="purple"
     data-home-guests-cards
 >
@@ -34,11 +34,14 @@
 
             {% if block.teaser_text %}
                 <div class="home-guests-teaser-layer">
-                    <div data-home-guests-teaser-text>
+                    <div
+                        data-home-guests-teaser-text
+                        class="flex flex-col items-center md:gap-16 gap-8 content-end"
+                    >
                         <h1 class="text-center">
                             {{ block.teaser_text }}
                         </h1>
-                        <p class="text-center w-full font-extralight">
+                        <p class="text-center w-full font-extralight max-w-2xl">
                             {% for guest in block.secondary_guests %}
                             <strong class="font-extrabold">{{ guest.title }}</strong> {{guest.subtitle}}{% if not forloop.last %} &#149; {% endif%}
                             {% endfor %}
@@ -52,7 +55,7 @@
         {% if block.cta %}
             {% with cta_link=block.cta.url|linkblock_url %}
                 {% if cta_link %}
-                    <div class="home-guests-cta">
+                    <div class="home-guests-cta mt-8 md:mt-16">
                         {% render_button label=block.cta.label url=cta_link variant="primary" color="purple" %}
                     </div>
                 {% endif %}

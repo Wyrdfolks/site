@@ -3,7 +3,7 @@
 {% if card_url %}
     <a
         href="{{ card_url }}"
-        class="no-underline presentation-card pointer-events-auto shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
+        class="no-underline presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
         {% if index is not None %} data-card-index="{{ index }}"{% endif %}
         aria-label="{{ title|default:'Carte de presentation' }}"
     >
