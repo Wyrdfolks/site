@@ -56,6 +56,12 @@ class ProgrammationTabBlock(StructBlock):
         label="Titre du tab",
         help_text="Lieu du festival (tables, scènes, stands, etc.)",
     )
+    subtitle = CharBlock(
+        label="Sous-titre",
+        max_length=255,
+        required=False,
+        blank=True,
+        help_text="Un sous titre à afficher dans le tab")
     link = LinkBlock(
         label="Lien",
         required=False,

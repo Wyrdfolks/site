@@ -157,8 +157,12 @@ class FooterPageLink(Orderable):
         related_name="+",
         verbose_name="Page",
     )
+    link = models.URLField(verbose_name="URL Externe", null=True, blank=True)
+    email = models.EmailField("Email", null=True, blank=True)
 
     panels = [
         FieldPanel("label"),
         FieldPanel("page"),
+        FieldPanel("link"),
+        FieldPanel("email")
     ]

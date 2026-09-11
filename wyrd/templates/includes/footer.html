@@ -11,6 +11,10 @@
                     {% if link.page %}
                         {% pageurl link.page as link_url %}
                         {% render_button label=link.label url=link_url variant="ghost" %}
+                    {% elif link.link %}
+                        {% render_button label=link.label url=link.link variant="ghost"}
+                    {% elif link.email %}
+                        {% render_button label=link.label url="mailto:"|add:link.email variant="ghost" %}
                     {% else %}
                         {% render_button label=link.label variant="ghost" %}
                     {% endif %}
