@@ -36,6 +36,9 @@
     </head>
 
     <body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 {% block body_class %}{% endblock %}">
+        {% include "includes/cookies.html" %}
+        {% include "includes/a11y.html" %}
+
         {% wagtailuserbar %}
 
         {% block header %}

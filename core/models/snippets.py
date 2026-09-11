@@ -46,6 +46,7 @@ class Guest(models.Model):
     title = models.CharField("Titre", max_length=255)
     subtitle = models.CharField("Sous-titre", max_length=255, blank=True)
     description = RichTextField("Description", blank=True)
+    url = models.URLField("Site web", blank=True)
     photo = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -59,6 +60,7 @@ class Guest(models.Model):
         FieldPanel("title"),
         FieldPanel("subtitle"),
         FieldPanel("description"),
+        FieldPanel("url"),
         FieldPanel("photo"),
     ]
 

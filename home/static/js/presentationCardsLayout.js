@@ -26,7 +26,7 @@
     },
     "card-green": {
       x: 200,
-      y: 280,
+      y: 310,
       rotation: -11,
       stackedOffset: { x: 18, y: 16, rotation: -8 },
     },

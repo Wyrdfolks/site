@@ -3,7 +3,7 @@
 {% if card_url %}
     <a
         href="{{ card_url }}"
-        class="no-underline presentation-card shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
+        class="no-underline presentation-card pointer-events-auto shadow-card-mobile md:shadow-card-desktop w-card-s-mobile h-card-s-mobile md:w-card-s-desktop md:h-card-s-desktop flex flex-col items-center justify-end rounded-xl md:rounded-4xl p-2 md:p-4 absolute overflow-hidden {{ class_name }}"
         {% if index is not None %} data-card-index="{{ index }}"{% endif %}
         aria-label="{{ title|default:'Carte de presentation' }}"
     >
@@ -16,7 +16,7 @@
         </div>
         <div class="card-content relative z-10 w-full text-center">
             {% if title %}
-                <span class="presentation-card-title text-2xs md:text-xl font-bold normal-case max-md:leading-2xs">
+                <span class="presentation-card-title text-base md:text-xl font-bold normal-case max-md:leading-2xs">
                     {{ title|lower|capfirst }}
                 </span>
             {% endif %}
@@ -36,7 +36,7 @@
         </div>
         <div class="card-content relative z-10 w-full text-center">
             {% if title %}
-                <p class="presentation-card-title text-2xs md:text-xl font-bold normal-case max-md:leading-2xs">
+                <p class="presentation-card-title text-base md:text-xl font-bold normal-case max-md:leading-2xs">
                     {{ title|lower|capfirst }}
                 </p>
             {% endif %}

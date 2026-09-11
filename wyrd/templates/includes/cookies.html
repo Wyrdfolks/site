@@ -1,0 +1,185 @@
+<!--
+  BANNIÈRE D'INFORMATION COOKIES (cookies nécessaires uniquement)
+  ======================================================
+  Prêt à intégrer : copier ce bloc entier (HTML + CSS + JS) juste avant
+  la balise </body> de votre site.
+
+  Contexte : ce site n'utilise QUE des cookies strictement nécessaires
+  (session + préférences d'accessibilité). Sous RGPD / CNIL, ces cookies
+  sont exemptés de consentement — on informe l'utilisateur, on ne lui
+  demande pas d'accepter/refuser.
+
+  Fonctionnalités incluses :
+  - Bannière discrète (pas un blocage plein écran, pas de piège de focus)
+  - 1 seul bouton "J'ai compris" (pas de accept/reject : rien à refuser)
+  - Lien vers la politique de cookies pour le détail
+  - Mémorisation en localStorage : ne réaffiche plus une fois vue
+  - Lien "En savoir plus" pour rouvrir le détail des cookies utilisés
+-->
+
+<!-- ===================== CSS ===================== -->
+<style>
+  #cookie-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    width: 520px;
+    max-width: calc(100vw - 32px);
+    background: #fff;
+    color: #1a1a2e;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    z-index: 9999;
+    padding: 18px 20px;
+    display: none;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  #cookie-banner.open {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  #cookie-banner-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+  }
+
+  #cookie-banner-text {
+    flex: 1 1 280px;
+  }
+
+  #cookie-banner-text p {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin: 0;
+    color: #333;
+  }
+
+  #cookie-banner-text a {
+    color: #1a1a2e;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  #cookie-banner-close {
+    flex-shrink: 0;
+    padding: 9px 18px;
+    background: #1a1a2e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+  }
+  #cookie-banner-close:hover { background: #2b2b4a; }
+  #cookie-banner-close:focus-visible {
+    outline: 3px solid #4d9fff;
+    outline-offset: 2px;
+  }
+
+  #cookie-details {
+    display: none;
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    width: 100%;
+    font-size: 12.5px;
+    color: #555;
+  }
+  #cookie-details.open { display: block; }
+  #cookie-details ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+  }
+  #cookie-details li { margin-bottom: 4px; }
+
+  @media (max-width: 560px) {
+    #cookie-banner { bottom: 0; border-radius: 14px 14px 0 0; width: 100%; }
+    #cookie-banner-close { width: 100%; }
+  }
+</style>
+
+<!-- ===================== HTML ===================== -->
+<div id="cookie-banner" role="region" aria-label="Information sur les cookies">
+  <svg id="cookie-banner-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#1a1a2e" stroke-width="1.5">
+    <circle cx="12" cy="12" r="9"/>
+    <circle cx="9" cy="9" r="1" fill="#1a1a2e"/>
+    <circle cx="14" cy="8" r="1" fill="#1a1a2e"/>
+    <circle cx="15.5" cy="13" r="1" fill="#1a1a2e"/>
+    <circle cx="9.5" cy="14" r="1" fill="#1a1a2e"/>
+  </svg>
+
+  <div id="cookie-banner-text">
+    <p>
+      Ce site utilise uniquement des cookies <strong>strictement nécessaires</strong> à son fonctionnement
+      (maintien de votre session, mémorisation de vos préférences d'accessibilité). Aucun cookie de mesure
+      d'audience ou publicitaire n'est utilisé.
+      <a href="#" id="cookie-details-toggle">En savoir plus</a>
+    </p>
+
+    <div id="cookie-details">
+      <ul>
+        <li><strong>Session</strong> — vous garde connecté(e) pendant votre navigation. Expire à la fermeture du navigateur.</li>
+        <li><strong>Préférences d'accessibilité</strong> — mémorise vos réglages (contraste, taille du texte, etc.) choisis via le menu accessibilité.</li>
+      </ul>
+    </div>
+  </div>
+
+  <button type="button" id="cookie-banner-close">J'ai compris</button>
+</div>
+
+<!-- ===================== JS ===================== -->
+<script>
+(function () {
+  var STORAGE_KEY = 'cookie-notice-seen';
+  var NOTICE_VERSION = 1; // à incrémenter si tu ajoutes un nouveau cookie nécessaire -> réinforme l'utilisateur
+
+  var banner = document.getElementById('cookie-banner');
+  var closeBtn = document.getElementById('cookie-banner-close');
+  var detailsToggle = document.getElementById('cookie-details-toggle');
+  var details = document.getElementById('cookie-details');
+
+  function hasSeenNotice() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      return raw && raw.version === NOTICE_VERSION;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markAsSeen() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        version: NOTICE_VERSION,
+        date: new Date().toISOString()
+      }));
+    } catch (e) {}
+  }
+
+  if (!hasSeenNotice()) {
+    banner.classList.add('open');
+  }
+
+  closeBtn.addEventListener('click', function () {
+    markAsSeen();
+    banner.classList.remove('open');
+  });
+
+  detailsToggle.addEventListener('click', function (e) {
+    e.preventDefault();
+    var isOpen = details.classList.toggle('open');
+    detailsToggle.textContent = isOpen ? 'Voir moins' : 'En savoir plus';
+  });
+
+  // --- Lien pour rouvrir la bannière à tout moment (ex: footer) ---
+  // <button onclick="window.reopenCookieNotice()">Cookies</button>
+  window.reopenCookieNotice = function () {
+    banner.classList.add('open');
+  };
+})();
+</script>
