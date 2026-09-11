@@ -4,8 +4,11 @@
 {% block body_class %}template-programmation{% endblock %}
 
 {% block content %}
+<div class="mx-6 my-16 md:px-24 md:py-24 ">
+    <a href="/" class="inline-block hover:scale-110 transition-transform duration-100 ease-out">&lt; Accueil</a>
+</div>
 <section data-nav-color="purple">
-    <div class="text-white flex flex-col items-center justify-center px-6 py-16 md:px-24 md:py-24 mt-header-mobile md:mt-header-desktop max-w-7xl mx-auto">
+    <div class="text-white flex flex-col items-center justify-center px-6 py-8 md:px-24 md:py-24 mt-header-mobile md:mt-header-desktop max-w-7xl mx-auto">
         <h1 class="text-4xl md:text-5xl font-bold text-center mb-6 relative md:h-66 h-40">
             {{ page.title }}
             <div class="absolute bottom-3 md:bottom-12 left-1/2 -translate-x-1/2 w-fit flex">
@@ -43,11 +46,7 @@
                         </a>
                         {% endwith %}
                     {% endfor %}
-                </div>            
-                <p class="text-center text-base font-normal">
-                    Des histoires se créent en direct. Tu regardes, tu votes, tu influes
-                    Temps forts, actual plays, tables rondes.
-                </p>
+                </div>
             </div>
 
             {% for tab in page.tabs %}
@@ -55,6 +54,9 @@
                 <div class="w-full tab-content {% if not forloop.first or tab_link %}hidden{% endif %}" 
                      id="tab-{{ forloop.counter0 }}"
                      data-tab-slug="{{ tab_slug }}">
+                    <p class="text-center text-base font-normal mb-16">
+                        {{ tab.value.subtitle }}
+                    </p>
                     <div class="space-y-6">
                         {% for animation in tab.value.animations %}
                             {% include "includes/schedule_item.html" with animation=animation animation_id="animation-"|add:tab.value.title|add:"-"|add:forloop.counter %}

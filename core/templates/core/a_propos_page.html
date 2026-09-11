@@ -4,6 +4,9 @@
 {% block body_class %}template-apropos{% endblock %}
 
 {% block content %}
+<div class="mx-6 my-16 md:px-24 md:py-24 ">
+    <a href="/" class="inline-block hover:scale-110 transition-transform duration-100 ease-out">&lt; Accueil</a>
+</div>
 <section data-nav-color="purple">
     <div class="flex flex-col items-center justify-center px-6 py-16 md:px-24 md:py-24 mt-header-mobile md:mt-header-desktop max-w-7xl mx-auto">
         <h1 class="text-center min-h-44 md:min-h-80 flex items-center text-wyrd-purple-100">
@@ -15,7 +18,7 @@
         {% if page.content %}
             <div class="gap-16 flex flex-col w-full pt-16 md:pt-24">
                 {% for category in page.content %}
-                    <article class="max-w-none grid grid-cols-1 md:grid-cols-2 border-t border-white pt-6 md:pt-16 md:gap-6">
+                    <article class="max-w-none grid grid-cols-1 md:grid-cols-2 border-t border-white pt-6 md:pt-16 md:gap-6" id="{{ category.value.title|slugify }}">
                         <h4>{{ category.value.title }}</h4>
                         {% if category.value.content %}
                             <div class="max-md:pt-6 flex flex-col gap-2" data-apropos-category-content>
