@@ -8,3 +8,5 @@ __pycacahe__/
 .env
 .vscode
 /static/
+
+node_modules/

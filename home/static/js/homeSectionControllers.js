@@ -421,7 +421,7 @@
       scrollTrigger: {
         trigger: espacesSection,
         start: "top top",
-        end: "+=280%",
+        end: "+=380%",
         pin: espacesSection,
         pinSpacing: true,
         scrub: 1.35,
@@ -447,25 +447,38 @@
       }
 
       sceneTimeline.set(heroContent, { autoAlpha: 1 }, heroRevealSetAt);
-      sceneTimeline.to(
-        heroTextPath,
-        {
-          attr: { startOffset: "50%" },
-          duration: heroIntroDuration,
-          ease: "power2.out",
-        },
-        heroIntroStart,
-      );
 
-      sceneTimeline.to(
-        heroTextPath,
-        {
-          attr: { startOffset: isDesktop ? "-62%" : "-42%" },
-          duration: heroOutroDuration,
-          ease: "power2.in",
-        },
-        heroOutroStart,
-      );
+      if (isDesktop) {
+        sceneTimeline.to(
+          heroTextPath,
+          {
+            attr: { startOffset: "50%" },
+            duration: heroIntroDuration,
+            ease: "power2.out",
+          },
+          heroIntroStart,
+        );
+
+        sceneTimeline.to(
+          heroTextPath,
+          {
+            attr: { startOffset: "-62%" },
+            duration: heroOutroDuration,
+            ease: "power2.in",
+          },
+          heroOutroStart,
+        );
+      } else {
+        sceneTimeline.to(
+          heroTextPath,
+          {
+            attr: { startOffset: "-42%" },
+            duration: heroIntroDuration + heroOutroDuration,
+            ease: "power1.inOut",
+          },
+          heroIntroStart,
+        );
+      }
     } else {
       // Fallback for environments where SVG textPath is not available.
       if (introContent instanceof HTMLElement) {
