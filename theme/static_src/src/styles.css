@@ -217,7 +217,6 @@ p > a {
 	background-position: 0 100%;
 	background-repeat: repeat-x;
 	background-size: 3px 3px;
-  color: #000;
   text-decoration: none;
 }
 p > a:hover {
