@@ -66,12 +66,12 @@
       hint.classList.add(...visibleClasses);
     }
 
-    if (!window.location.hash || window.location.hash === "#") {
-      hint.hidden = true;
-      setHiddenState();
-      hint.setAttribute("aria-hidden", "true");
-      return;
-    }
+    // if (!window.location.hash || window.location.hash === "#") {
+    //   hint.hidden = true;
+    //   setHiddenState();
+    //   hint.setAttribute("aria-hidden", "true");
+    //   return;
+    // }
 
     let dismissed = false;
     let hasUserScrollIntent = false;

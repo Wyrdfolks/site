@@ -446,32 +446,17 @@
   .my-2 {
     margin-block: calc(var(--spacing) * 2);
   }
-  .my-6 {
-    margin-block: calc(var(--spacing) * 6);
-  }
-  .my-8 {
-    margin-block: calc(var(--spacing) * 8);
-  }
   .my-12 {
     margin-block: calc(var(--spacing) * 12);
   }
-  .my-16 {
-    margin-block: calc(var(--spacing) * 16);
-  }
   .my-24 {
     margin-block: calc(var(--spacing) * 24);
-  }
-  .my-200 {
-    margin-block: calc(var(--spacing) * 200);
   }
   .my-auto {
     margin-block: auto;
   }
   .-mt-1 {
     margin-top: calc(var(--spacing) * -1);
-  }
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
   }
   .mt-3 {
     margin-top: calc(var(--spacing) * 3);
@@ -487,9 +472,6 @@
   }
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
-  }
-  .mt-52 {
-    margin-top: calc(var(--spacing) * 52);
   }
   .mt-auto {
     margin-top: auto;
@@ -1157,11 +1139,11 @@
   .text-\[clamp\(0\.75rem\,1\.7vw\,0\.9rem\)\] {
     font-size: clamp(0.75rem, 1.7vw, 0.9rem);
   }
+  .text-\[clamp\(0\.75rem\,1\.9vw\,2rem\)\] {
+    font-size: clamp(0.75rem, 1.9vw, 2rem);
+  }
   .text-\[clamp\(0\.75rem\,2vw\,2rem\)\] {
     font-size: clamp(0.75rem, 2vw, 2rem);
-  }
-  .text-\[clamp\(0\.75rem\,3vw\,2rem\)\] {
-    font-size: clamp(0.75rem, 3vw, 2rem);
   }
   .text-body-mobile {
     font-size: var(--text-body-mobile);
@@ -1984,11 +1966,6 @@
   .md\:px-12 {
     @media (width >= 48rem) {
       padding-inline: calc(var(--spacing) * 12);
-    }
-  }
-  .md\:px-18 {
-    @media (width >= 48rem) {
-      padding-inline: calc(var(--spacing) * 18);
     }
   }
   .md\:px-24 {
