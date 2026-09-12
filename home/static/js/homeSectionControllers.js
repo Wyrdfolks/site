@@ -574,7 +574,7 @@
 
       const listTravel = Math.max(
         0,
-        listScrollTarget.scrollHeight - mondesList.clientHeight,
+        listScrollTarget.scrollHeight - (mondesList.clientHeight - 120),
       );
       if (listTravel <= 0) return;
 
