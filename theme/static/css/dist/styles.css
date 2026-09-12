@@ -458,6 +458,12 @@
   .my-16 {
     margin-block: calc(var(--spacing) * 16);
   }
+  .my-24 {
+    margin-block: calc(var(--spacing) * 24);
+  }
+  .my-200 {
+    margin-block: calc(var(--spacing) * 200);
+  }
   .my-auto {
     margin-block: auto;
   }
@@ -1647,6 +1653,11 @@
   .md\:-mx-4 {
     @media (width >= 48rem) {
       margin-inline: calc(var(--spacing) * -4);
+    }
+  }
+  .md\:my-16 {
+    @media (width >= 48rem) {
+      margin-block: calc(var(--spacing) * 16);
     }
   }
   .md\:mt-2 {
