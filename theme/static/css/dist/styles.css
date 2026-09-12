@@ -1120,6 +1120,10 @@
   .font-serif {
     font-family: var(--font-serif);
   }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
   .text-4xl {
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
@@ -1152,6 +1156,12 @@
   }
   .text-\[clamp\(0\.75rem\,1\.7vw\,0\.9rem\)\] {
     font-size: clamp(0.75rem, 1.7vw, 0.9rem);
+  }
+  .text-\[clamp\(0\.75rem\,2vw\,2rem\)\] {
+    font-size: clamp(0.75rem, 2vw, 2rem);
+  }
+  .text-\[clamp\(0\.75rem\,3vw\,2rem\)\] {
+    font-size: clamp(0.75rem, 3vw, 2rem);
   }
   .text-body-mobile {
     font-size: var(--text-body-mobile);
