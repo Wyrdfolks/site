@@ -263,8 +263,27 @@
       navVisible: true,
     };
 
+    /**
+     * On the homepage, `homeSectionScroll.js` keeps this value synchronized with
+     * background transitions so nav color can switch in lockstep.
+     *
+     * @returns {"purple" | "green" | "pink" | null}
+     */
+    function getSharedThemeNavColor() {
+      const color = window.wyrdUi?.activeNavColor;
+      if (color === "purple" || color === "green" || color === "pink")
+        return color;
+      return null;
+    }
+
     function syncNavColor() {
-      applyNavColor(detectActiveSectionColor(sections));
+      const sharedThemeColor = getSharedThemeNavColor();
+      applyNavColor(sharedThemeColor || detectActiveSectionColor(sections));
+    }
+
+    function onThemeColorChange(event) {
+      const color = event?.detail?.navColor;
+      if (color !== null) applyNavColor(color);
     }
 
     function onScroll() {
@@ -293,6 +312,7 @@
 
     toggleNavDisplay(true);
     syncNavColor();
+    window.addEventListener("wyrd:theme-color-change", onThemeColorChange);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => {
       updateSharedNavHeight();

@@ -18,6 +18,8 @@
         {% include "svg/youtube.svg" %}
     {% elif social_link.platform_type == "discord" %}
         {% include "svg/discord.svg" %}
+    {% elif social_link.platform_type == "twitch" %}
+        {% include "svg/twitch.svg" %}
     {% elif social_link.icon %}
         <img 
             src="{{ social_link.icon.url }}" 

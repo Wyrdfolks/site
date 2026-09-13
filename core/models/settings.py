@@ -19,11 +19,13 @@ class HeaderNavigationLink(models.Model):
         verbose_name="Page",
     )
     external_url = models.URLField("URL externe", blank=True)
+    email = models.EmailField("Email", blank=True)
 
     panels = [
         FieldPanel("label"),
         FieldPanel("page"),
         FieldPanel("external_url"),
+        FieldPanel("email"),
     ]
 
     class Meta:
@@ -32,29 +34,24 @@ class HeaderNavigationLink(models.Model):
     def clean(self):
         has_page = bool(self.page_id)
         has_external = bool(self.external_url)
-        if not has_page and not has_external:
+        has_email = bool(self.email)
+
+        selected_targets = sum([has_page, has_external, has_email])
+
+        if selected_targets == 0:
             raise ValidationError(
-                "Renseignez soit une Page, soit une URL externe pour le lien."
+                "Renseignez soit une Page, soit une URL externe, soit une adresse email pour le lien."
             )
-        if has_page and has_external:
+
+        if selected_targets > 1:
             raise ValidationError(
-                "Choisissez soit une Page, soit une URL externe (pas les deux)."
+                "Choisissez une seule destination: Page, URL externe ou Email."
             )
 
 
 @register_setting
 class HeaderSettings(ClusterableModel, BaseSiteSetting):
-    logo = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Logo",
-    )
-
     panels = [
-        FieldPanel("logo"),
         MultiFieldPanel(
             [
                 InlinePanel("nav_bar_left_links", label="Liens gauche"),
@@ -160,8 +157,12 @@ class FooterPageLink(Orderable):
         related_name="+",
         verbose_name="Page",
     )
+    link = models.URLField(verbose_name="URL Externe", null=True, blank=True)
+    email = models.EmailField("Email", null=True, blank=True)
 
     panels = [
         FieldPanel("label"),
         FieldPanel("page"),
+        FieldPanel("link"),
+        FieldPanel("email")
     ]

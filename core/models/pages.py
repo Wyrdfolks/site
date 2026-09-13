@@ -13,6 +13,8 @@ from wagtail.blocks import (
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import FieldPanel
 
+from home.models import LinkBlock
+
 
 class FAQItemBlock(StructBlock):
     question = CharBlock(label="Question")
@@ -34,8 +36,9 @@ class FAQCategoryBlock(StructBlock):
 
 class AnimationBlock(StructBlock):
     title = CharBlock(label="Titre")
-    date = DateBlock(label="Date")
-    start_time = TimeBlock(label="Heure")
+    date = DateBlock(label="Date", required=False)
+    start_time = TimeBlock(label="Heure de début", required=False)
+    end_time = TimeBlock(label="Heure de fin", required=False)
     description = RichTextBlock(label="Description", required=False)
     guests = ListBlock(
         SnippetChooserBlock("core.Guest"),
@@ -49,7 +52,21 @@ class AnimationBlock(StructBlock):
 
 
 class ProgrammationTabBlock(StructBlock):
-    title = CharBlock(label="Titre du tab")
+    title = CharBlock(
+        label="Titre du tab",
+        help_text="Lieu du festival (tables, scènes, stands, etc.)",
+    )
+    subtitle = CharBlock(
+        label="Sous-titre",
+        max_length=255,
+        required=False,
+        blank=True,
+        help_text="Un sous titre à afficher dans le tab")
+    link = LinkBlock(
+        label="Lien",
+        required=False,
+        help_text="Lien à ouvrir dans un nouvel onglet plutôt que d'afficher les animations de cette catégorie (ex: lien vers l'inscription aux tables)",
+    )
     animations = ListBlock(AnimationBlock(), label="Animations")
 
     class Meta:

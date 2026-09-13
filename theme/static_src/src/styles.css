@@ -31,6 +31,7 @@ html {
   --color-wyrd-green-900: #154d2e;
   --color-wyrd-indigo-100: #e2e1f0;
   --color-wyrd-indigo-300: #a19bcb;
+  --color-wyrd-indigo-500: #261f4e;
   --color-wyrd-indigo-700: #130e30;
   --color-wyrd-indigo-900: #060412;
   --color-wyrd-gray-300: #d2c9e4;
@@ -67,6 +68,7 @@ html {
   --color-wyrd-green-900: var(--color-wyrd-green-900);
   --color-wyrd-indigo-100: var(--color-wyrd-indigo-100);
   --color-wyrd-indigo-300: var(--color-wyrd-indigo-300);
+  --color-wyrd-indigo-500: var(--color-wyrd-indigo-500);
   --color-wyrd-indigo-700: var(--color-wyrd-indigo-700);
   --color-wyrd-indigo-900: var(--color-wyrd-indigo-900);
   --color-wyrd-gray-300: var(--color-wyrd-gray-300);
@@ -128,10 +130,10 @@ html {
   --spacing-header-desktop: 85px;
   --spacing-header-mobile: 88px;
 
-  --height-card-s-desktop: 250px;
-  --width-card-s-desktop: 250px;
-  --height-card-s-mobile: 100px;
-  --width-card-s-mobile: 100px;
+  --height-card-s-desktop: 258px;
+  --width-card-s-desktop: 258px;
+  --height-card-s-mobile: 120px;
+  --width-card-s-mobile: 120px;
   --height-card-l-desktop: 575px;
   --width-card-l-desktop: 475px;
   --height-card-l-mobile: 324px;
@@ -194,7 +196,9 @@ footer a.social-media-icon:hover {
   @apply text-wyrd-indigo-300;
 }
 
-body.template-apropos {
+body.template-apropos,
+body.template-programmation,
+body.template-404 {
   @apply bg-wyrd-purple-500 text-white;
 }
 
@@ -203,9 +207,26 @@ body.template-faq {
 }
 
 body.template-faq section,
-body.template-apropos section {
+body.template-apropos section,
+body.template-programmation section,
+body.template-404 section {
   @apply min-h-screen;
 }
+p > a {
+  background: linear-gradient(to bottom, #ff9800 0%, #ff9800 100%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+	background-size: 3px 3px;
+  text-decoration: none;
+}
+p > a:hover {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23ff9800' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+  background-position: 0 100%;
+  background-size: auto 6px;
+  background-repeat: repeat-x;
+  text-decoration: none;
+}
+
 
 /**
   * A catch-all path to Django template files, JavaScript, and Python files

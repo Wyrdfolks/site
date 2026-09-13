@@ -6,7 +6,7 @@
     <div class="md:pb-32 md:pt-32 pt-24 max-w-lg sm:max-w-xl md:max-w-7xl mx-auto px-4 lg:px-32 items-center justify-center text-center gap-6 md:gap-12 flex flex-col my-auto">
         
         <h4 class="uppercase">{{ block.tagline }}</h4>
-        <h1 class="hero">{{ block.title }}</h1>
+        <h1 class="hero break-normal">{{ block.title }}</h1>
         <h4 class="max-w-3xs sm:max-w-lg">
             {{ block.subtitle|linebreaksbr }}
         </h4>
@@ -47,7 +47,7 @@
 {# Desktop ticker view, in its own section #}
 <section 
     data-nav-color="purple"
-    class="home-section landing-page-ticker max-h-fit! h-fit! min-h-fit! w-full overflow-hidden bg-wyrd-green-900 text-wyrd-green-500 max-md:hidden"
+    class="home-section landing-page-ticker max-h-fit! h-fit! min-h-fit! w-full overflow-hidden motion-reduce:bg-wyrd-green-900 text-wyrd-green-500 max-md:hidden"
 >
     <div class="h-80 flex items-center marquee-desktop whitespace-nowrap mx-auto">
         {% for text in block.ticker_text %}

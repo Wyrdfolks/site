@@ -1,4 +1,4 @@
-from .snippets import SocialMediaLink, Guest, Monde  # noqa: F401
+from .snippets import SocialMediaLink, Guest, Espace  # noqa: F401
 from .settings import (  # noqa: F401
     HeaderSettings,
     HeaderNavBarLeftLink,

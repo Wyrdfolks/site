@@ -1,36 +1,39 @@
-{% load wagtailcore_tags wagtailimages_tags core_components %}
+{% load wagtailcore_tags wagtailimages_tags core_components home_filters %}
 
 <section 
+    id="home-info"
     data-nav-color="pink"
-    class="home-section bg-wyrd-pink-500 text-wyrd-pink-900 flex items-center flex-row"
+    class="home-section motion-reduce:bg-wyrd-pink-500 motion-reduce:text-wyrd-pink-900 flex items-center flex-row"
 >
     <div class="flex flex-col md:flex-row items-center justify-center flex-1 gap-6 lg:gap-32 md:gap-16 sm:gap-12 lg:m-6 mx-auto p-14 sm:p-16 max-w-full">
         
         <div class="card bg-white rounded-2xl md:rounded-4xl overflow-hidden shadow-card-mobile md:shadow-card-desktop h-fit w-fit p-1 md:p-2 rotate-[8deg]">
             <div class="overflow-hidden relative bg-wyrd-purple-500 rounded-xl md:rounded-3xl w-map-mobile h-map-mobile md:w-map-desktop md:h-map-desktop max-w-full">
-                {% if block.picture %}
-                    {% image block.picture fill-800x800 as info_image %}
-                    <img
-                        src="{{ info_image.url }}"
-                        alt="{{ block.title }}"
-                        class="w-full h-full object-cover"
-                    >
-                {% endif %}
+                {# Google Maps iframe for La Cité Fertile #}
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2622.8884007687157!2d2.3962520770775555!3d48.8984639713376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66d6d8268a265%3A0xa62cf107e05da1dc!2sLa%20Cit%C3%A9%20Fertile!5e0!3m2!1sfr!2sfr!4v1788028652525!5m2!1sfr!2sfr"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen="" 
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
             </div>        
         </div>
 
         <div class="flex flex-col gap-6 sm:gap-8 md:gap-16 lg:w-[640px] max-md:mt-2">
-            <h2 class="max-md:text-center">{{ block.title }}</h2>
-            <div class="grid grid-cols-2 gap-6 md:gap-12 sm:max-w-md md:max-w-4xl mx-auto">
+            <h2 class="max-md:text-center break-normal">{{ block.title }}</h2>
+            <div class="grid grid-cols-2 gap-6 md:gap-12 sm:max-w-md md:max-w-4xl">
                 {% if block.access %}
-                    <div>
-                        <h4 class="font-semibold uppercase">Accès</h4>
+                    <div class="text-body-mobile">
+                        <h5 class="font-extrabold! uppercase mb-2.5">Accès</h5>
                         {{ block.access|safe }}
                     </div>
                 {% endif %}
                 {% if block.schedule %}
-                    <div>
-                        <h4 class="font-semibold uppercase">Horaires</h4>
+                    <div class="text-body-mobile">
+                        <h5 class="font-extrabold! uppercase mb-2.5">Horaires</h5>
                         {{ block.schedule|safe }}
                     </div>
                 {% endif %}
@@ -38,19 +41,17 @@
 
             {% if block.directions_link or block.faq_link %}
                 <div class="flex flex-row max-md:justify-center">
-                    {% if block.directions_link.page %}
-                        {% pageurl block.directions_link.page as directions_link %}
-                        {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" %}
-                    {% elif block.directions_link.external_url %}
-                            {% render_button label="Comment venir ?" url=block.directions_link.external_url variant="secondary" color="pink" %}
-                    {% endif %}
+                    {% with directions_link=block.directions_link|linkblock_url %}
+                        {% if directions_link %}
+                            {% render_button label="Commment venir ?" url=directions_link variant="secondary" color="pink" additional_class="font-medium!" %}
+                        {% endif %}
+                    {% endwith %}
 
-                    {% if block.faq_link.page %}
-                        {% pageurl block.faq_link.page as faq_link %}
-                        {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" %}
-                    {% elif block.faq_link.external_url %}
-                        {% render_button label="FAQ" url=block.faq_link.external_url variant="secondary" color="pink" %}
-                    {% endif %}
+                    {% with faq_link=block.faq_link|linkblock_url %}
+                        {% if faq_link %}
+                            {% render_button label="FAQ" url=faq_link variant="secondary" color="pink" additional_class="font-medium!" %}
+                        {% endif %}
+                    {% endwith %}
                 </div>
             {% endif %}
         </div>

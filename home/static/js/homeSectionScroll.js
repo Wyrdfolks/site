@@ -1,25 +1,21 @@
 /**
- * Homepage-only section switching driven by GSAP.
+ * Homepage section animation orchestration for continuous scrolling.
  *
- * One downward gesture/key down moves to the next scroll stop.
- * One upward gesture/key up moves to the previous scroll stop.
- * The footer is treated as the final stop after the homepage sections.
- * Nested scrollable containers keep native scrolling when they still
- * have scroll range in the gesture direction.
+ * Section controllers own animation behavior. This file wires controllers
+ * to ScrollTrigger lifecycle callbacks (enter/leave/enterBack/leaveBack).
  */
 
 (() => {
   const SECTION_SELECTOR = "main section.home-section";
   const FOOTER_SELECTOR = "body > footer";
 
-  const DESKTOP_SCROLL_DURATION = 1.35;
-  const MOBILE_SCROLL_DURATION = 0.85;
-
-  const WHEEL_THRESHOLD = 18;
-  const DESKTOP_TOUCH_THRESHOLD = 48;
-  const MOBILE_TOUCH_THRESHOLD = 72;
-
   const SHARED_SCREEN_THRESHOLD = 768;
+  const LIFECYCLE_COOLDOWN_MS = 140;
+
+  // Hero section animation timings (in seconds)
+  const HERO_INTRO_DURATION = 2;
+  const HERO_OUTRO_DURATION = 1.8;
+  const HERO_STICKER_DURATION = 0.5;
 
   window.wyrdUi = window.wyrdUi || {};
   window.wyrdUi.screenThreshold =
@@ -29,12 +25,125 @@
     window.matchMedia(`(min-width: ${window.wyrdUi.screenThreshold}px)`);
 
   const desktopMedia = window.wyrdUi.desktopMedia;
+  const isIosWebkit =
+    /iPad|iPhone|iPod/.test(window.navigator.userAgent) &&
+    /WebKit/.test(window.navigator.userAgent);
 
   /**
-   * Collect all scroll destinations in DOM order, including the footer.
+   * Initialize the hash scroll hint for the homepage:
+   * Show "scroll down" message if the page has a hash anchor.
+   * It disappears once the user shows scroll intent (actual scroll,
+   * keyboard nav) and doesn't reappear.
+   */
+  function initHashScrollHint() {
+    if (!document.body.classList.contains("template-homepage")) return;
+
+    let hint = document.querySelector("[data-home-hash-scroll-hint]");
+    // fallback to create the hint element if it doesn't exist
+    if (!(hint instanceof HTMLElement)) {
+      hint = document.createElement("p");
+      hint.hidden = true;
+      hint.setAttribute("aria-hidden", "true");
+      hint.setAttribute("data-home-hash-scroll-hint", "");
+      hint.className =
+        "fixed left-1/2 bottom-[clamp(0.875rem,3.5vh,1.5rem)] z-40 m-0 -translate-x-1/2 translate-y-1.5 rounded-full bg-black/10 px-3.5 py-1.5 text-[clamp(0.75rem,1.7vw,0.9rem)] uppercase leading-none tracking-widest opacity-0 pointer-events-none transition-all duration-200 ease-out";
+      hint.textContent = "Animer";
+      hint.title = "Scrollez pour animer";
+      document.body.appendChild(hint);
+    }
+
+    const hiddenClasses = ["opacity-0", "translate-y-1.5"];
+    const visibleClasses = ["opacity-100", "translate-y-0"];
+    const bounceClass = "animate-bounce";
+
+    function setHiddenState() {
+      hint.classList.remove(...visibleClasses, bounceClass);
+      hint.classList.add(...hiddenClasses);
+    }
+
+    function setVisibleState() {
+      hint.classList.remove(...hiddenClasses);
+      hint.classList.add(...visibleClasses);
+    }
+
+    // if (!window.location.hash || window.location.hash === "#") {
+    //   hint.hidden = true;
+    //   setHiddenState();
+    //   hint.setAttribute("aria-hidden", "true");
+    //   return;
+    // }
+
+    let dismissed = false;
+    let hasUserScrollIntent = false;
+    let intentStartY = window.scrollY;
+
+    function cleanupListeners() {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("scroll", onScroll);
+    }
+
+    function onWheel() {
+      hasUserScrollIntent = true;
+      intentStartY = window.scrollY;
+    }
+
+    function onTouchStart() {
+      hasUserScrollIntent = true;
+      intentStartY = window.scrollY;
+    }
+
+    function dismissHint() {
+      if (dismissed) return;
+      dismissed = true;
+      setHiddenState();
+      hint.setAttribute("aria-hidden", "true");
+      cleanupListeners();
+      window.setTimeout(() => (hint.hidden = true), 220);
+    }
+
+    function onKeyDown(event) {
+      const keysThatScroll = new Set([
+        "ArrowUp",
+        "ArrowDown",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+        "Space",
+      ]);
+
+      if (keysThatScroll.has(event.code) || keysThatScroll.has(event.key)) {
+        hasUserScrollIntent = true;
+        intentStartY = window.scrollY;
+      }
+    }
+
+    function onScroll() {
+      if (!hasUserScrollIntent) return;
+      if (Math.abs(window.scrollY - intentStartY) > 2) dismissHint();
+    }
+
+    hint.hidden = false;
+    hint.setAttribute("aria-hidden", "false");
+    window.requestAnimationFrame(() => {
+      setVisibleState();
+      hint.classList.add(bounceClass);
+    });
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  /**
+   * Collect all section stops in DOM order, including footer.
+   *
    * @returns {HTMLElement[]}
    */
-  function getScrollStops() {
+  function getStops() {
     const sections = Array.from(document.querySelectorAll(SECTION_SELECTOR));
     const footer = document.querySelector(FOOTER_SELECTOR);
 
@@ -46,7 +155,8 @@
   }
 
   /**
-   * Detect the closest scroll stop to the current window position.
+   * Detect closest stop index to current scroll position.
+   *
    * @param {HTMLElement[]} stops
    * @returns {number}
    */
@@ -67,371 +177,411 @@
   }
 
   /**
-   * Find the nearest scrollable ancestor of an element, if any.
-   * @param {HTMLElement | null} element
-   * @returns {HTMLElement | null}
+   * Build section-activation theme transitions. When a section is active in
+   * the viewport center, animate body colors to that section's theme.
+   *
+   * @returns {Array<{ kill: () => void }>}
    */
-  function findScrollableAncestor(element) {
-    let current = element;
+  function initSectionThemeTransitions() {
+    const sections = Array.from(document.querySelectorAll("[data-nav-color]"));
+    if (sections.length === 0) return [];
 
-    while (current && current !== document.body) {
-      const style = window.getComputedStyle(current);
-      const canScrollY = /(auto|scroll|overlay)/.test(style.overflowY);
+    /** @type {Array<{ kill: () => void }> } */
+    const themeArtifacts = [];
 
-      if (canScrollY && current.scrollHeight > current.clientHeight + 1) {
-        return current;
-      }
-
-      current = current.parentElement;
-    }
-
-    return null;
-  }
-
-  /**
-   * Check if a nested scroll container can absorb the gesture.
-   * @param {HTMLElement | null} scrollable
-   * @param {number} direction
-   * @returns {boolean}
-   */
-  function canScrollableHandleDirection(scrollable, direction) {
-    if (!scrollable) return false;
-
-    if (direction > 0) {
-      return (
-        scrollable.scrollTop + scrollable.clientHeight <
-        scrollable.scrollHeight - 1
-      );
-    }
-
-    return scrollable.scrollTop > 1;
-  }
-
-  function isNavMenuOpen() {
-    const drawer = document.getElementById("nav-side-drawer");
-    return drawer?.getAttribute("aria-hidden") === "false";
-  }
-
-  function sectionFitsViewport(section) {
-    return section instanceof HTMLElement
-      ? section.offsetHeight <= window.innerHeight
-      : false;
-  }
-
-  /**
-   * On mobile, use a higher touch threshold to avoid triggering section
-   * scroll unintentionally when trying to scroll within a section that
-   * doesn't fit in the viewport
-   */
-  function getScrollDuration() {
-    return desktopMedia.matches
-      ? DESKTOP_SCROLL_DURATION
-      : MOBILE_SCROLL_DURATION;
-  }
-
-  // same here
-  function getTouchThreshold() {
-    return desktopMedia.matches
-      ? DESKTOP_TOUCH_THRESHOLD
-      : MOBILE_TOUCH_THRESHOLD;
-  }
-
-  /**
-   * Initialize GSAP animations for the "Espaces" section, triggered on scroll.
-   * - The hero content slides in from left to right while fading in.
-   * - The subtitle fades in and out when entering/leaving the viewport.
-   */
-  function initEspacesAnimations({ goToStop }) {
-    const heroSection = document.querySelector('[data-espaces-section="hero"]');
-    const heroContent = heroSection?.querySelector(
-      "[data-espaces-hero-content]",
-    );
-    const subtitleSection = document.querySelector(
-      '[data-espaces-section="subtitle"]',
-    );
-    const subtitleContent = subtitleSection?.querySelector(
-      "[data-espaces-subtitle-content]",
-    );
-    const heroIndex = heroSection
-      ? Array.from(document.querySelectorAll(SECTION_SELECTOR)).findIndex(
-          (section) => section === heroSection,
-        )
-      : -1;
-
-    if (
-      heroSection instanceof HTMLElement &&
-      heroContent instanceof HTMLElement
-    ) {
-      // animation to slide the text from left to right while fading in,
-      // triggered when the section enters the viewport
-      const textTimeline = gsap.timeline({
-        paused: true,
-        defaults: {
-          duration: desktopMedia.matches ? 5 : 15,
-          ease: "power2.out",
-        },
-      });
-
-      textTimeline.fromTo(
-        heroContent,
-        { xPercent: desktopMedia.matches ? 50 : -50, autoAlpha: 0.35 },
-        { xPercent: desktopMedia.matches ? 0 : 120, autoAlpha: 1 },
-      );
-
-      const goToNextOnComplete = () => {
-        if (heroIndex > 0) goToStop(heroIndex + 1);
-        textTimeline.eventCallback("onComplete", null);
-      };
-
-      ScrollTrigger.create({
-        trigger: heroSection,
-        start: "top 70%",
-        end: "bottom 30%",
-        onEnter: () => {
-          // first section enter, allow advancing to next
-          // section (fading text) when animation completes
-          textTimeline.eventCallback("onComplete", goToNextOnComplete);
-          textTimeline.restart();
-        },
-        onEnterBack: () => textTimeline.play(),
-        onLeave: () => textTimeline.reverse(),
-        onLeaveBack: () => textTimeline.reverse(),
-      });
-    }
-
-    if (
-      subtitleSection instanceof HTMLElement &&
-      subtitleContent instanceof HTMLElement
-    ) {
-      // have the subtitle fade in and out when the section enters/leavess the viewport
-      const subtitleTimeline = gsap.timeline({
-        paused: true,
-        defaults: { duration: 3, ease: "power2.out" },
-      });
-
-      subtitleTimeline.fromTo(
-        subtitleContent,
-        { autoAlpha: 0 },
-        { autoAlpha: 1 },
-      );
-
-      const goToNextOnComplete = () => {
-        if (heroIndex > 0) goToStop(heroIndex + 2);
-        subtitleTimeline.eventCallback("onComplete", null);
-      };
-
-      ScrollTrigger.create({
-        trigger: subtitleSection,
-        start: "top 70%",
-        end: "bottom 30%",
-        onEnter: () => {
-          // first section enter, allow advancing to next (spaces list)
-          subtitleTimeline.eventCallback("onComplete", goToNextOnComplete);
-          subtitleTimeline.restart();
-        },
-        onEnterBack: () => subtitleTimeline.play(),
-        onLeave: () => subtitleTimeline.reverse(),
-        onLeaveBack: () => subtitleTimeline.reverse(),
-      });
-    }
-  }
-
-  function initHomeSectionScroll() {
-    if (!document.body.classList.contains("template-homepage")) return;
-    if (!window.gsap || !window.ScrollTrigger || !window.ScrollToPlugin) return;
-    if (window.__homeSectionScrollInitialized) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const stops = getScrollStops();
-    if (stops.length < 2) return;
-
-    window.__homeSectionScrollInitialized = true;
-
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-    let currentIndex = getClosestStopIndex(stops);
-    let isAnimating = false;
-    let touchStartY = 0;
-    let touchLastY = 0;
-    let touchScrollable = null;
-    let touchCaptured = false;
-
-    // prevent automatic scroll animation to the next section
-    // if the current section doesn't fit in the viewport
-    // (ie. the user needs to scroll manually to see all content,
-    // like on mobile for the spaces list section)
-    function currentStopNeedsNativeScroll() {
-      const currentStop = stops[currentIndex];
-      return (
-        currentStop instanceof HTMLElement && !sectionFitsViewport(currentStop)
-      );
-    }
+    const rootStyles = window.getComputedStyle(document.documentElement);
 
     /**
-     * Go to home section at the specified index with a smooth scroll animation.
-     * @param {number} nextIndex
-     * @returns {boolean}
+     * @param {string} cssVar
+     * @param {string} fallback
+     * @returns {string}
      */
-    function goToStop(nextIndex) {
-      if (nextIndex < 0 || nextIndex >= stops.length || isAnimating) {
-        return false;
-      }
-
-      const targetStop = stops[nextIndex];
-      if (!targetStop || nextIndex === currentIndex) {
-        return false;
-      }
-
-      isAnimating = true;
-      currentIndex = nextIndex;
-
-      gsap.to(window, {
-        duration: getScrollDuration(),
-        ease: "power2.inOut",
-        overwrite: true,
-        scrollTo: {
-          y: targetStop,
-          autoKill: false,
-        },
-        onComplete: () => {
-          isAnimating = false;
-        },
-        onInterrupt: () => {
-          isAnimating = false;
-          currentIndex = getClosestStopIndex(stops);
-        },
-      });
-
-      return true;
+    function resolveColorVar(cssVar, fallback) {
+      return rootStyles.getPropertyValue(cssVar).trim() || fallback;
     }
 
-    initEspacesAnimations({ goToStop });
+    const themeByNavColor = {
+      purple: {
+        backgroundColor: resolveColorVar("--color-wyrd-purple-500", "#5a43f2"),
+        color: "white",
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-900", "#0c3b2d"),
+        color: resolveColorVar("--color-wyrd-green-500", "#6ef2a3"),
+      },
+      pink: {
+        backgroundColor: resolveColorVar("--color-wyrd-pink-500", "#f47ab2"),
+        color: resolveColorVar("--color-wyrd-pink-900", "#4d1430"),
+      },
+    };
 
-    // create GSAP ScrollTriggers for each stop (home sections + footer)
-    // to keep track of the current index
-    stops.forEach((stop, index) => {
-      ScrollTrigger.create({
-        trigger: stop,
-        start: "top center",
-        end: "bottom center",
-        onEnter: () => (currentIndex = index),
-        onEnterBack: () => (currentIndex = index),
+    const mondeListThemeByNavColor = {
+      purple: {
+        ...themeByNavColor.purple,
+        backgroundColor: resolveColorVar("--color-wyrd-purple-400", "#9375ff"),
+        borderColor: themeByNavColor.purple.color,
+      },
+      pink: {
+        ...themeByNavColor.pink,
+        borderColor: themeByNavColor.pink.color,
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-800", "#0c3b2d"),
+        color: resolveColorVar("--color-wyrd-green-500", "#7cf6a8"),
+        borderColor: resolveColorVar("--color-wyrd-green-500", "#7cf6a8"),
+      },
+    };
+
+    const mondeZoneThemeByNavColor = {
+      pink: themeByNavColor.pink,
+      purple: {
+        backgroundColor: "white",
+        color: resolveColorVar("--color-wyrd-indigo-900", "#060412"),
+      },
+      green: {
+        backgroundColor: resolveColorVar("--color-wyrd-green-500", "#6ef2a3"),
+        color: resolveColorVar("--color-wyrd-green-900", "#0c3b2d"),
+      },
+    };
+
+    const fallbackTheme = themeByNavColor.purple;
+    const sectionThemeMap = new Map();
+    let activeSection = null;
+
+    sections.forEach((section) => {
+      if (!(section instanceof HTMLElement)) return;
+      const navColor = section.dataset.navColor || "";
+      sectionThemeMap.set(section, {
+        navColor: themeByNavColor[navColor] ? navColor : "purple",
+        theme: themeByNavColor[navColor] || fallbackTheme,
       });
     });
 
     /**
-     * Handle directional input for scrolling.
-     * @param {number} deltaY
-     * @param {HTMLElement | null} eventTarget
-     * @returns {boolean}
+     * @param {HTMLElement} section
      */
-    function handleDirectionalInput(deltaY, eventTarget) {
-      const direction = deltaY > 0 ? 1 : -1;
-      if (isAnimating || isNavMenuOpen()) return false;
+    function applyThemeFromSection(section, immediate = false) {
+      const sectionTheme = sectionThemeMap.get(section);
+      if (!sectionTheme) return;
 
-      if (currentStopNeedsNativeScroll()) return false;
+      const mondeListTheme =
+        mondeListThemeByNavColor[sectionTheme.navColor] ||
+        mondeListThemeByNavColor.green;
+      const mondeZoneTheme =
+        mondeZoneThemeByNavColor[sectionTheme.navColor] ||
+        mondeZoneThemeByNavColor.green;
 
-      const scrollable = findScrollableAncestor(
-        eventTarget instanceof HTMLElement ? eventTarget : null,
+      window.wyrdUi = window.wyrdUi || {};
+      window.wyrdUi.activeNavColor = sectionTheme.navColor;
+      document.body.dataset.activeNavColor = sectionTheme.navColor;
+      window.dispatchEvent(
+        new CustomEvent("wyrd:theme-color-change", {
+          detail: { navColor: sectionTheme.navColor },
+        }),
       );
 
-      if (canScrollableHandleDirection(scrollable, direction)) return false;
-
-      return goToStop(currentIndex + direction);
+      gsap.to([document.documentElement, document.body], {
+        backgroundColor: sectionTheme.theme.backgroundColor,
+        color: sectionTheme.theme.color,
+        "--monde-list-bg": mondeListTheme.backgroundColor,
+        "--monde-list-text": mondeListTheme.color,
+        "--monde-card-border-color": mondeListTheme.borderColor,
+        "--monde-zone-bg": mondeZoneTheme.backgroundColor,
+        "--monde-zone-text": mondeZoneTheme.color,
+        duration: immediate ? 0 : 0.7,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
     }
 
-    /**
-     * @param {WheelEvent} event
-     */
-    function onWheel(event) {
-      if (isAnimating) return event.preventDefault();
-      if (Math.abs(event.deltaY) < WHEEL_THRESHOLD) return;
-      const handled = handleDirectionalInput(event.deltaY, event.target);
-      if (handled) event.preventDefault();
+    function getMostVisibleSection() {
+      const viewportHeight = window.innerHeight;
+      let winner = null;
+      let maxVisiblePx = -1;
+
+      sections.forEach((section) => {
+        if (!(section instanceof HTMLElement)) return;
+        const rect = section.getBoundingClientRect();
+        const visiblePx =
+          Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+
+        if (visiblePx > maxVisiblePx) {
+          maxVisiblePx = visiblePx;
+          winner = section;
+        }
+      });
+
+      return winner;
     }
 
+    function syncThemeToMostVisible(immediate = false) {
+      const winner = getMostVisibleSection();
+      if (!(winner instanceof HTMLElement)) return;
+      if (winner === activeSection && !immediate) return;
+      activeSection = winner;
+      applyThemeFromSection(winner, immediate);
+    }
+
+    const globalThemeTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: "top top",
+      end: "bottom bottom",
+      onRefresh: () => syncThemeToMostVisible(true),
+      onUpdate: () => syncThemeToMostVisible(false),
+    });
+
+    themeArtifacts.push(globalThemeTrigger);
+
+    syncThemeToMostVisible(true);
+
+    return themeArtifacts;
+  }
+
+  function initHomeSectionScroll() {
+    if (!document.body.classList.contains("template-homepage")) return;
+    if (!window.gsap || !window.ScrollTrigger) return;
+    if (window.__homeSectionScrollInitialized) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const controllersApi = window.wyrdUi?.homeSectionControllers;
+    if (!controllersApi) return;
+
+    const stops = getStops();
+    if (stops.length < 2) return;
+
+    window.__homeSectionScrollInitialized = true;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // iOS browser chrome show/hide emits resize during scroll; avoid pin jitter.
+    if (isIosWebkit) ScrollTrigger.config({ ignoreMobileResize: true });
+
+    function initLenisBridge() {
+      if (!window.Lenis) return () => {};
+      if (window.__homeLenisInitialized) return () => {};
+      if (isIosWebkit) return () => {};
+
+      const lenis = new window.Lenis({
+        duration: 1.05,
+        smoothWheel: true,
+        syncTouch: true,
+      });
+
+      const onLenisScroll = () => ScrollTrigger.update();
+      const onGsapTick = (time) => {
+        lenis.raf(time * 1000);
+      };
+
+      lenis.on("scroll", onLenisScroll);
+      gsap.ticker.add(onGsapTick);
+      gsap.ticker.lagSmoothing(0);
+
+      window.wyrdUi.homeLenis = lenis;
+      window.__homeLenisInitialized = true;
+
+      return () => {
+        gsap.ticker.remove(onGsapTick);
+        lenis.off("scroll", onLenisScroll);
+        lenis.destroy();
+        delete window.wyrdUi.homeLenis;
+        window.__homeLenisInitialized = false;
+      };
+    }
+
+    const cleanupLenisBridge = initLenisBridge();
+
+    const noOpController = controllersApi.createNoOpSectionController();
+
     /**
-     * @param {TouchEvent} event
+     * Build section animation controllers keyed by section index.
+     *
+     * @returns {Map<number, typeof noOpController>}
      */
-    function onTouchStart(event) {
-      if (!event.touches.length) return;
-      touchStartY = event.touches[0].clientY;
-      touchLastY = touchStartY;
-      touchCaptured = false;
-      touchScrollable = findScrollableAncestor(
-        event.target instanceof HTMLElement ? event.target : null,
+    function buildSectionControllers() {
+      const controllers = new Map();
+
+      /**
+       * Resolve stop index for a section selector.
+       *
+       * @param {string} selector
+       * @returns {number}
+       */
+      function getSectionStopIndex(selector) {
+        const section = document.querySelector(selector);
+        return section ? stops.findIndex((stop) => stop === section) : -1;
+      }
+
+      /**
+       * Register a section controller by selector.
+       *
+       * @param {string} selector
+       * @param {(params: { sectionIndex: number }) => SectionController} createController
+       */
+      function registerSectionController(selector, createController) {
+        const sectionIndex = getSectionStopIndex(selector);
+        if (sectionIndex < 0) return;
+        controllers.set(sectionIndex, createController({ sectionIndex }));
+      }
+
+      registerSectionController("[data-home-hero]", () =>
+        controllersApi.createHeroSectionController({
+          heroIntroDuration: HERO_INTRO_DURATION,
+          heroOutroDuration: HERO_OUTRO_DURATION,
+          heroStickerDuration: HERO_STICKER_DURATION,
+        }),
       );
+
+      registerSectionController("[data-home-presentation]", () =>
+        controllersApi.createPresentationSectionController(),
+      );
+
+      registerSectionController("[data-home-ticker]", () =>
+        controllersApi.createTickerSectionController(),
+      );
+
+      registerSectionController('[data-espaces-section="hero"]', () =>
+        controllersApi.createEspacesSectionController({
+          desktopMedia,
+        }),
+      );
+
+      registerSectionController("[data-espaces-mondes]", () =>
+        controllersApi.createEspacesMondesController({
+          desktopMedia,
+        }),
+      );
+
+      registerSectionController("[data-home-guests-cards]", () =>
+        controllersApi.createGuestsSectionController(),
+      );
+
+      return controllers;
     }
+
+    const sectionControllers = buildSectionControllers();
+    const standaloneControllers = [
+      controllersApi.createHeroFomoFadeController(),
+    ];
+
+    function getSectionController(index) {
+      return sectionControllers.get(index) || noOpController;
+    }
+
+    function destroySectionControllers() {
+      sectionControllers.forEach((controller) => {
+        controller.destroy();
+      });
+      standaloneControllers.forEach((controller) => {
+        controller.destroy();
+      });
+    }
+
+    const cleanupHeroHoverAnimations =
+      controllersApi.initHeroStickerHoverAnimations();
+    const themeTransitionArtifacts = initSectionThemeTransitions();
+
+    // Ensure current section gets an initial enter callback on first load.
+    const initialIndex = getClosestStopIndex(stops);
+    getSectionController(initialIndex).onEnter();
+
+    /** @type {Map<string, number>} */
+    const lifecycleCooldownByEvent = new Map();
 
     /**
-     * @param {TouchEvent} event
+     * Prevent rapid repeated lifecycle calls near trigger boundaries.
+     *
+     * @param {number} index
+     * @param {"enter" | "leave" | "enterBack" | "leaveBack"} eventName
+     * @param {() => void} callback
      */
-    function onTouchMove(event) {
-      if (!event.touches.length || isNavMenuOpen()) return;
-      if (isAnimating) return event.preventDefault();
+    function invokeWithCooldown(index, eventName, callback) {
+      const key = `${index}:${eventName}`;
+      const now = Date.now();
+      const lastCall = lifecycleCooldownByEvent.get(key) ?? 0;
 
-      touchLastY = event.touches[0].clientY;
-      const deltaY = touchStartY - touchLastY;
-      if (Math.abs(deltaY) < getTouchThreshold()) return;
-
-      if (currentStopNeedsNativeScroll()) {
-        touchCaptured = false;
-        return;
-      }
-
-      const direction = deltaY > 0 ? 1 : -1;
-      if (canScrollableHandleDirection(touchScrollable, direction)) {
-        touchCaptured = false;
-        return;
-      }
-
-      touchCaptured = true;
-      event.preventDefault();
+      if (now - lastCall < LIFECYCLE_COOLDOWN_MS) return;
+      lifecycleCooldownByEvent.set(key, now);
+      callback();
     }
 
-    /**
-     * @param {TouchEvent} event
-     */
-    function onTouchEnd(event) {
-      if (isAnimating) return event.preventDefault();
-      const deltaY = touchStartY - touchLastY;
-      if (Math.abs(deltaY) < getTouchThreshold()) return;
-      const handled = handleDirectionalInput(deltaY, event.target);
-      if (handled && touchCaptured) event.preventDefault();
-    }
+    const stopTriggers = [];
+    const lifecycleTriggerStart = isIosWebkit ? "top 72%" : "top 85%";
+    const lifecycleTriggerEnd = isIosWebkit ? "bottom 28%" : "bottom 15%";
+
+    stops.forEach((stop, index) => {
+      const controller = getSectionController(index);
+
+      const trigger = ScrollTrigger.create({
+        trigger: stop,
+        start: lifecycleTriggerStart,
+        end: lifecycleTriggerEnd,
+        onEnter: () =>
+          invokeWithCooldown(index, "enter", () => controller.onEnter()),
+        onLeave: () =>
+          invokeWithCooldown(index, "leave", () => controller.onLeave()),
+        onEnterBack: () =>
+          invokeWithCooldown(index, "enterBack", () =>
+            controller.onEnterBack(),
+          ),
+        onLeaveBack: () =>
+          invokeWithCooldown(index, "leaveBack", () =>
+            controller.onLeaveBack(),
+          ),
+      });
+
+      stopTriggers.push(trigger);
+    });
+
+    let hasTeardownRun = false;
+    let resizeRefreshTimeout = null;
 
     function onResize() {
-      currentIndex = getClosestStopIndex(stops);
-      ScrollTrigger.refresh();
+      if (resizeRefreshTimeout) window.clearTimeout(resizeRefreshTimeout);
+      resizeRefreshTimeout = window.setTimeout(() => {
+        resizeRefreshTimeout = null;
+        ScrollTrigger.refresh();
+      }, 180);
     }
 
-    /**
-     * @param {KeyboardEvent} event
-     * @returns
-     */
-    function onKeyDown(event) {
-      if (event.key === "ArrowDown" || event.key === "PageDown") {
-        const handled = handleDirectionalInput(1, event.target);
-        if (handled) event.preventDefault();
-      } else if (event.key === "ArrowUp" || event.key === "PageUp") {
-        const handled = handleDirectionalInput(-1, event.target);
-        if (handled) event.preventDefault();
+    function onOrientationChange() {
+      window.setTimeout(() => ScrollTrigger.refresh(), 280);
+    }
+
+    function teardownHomeSectionScroll() {
+      if (hasTeardownRun) return;
+      hasTeardownRun = true;
+
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onOrientationChange);
+      window.removeEventListener("pagehide", teardownHomeSectionScroll);
+
+      if (resizeRefreshTimeout) {
+        window.clearTimeout(resizeRefreshTimeout);
+        resizeRefreshTimeout = null;
       }
+
+      stopTriggers.forEach((trigger) => trigger.kill());
+      themeTransitionArtifacts.forEach((artifact) => artifact.kill());
+      if (typeof cleanupHeroHoverAnimations === "function") {
+        cleanupHeroHoverAnimations();
+      }
+      cleanupLenisBridge();
+      destroySectionControllers();
+      window.__homeSectionScrollInitialized = false;
     }
 
-    // listen to wheel, touch, and key events at the window level
-    // to capture them before any scrollable containers
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("touchend", onTouchEnd, { passive: false });
     window.addEventListener("resize", onResize);
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("orientationchange", onOrientationChange);
+    window.addEventListener("pagehide", teardownHomeSectionScroll);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHomeSectionScroll);
+    document.addEventListener("DOMContentLoaded", () => {
+      initHashScrollHint();
+      initHomeSectionScroll();
+    });
   } else {
+    initHashScrollHint();
     initHomeSectionScroll();
   }
 })();

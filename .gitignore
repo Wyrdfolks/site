@@ -5,6 +5,9 @@ __pycacahe__/
 *.py[cdo]
 
 *.sqlite3
-.env
+.env*
+!.env.example
 .vscode
 /static/
+
+node_modules/

@@ -36,6 +36,8 @@
 					{% render_button label=link.label url=link_url variant="ghost" size="medium" %}
 				{% elif link.external_url %}
 					{% render_button label=link.label url=link.external_url variant="ghost" size="medium" target="_blank" rel="noopener" %}
+				{% elif link.email %}
+					{% render_button label=link.label url="mailto:"|add:link.email variant="ghost" size="medium" %}
 				{% endif %}
 			{% endfor %}
 		</div>
@@ -47,6 +49,8 @@
 				{% render_button label=link.label url=link_url variant="ghost" size="small" %}
                 {% elif link.external_url %}
 				{% render_button label=link.label url=link.external_url variant="ghost" size="small" target="_blank" rel="noopener" %}
+                {% elif link.email %}
+				{% render_button label=link.label url="mailto:"|add:link.email variant="ghost" size="small" %}
                 {% endif %}
 				<hr class="my-2" />
 			{% endfor %}

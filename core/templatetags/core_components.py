@@ -3,6 +3,15 @@ from django import template
 
 register = template.Library()
 
+
+@register.filter
+def time_hm(value):
+    """Format a time as '18h' or '18h30', omitting minutes when they're zero."""
+    if not value:
+        return ""
+    return value.strftime("%Hh%M") if value.minute else value.strftime("%Hh")
+
+
 BUTTON_VARIANT_CLASSES = {
     "primary": "btn-primary",
     "secondary": "btn-secondary",
@@ -62,8 +71,8 @@ def render_button(
     return {
         "href": url or "",
         "label": label,
+        "variant": variant,
         "classes": classes,
-        "show_icon": variant == "ghost",
         "target": target,
         "rel": f"noopener noreferrer {rel}" if rel else "noopener noreferrer",
         "is_disabled": disabled,

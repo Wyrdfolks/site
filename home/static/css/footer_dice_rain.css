@@ -1,0 +1,17 @@
+.home-bottom-dice-target {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background-color: transparent;
+  border: none;
+}
+
+.home-bottom-dice-target canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
